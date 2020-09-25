@@ -1,0 +1,21 @@
+---
+layout: default
+---
+<a class="default" href="/blog.html">&laquo; Back</a>
+
+<h1 class="post-title">{{ page.title }}</h1>
+<ul class="post-meta">
+<li><i class="far fa-calendar"></i>{{ page.date | date_to_string }}</li>
+  <li><i class="far fa-user"></i>{{ page.author }}</li>
+</ul>
+
+<p class="separator"></p>
+
+{{ content }}
+
+<div class="comments">
+  <i class="far fa-comments"></i>
+  <p>
+    Placeholder for a <a href="https://disqus.com/" class="default">disqus</a> comment section.
+  </p>
+</div>

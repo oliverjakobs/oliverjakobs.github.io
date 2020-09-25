@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    
+    <!-- Font Aweseome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.min.css"  />
+
+    <title>{ devlog::{{ page.title | downcase }} }</title>
+
+    {% feed_meta %}
+    {% seo %}
+  </head>
+
+  <body>
+    {% include navbar.html %}
+    <div class="page-content clearfix">
+      {{ content }}
+    </div>
+    {% include footer.html %}
+  </body>
+</html>

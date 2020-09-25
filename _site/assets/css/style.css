@@ -1,0 +1,106 @@
+/* GENERAL STYLE */
+* { box-sizing: border-box; }
+
+body { padding: 0; margin: 0; font-family: "Lucida Console"; }
+
+a { text-decoration: none; color: inherit; }
+
+a.default { color: #bbbbbb; }
+
+a.default:hover { color: #999999; }
+
+.separator { padding-bottom: 1em; border-bottom: 1px solid #dddddd; }
+
+/* */
+.clearfix::after { content: ''; display: block; clear: both; }
+
+/* NAVBAR */
+.navbar { background: #111111; height: 64px; width: 100%; }
+
+.navbar * { margin: 0; padding: 0; line-height: 64px; list-style: none; text-decoration: none; }
+
+.navbar .logo { margin-left: 30%; color: #eeeeee; font-size: 2em; font-weight: bold; }
+
+.navbar .logo a::before { display: inline-block; transition: transform .5s ease; content: '{'; }
+
+.navbar .logo a::after { display: inline-block; transition: transform .5s ease; content: '}'; }
+
+.navbar .logo a:hover { transition: transform .5s ease; }
+
+.navbar .logo a:hover::before { transform: translateX(-0.2em); }
+
+.navbar .logo a:hover::after { transform: translateX(0.2em); }
+
+.navbar .menu { float: right; margin-right: 30%; height: 64px; }
+
+.navbar .menu li { display: inline-block; padding-left: .6em; height: inherit; }
+
+.navbar .menu li a { color: #eeeeee; font-size: 1.4em; text-transform: lowercase; display: inline-block; height: inherit; }
+
+.navbar .menu li a:hover { color: #bbbbbb; transition: .5s; }
+
+.navbar .menu li a.active { color: #bbbbbb; border-bottom: 3px solid #bbbbbb; }
+
+.navbar .menu-btn { font-size: 2em; color: #eeeeee; float: right; margin-right: 2rem; cursor: pointer; display: none; }
+
+.navbar .menu-btn:hover { color: #bbbbbb; transition: .5s; }
+
+.navbar #menu-check { display: none; }
+
+/* CONTENT */
+.page-content { width: 40%; margin-left: auto; margin-right: auto; font-size: 1.1em; text-align: justify; padding: 2rem 0rem; line-height: 1.4em; }
+
+.page-title { margin-bottom: 1.4em; }
+
+.blog { list-style: none; }
+
+.blog * { margin: 0px; padding: 0px; }
+
+.blog > li { margin: 1rem; padding: 2rem; }
+
+/* POST */
+.post-summary { margin: 0.6em 0em; }
+
+.post-title { margin-bottom: 0.3em; }
+
+/* POST */
+.post-meta { font-size: .85em; padding-left: 0.1em; }
+
+.post-meta li { display: inline; margin-right: 0.6em; color: #bbbbbb; }
+
+.post-meta li i { padding-right: 0.4em; }
+
+/* COMMENTS */
+.comments { border: 1px solid #999999; border-radius: 3px; color: #bbbbbb; }
+
+.comments i { font-size: 4em; position: relative; left: 50%; transform: translateX(-50%); margin: 0.5em 0em; }
+
+.comments p { text-align: center; font-size: 2em; margin-bottom: 1em; }
+
+/* FOOTER */
+.page-footer { width: 40%; height: 4em; margin-left: auto; margin-right: auto; margin-top: 2rem; text-align: center; }
+
+.page-footer ul { border-top: 1px solid #dddddd; line-height: 4em; list-style: none; text-transform: lowercase; padding: 0px; margin: 0px; }
+
+.page-footer ul li { display: inline; color: #bbbbbb; }
+
+.page-footer ul li * { vertical-align: middle; }
+
+.page-footer ul li i { font-size: 1.4em; padding-right: 0.4em; }
+
+.page-footer ul li a:hover { color: #999999; transition: .5s; }
+
+.page-footer ul li:not(:last-child)::after { content: "|"; margin: 1.25em; }
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 1440px) { .container { width: 60%; } .navbar .logo { margin-left: 20%; } .navbar .menu { margin-right: 20%; } }
+
+@media screen and (max-width: 1200px) { .project-list { width: 100%; } }
+
+@media screen and (max-width: 960px) { .container { width: 80%; } .navbar .logo { margin-left: 2rem; } .navbar .menu { margin-right: 2rem; position: fixed; width: 100%; height: 100vh; top: 64px; left: -100%; background: #444444; text-align: center; transition: all .5s; } .navbar .menu li { display: block; margin: 50px 0; line-height: 30px; height: auto; } .navbar .menu li a { font-size: 20px; } .navbar .menu li a.active { border: none; } .navbar .menu-btn { display: block; } .navbar #menu-check:checked ~ .menu { left: 0; } .post { padding: 2rem 0rem; } }
+
+@media screen and (max-width: 640px) { .post .meta { margin-top: 1em; } .post .meta li { display: block; } .page-footer .content li { display: block; } .page-footer .content li:not(:last-child)::after { content: ""; margin: 0; } }
+
+@media screen and (max-width: 460px) { .container { width: 90%; } .navbar .logo { margin-left: 0.8rem; } .navbar .menu { margin-right: 0.8rem; } .navbar .menu-btn { margin-right: 0.8rem; } }
+
+/*# sourceMappingURL=style.css.map */
