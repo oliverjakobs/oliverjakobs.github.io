@@ -62,6 +62,12 @@ a {
     border-bottom: 1px solid $color-lightest;
 }
 
+.container {
+    width: $container-width;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* */
 .clearfix::after {
     content: '';
@@ -162,10 +168,6 @@ a {
 
 /* CONTENT */
 .page-content {
-    width: $container-width;
-    margin-left: auto;
-    margin-right: auto;
-
     font-size: 1.1em;
     text-align: justify;
 
@@ -175,6 +177,7 @@ a {
 
 .page-title {
     margin-bottom: 1.4em;
+    text-align: left;
 }
 
 .blog {
@@ -239,13 +242,8 @@ a {
 
 /* FOOTER */
 .page-footer {
-    width: $container-width;
     height: $footer-height;
-
-    margin-left: auto;
-    margin-right: auto;
     margin-top: 2rem;
-
     text-align: center;
 
     ul {
@@ -298,13 +296,6 @@ a {
         .menu {
             margin-right: $navbar-margin-desktop;
         }
-    }
-}
-
-@media screen and (max-width: $screen-large) {
-
-    .project-list {
-        width: 100%;
     }
 }
 
@@ -363,7 +354,7 @@ a {
 
 @media screen and (max-width: $screen-small) {
     
-    .post .meta {
+    .post-meta {
         margin-top: 1em;
 
         li {
@@ -371,7 +362,7 @@ a {
         }
     }
 
-    .page-footer .content li {
+    .page-footer ul li {
         display: block;
 
         &:not(:last-child)::after {
