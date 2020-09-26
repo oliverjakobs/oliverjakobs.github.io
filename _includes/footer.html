@@ -1,6 +1,7 @@
 <footer class="page-footer container">
-  <ul>
-      <li><a href="copyright.html"><i class="far fa-copyright"></i>2020 Oliver Jakobs</a></li>
-      <li><a href="https://github.com/oliverjakobs"><i class="fab fa-github"></i>Github</a></li>
+  <ul class="menu">
+    {% for item in site.data.footer %}
+      <li><a href="{{ item.link }}"><i class="{{ item.icon }}"></i>{{ item.name }}</a></li>
+    {% endfor %}
   </ul>
 </footer>

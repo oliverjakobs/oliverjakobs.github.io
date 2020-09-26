@@ -2,35 +2,19 @@
 $font-family: "Lucida Console";
 
 $container-width: 40%;
-$container-width-desktop: 60%;
-$container-width-tablet: 80%;
-$container-width-phone: 90%;
 
 $separator-padding: 1em;
 
 $navbar-height: 64px;
 $navbar-margin: (100% - $container-width) / 2;
-$navbar-margin-desktop: (100% - $container-width-desktop) / 2;
-$navbar-margin-tablet: 2rem;
-$navbar-margin-phone: .8rem;
 
 $footer-height: 4em;
 
-$color-lightest: #dddddd;
-$color-lighter: #bbbbbb;
-$color-light: #999999;
-$color-dark: #666666;
-$color-darker: #444444;
-$color-darkest: #111111;
+$color-font: #eeeeee;
+$color-font2: #bbbbbb;
+$color-highlight: #999999;
 
-$color-font-dark: #000000;
-$color-font-light: #eeeeee;
-
-$screen-smallest: 460px;
-$screen-small: 640px;
-$screen-medium: 960px;
-$screen-large: 1200px;
-$screen-largest: 1440px;
+$color-background: #242424;
 
 /* GENERAL STYLE */
 
@@ -42,24 +26,22 @@ body {
     padding: 0;
     margin: 0;
     font-family: $font-family;
+    color: $color-font;
+    background: $color-background;
 }
 
 a {
     text-decoration: none;
-    color: inherit;
+    color: $color-font2;
 
-    &.default {
-        color: $color-lighter;
-
-        &:hover {
-            color: $color-light;
-        }
+    &:hover {
+        color: $color-highlight;
     }
 }
 
 .separator {
     padding-bottom: $separator-padding;
-    border-bottom: 1px solid $color-lightest;
+    border-bottom: 1px solid $color-highlight;
 }
 
 .container {
@@ -77,7 +59,6 @@ a {
 
 /* NAVBAR */
 .navbar {
-    background: $color-darkest;
     height: $navbar-height;
     width: 100%;
 
@@ -91,11 +72,12 @@ a {
 
     .logo {
         margin-left: $navbar-margin;
-        color: $color-font-light;
         font-size: 2em;
         font-weight: bold;
 
         a {
+            color: $color-font;
+
             &::before {
                 display: inline-block;
                 transition: transform .5s ease;
@@ -128,20 +110,19 @@ a {
             height: inherit;
 
             a {
-                color: $color-font-light;
+                color: $color-font;
                 font-size: 1.4em;
+                padding-bottom: .2em;
                 text-transform: lowercase;
-                display: inline-block;
-                height: inherit;
 
                 &:hover {
-                    color: $color-lighter;
+                    color: $color-font2;
                     transition: .5s;
                 }
 
                 &.active {
-                    color: $color-lighter;
-                    border-bottom: 3px solid $color-lighter;
+                    color: $color-font2;
+                    border-bottom: 1px solid $color-font2;
                 }
             }
         }
@@ -149,14 +130,13 @@ a {
 
     .menu-btn {
         font-size: 2em;
-        color: $color-font-light;
         float: right;
-        margin-right: $navbar-margin-tablet;
+        margin-right: $navbar-margin;
         cursor: pointer;
         display: none;
 
         &:hover {
-            color: $color-lighter;
+            color: $color-font2;
             transition: .5s;
         }
     }
@@ -201,6 +181,10 @@ a {
 
 .post-title {
     margin-bottom: 0.3em;
+
+    a {
+        color: $color-font;
+    }
 }
 
 /* POST */
@@ -211,7 +195,7 @@ a {
     li {
         display: inline;
         margin-right: 0.6em;
-        color: $color-lighter;
+        color: $color-font2;
 
         i {
             padding-right: 0.4em;
@@ -221,9 +205,9 @@ a {
 
 /* COMMENTS */
 .comments {
-    border: 1px solid $color-light;
+    border: 1px solid $color-highlight;
     border-radius: 3px;
-    color: $color-lighter;
+    color: $color-font2;
 
     i {
         font-size: 4em;
@@ -247,16 +231,15 @@ a {
     text-align: center;
 
     ul {
-        border-top: 1px solid $color-lightest;
+        border-top: 1px solid $color-font2;
         line-height: $footer-height;
         list-style: none;
-        text-transform: lowercase;
         padding: 0px;
         margin: 0px;
 
         li {
             display: inline;
-            color: $color-lighter;
+            color: $color-font2;
 
             * {
                 vertical-align: middle;
@@ -268,7 +251,6 @@ a {
             }
 
             a:hover {
-                color: $color-light;
                 transition: .5s;
             }
 
@@ -276,119 +258,6 @@ a {
                 content: "|";
                 margin: 1.25em;
             }
-        }
-    }
-}
-
-/* MEDIA QUERIES */
-
-@media screen and (max-width: $screen-largest) {
-
-    .container {
-        width: $container-width-desktop;
-    }
-
-    .navbar {
-        .logo {
-            margin-left: $navbar-margin-desktop;
-        }
-    
-        .menu {
-            margin-right: $navbar-margin-desktop;
-        }
-    }
-}
-
-@media screen and (max-width: $screen-medium) {
-
-    .container {
-        width: $container-width-tablet;
-    }
-
-    .navbar {
-        .logo {
-            margin-left: $navbar-margin-tablet;
-        }
-    
-        .menu {
-            margin-right: $navbar-margin-tablet;
-            position: fixed;
-            width: 100%;
-            height: 100vh;
-            top: $navbar-height;
-            left: -100%;
-            background: $color-darker;
-            text-align: center;
-            transition: all .5s;
-
-            li {
-                display: block;
-                margin: 50px 0;
-                line-height: 30px;
-                height: auto;
-    
-                a {
-                    font-size: 20px;
-
-                    &.active {
-                        border: none;
-                    }
-                }
-
-            }
-        }
-    
-        .menu-btn {
-            display: block;
-        }
-    
-        #menu-check:checked ~ .menu {
-            left: 0;
-        }
-    }
-
-    .post {
-        padding: 2rem 0rem;
-    }
-}
-
-@media screen and (max-width: $screen-small) {
-    
-    .post-meta {
-        margin-top: 1em;
-
-        li {
-            display: block;
-        }
-    }
-
-    .page-footer ul li {
-        display: block;
-
-        &:not(:last-child)::after {
-            content: "";
-            margin: 0;
-        }
-    }
-}
-
-@media screen and (max-width: $screen-smallest) {
-
-    .container {
-        width: $container-width-phone;
-    }
-
-    .navbar {
-        .logo {
-            margin-left: $navbar-margin-phone;
-        }
-    
-        .menu {
-            margin-right: $navbar-margin-phone;
-        }
-    
-        .menu-btn {
-            margin-right: $navbar-margin-phone;
         }
     }
 }

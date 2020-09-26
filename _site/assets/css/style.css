@@ -1,15 +1,13 @@
 /* GENERAL STYLE */
 * { box-sizing: border-box; }
 
-body { padding: 0; margin: 0; font-family: "Lucida Console"; }
+body { padding: 0; margin: 0; font-family: "Lucida Console"; color: #eeeeee; background: #242424; }
 
-a { text-decoration: none; color: inherit; }
+a { text-decoration: none; color: #bbbbbb; }
 
-a.default { color: #bbbbbb; }
+a:hover { color: #999999; }
 
-a.default:hover { color: #999999; }
-
-.separator { padding-bottom: 1em; border-bottom: 1px solid #dddddd; }
+.separator { padding-bottom: 1em; border-bottom: 1px solid #999999; }
 
 .container { width: 40%; margin-left: auto; margin-right: auto; }
 
@@ -17,11 +15,13 @@ a.default:hover { color: #999999; }
 .clearfix::after { content: ''; display: block; clear: both; }
 
 /* NAVBAR */
-.navbar { background: #111111; height: 64px; width: 100%; }
+.navbar { height: 64px; width: 100%; }
 
 .navbar * { margin: 0; padding: 0; line-height: 64px; list-style: none; text-decoration: none; }
 
-.navbar .logo { margin-left: 30%; color: #eeeeee; font-size: 2em; font-weight: bold; }
+.navbar .logo { margin-left: 30%; font-size: 2em; font-weight: bold; }
+
+.navbar .logo a { color: #eeeeee; }
 
 .navbar .logo a::before { display: inline-block; transition: transform .5s ease; content: '{'; }
 
@@ -37,13 +37,13 @@ a.default:hover { color: #999999; }
 
 .navbar .menu li { display: inline-block; padding-left: .6em; height: inherit; }
 
-.navbar .menu li a { color: #eeeeee; font-size: 1.4em; text-transform: lowercase; display: inline-block; height: inherit; }
+.navbar .menu li a { color: #eeeeee; font-size: 1.4em; padding-bottom: .2em; text-transform: lowercase; }
 
 .navbar .menu li a:hover { color: #bbbbbb; transition: .5s; }
 
-.navbar .menu li a.active { color: #bbbbbb; border-bottom: 3px solid #bbbbbb; }
+.navbar .menu li a.active { color: #bbbbbb; border-bottom: 1px solid #bbbbbb; }
 
-.navbar .menu-btn { font-size: 2em; color: #eeeeee; float: right; margin-right: 2rem; cursor: pointer; display: none; }
+.navbar .menu-btn { font-size: 2em; float: right; margin-right: 30%; cursor: pointer; display: none; }
 
 .navbar .menu-btn:hover { color: #bbbbbb; transition: .5s; }
 
@@ -65,6 +65,8 @@ a.default:hover { color: #999999; }
 
 .post-title { margin-bottom: 0.3em; }
 
+.post-title a { color: #eeeeee; }
+
 /* POST */
 .post-meta { font-size: .85em; padding-left: 0.1em; }
 
@@ -82,7 +84,7 @@ a.default:hover { color: #999999; }
 /* FOOTER */
 .page-footer { height: 4em; margin-top: 2rem; text-align: center; }
 
-.page-footer ul { border-top: 1px solid #dddddd; line-height: 4em; list-style: none; text-transform: lowercase; padding: 0px; margin: 0px; }
+.page-footer ul { border-top: 1px solid #bbbbbb; line-height: 4em; list-style: none; padding: 0px; margin: 0px; }
 
 .page-footer ul li { display: inline; color: #bbbbbb; }
 
@@ -90,17 +92,8 @@ a.default:hover { color: #999999; }
 
 .page-footer ul li i { font-size: 1.4em; padding-right: 0.4em; }
 
-.page-footer ul li a:hover { color: #999999; transition: .5s; }
+.page-footer ul li a:hover { transition: .5s; }
 
 .page-footer ul li:not(:last-child)::after { content: "|"; margin: 1.25em; }
-
-/* MEDIA QUERIES */
-@media screen and (max-width: 1440px) { .container { width: 60%; } .navbar .logo { margin-left: 20%; } .navbar .menu { margin-right: 20%; } }
-
-@media screen and (max-width: 960px) { .container { width: 80%; } .navbar .logo { margin-left: 2rem; } .navbar .menu { margin-right: 2rem; position: fixed; width: 100%; height: 100vh; top: 64px; left: -100%; background: #444444; text-align: center; transition: all .5s; } .navbar .menu li { display: block; margin: 50px 0; line-height: 30px; height: auto; } .navbar .menu li a { font-size: 20px; } .navbar .menu li a.active { border: none; } .navbar .menu-btn { display: block; } .navbar #menu-check:checked ~ .menu { left: 0; } .post { padding: 2rem 0rem; } }
-
-@media screen and (max-width: 640px) { .post-meta { margin-top: 1em; } .post-meta li { display: block; } .page-footer ul li { display: block; } .page-footer ul li:not(:last-child)::after { content: ""; margin: 0; } }
-
-@media screen and (max-width: 460px) { .container { width: 90%; } .navbar .logo { margin-left: 0.8rem; } .navbar .menu { margin-right: 0.8rem; } .navbar .menu-btn { margin-right: 0.8rem; } }
 
 /*# sourceMappingURL=style.css.map */
