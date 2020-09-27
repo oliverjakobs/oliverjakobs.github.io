@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    
+    <!-- Font Aweseome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.min.css"  />
+
+    <title>{ devlog::implementing an avl tree }</title>
+
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" />
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Implementing an avl tree</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Implementing an avl tree" />
+<meta name="author" content="oliver" />
+<meta property="og:locale" content="C" />
+<meta name="description" content="Iterative method to implement an avl tree in c." />
+<meta property="og:description" content="Iterative method to implement an avl tree in c." />
+<link rel="canonical" href="http://localhost:4000/2020/09/27/Implementing-an-avl-tree.html" />
+<meta property="og:url" content="http://localhost:4000/2020/09/27/Implementing-an-avl-tree.html" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-09-27T00:00:00+02:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","author":{"@type":"Person","name":"oliver"},"url":"http://localhost:4000/2020/09/27/Implementing-an-avl-tree.html","headline":"Implementing an avl tree","dateModified":"2020-09-27T00:00:00+02:00","datePublished":"2020-09-27T00:00:00+02:00","description":"Iterative method to implement an avl tree in c.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/09/27/Implementing-an-avl-tree.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+    <nav class="navbar">
+  <label class="logo"><a href="/">devlog</a></label>
+  <input type="checkbox" id="menu-check">
+  <label for="menu-check" class="menu-btn"><i class="fas fa-bars"></i></label>
+  <ul class="menu">
+    
+      <li><a href="/" >blog</a></li>
+    
+  </ul>
+</nav>
+    <div class="page-content container clearfix">
+      <a href="/">&laquo; Back</a>
+
+<h1 class="post-title">Implementing an avl tree</h1>
+<ul class="post-meta">
+  <li><i class="far fa-calendar"></i>27 Sep 2020</li>
+  <li><i class="far fa-user"></i>oliver</li>
+  <li><i class="fas fa-code"></i>C</li>
+</ul>
+
+<p class="separator"></p>
+
+<p>Iterative method to implement an avl tree in c.</p>
+
+<blockquote>
+  <p>Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your project or maybe you get inspired to do something better.</p>
+</blockquote>
+
+<p>Before we start we need to talk about what an avl tree even is and why we may want to use it. An AVL tree (named after inventors Adelson-Velsky and Landis) is a self-balancing binary search tree. Lookup, insertion, and deletion all take O(log n) time in both the average and worst cases (with n beeing the number of nodes prior to the operation). After insertion and deletion the tree may require to be rebalanced by one or two tree rotations.</p>
+
+<p>AVL trees are often compared with red–black trees because both support the same set of operations and take O (log ⁡n) time for the basic operations. For lookup-intensive applications, AVL trees are faster than red–black trees because they are more strictly balanced.</p>
+
+
+<div class="comments">
+  <i class="far fa-comments"></i>
+  <p>
+    Placeholder for a comment section.
+  </p>
+</div>
+    </div>
+    <footer class="page-footer container">
+  <ul class="menu">
+    
+      <li><a href="/copyright.html"><i class="far fa-copyright"></i>2020 oliver jakobs</a></li>
+    
+      <li><a href="https://github.com/oliverjakobs"><i class="fab fa-github"></i>github</a></li>
+    
+      <li><a href="https://twitter.com/orwell_23"><i class="fab fa-twitter"></i>twitter</a></li>
+    
+  </ul>
+</footer>
+  </body>
+</html>
