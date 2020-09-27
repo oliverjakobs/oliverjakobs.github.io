@@ -1,0 +1,39 @@
+I"ý<p>An apple is a sweet, edible fruit produced by an apple tree.</p>
+
+<p>For my ecs system in my game I needed an easy way to add new components and systems, so I decided to write a small code generation tool to do that for me.
+Here is what I have done.</p>
+
+<p>First I needed to decide on a syntax for script file which decides what code to generate. After some changes I managed to plan out some syntax that fits my needs.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">define</span> <span class="no">ECS_LOADER_H</span>
+
+<span class="kp">include</span>
+<span class="p">{</span>
+    <span class="s2">"Ecs/Ecs.h"</span>
+    <span class="s2">"Components/Animator.h"</span><span class="p">,</span>
+    <span class="s2">"Components/Transform.h"</span><span class="p">,</span>
+    <span class="s2">"Components/RigidBody.h"</span><span class="p">,</span>
+    <span class="s2">"Components/Sprite.h"</span><span class="p">,</span>
+    <span class="s2">"Components/Movement.h"</span><span class="p">,</span>
+    <span class="s2">"Components/CameraController.h"</span><span class="p">,</span>
+    <span class="s2">"Components/Inventory.h"</span><span class="p">,</span>
+    <span class="s2">"Components/Interaction.h"</span>
+<span class="p">}</span>
+
+<span class="n">enum</span> <span class="no">ComponentType</span>
+<span class="p">{</span>
+    <span class="p">[</span> <span class="no">COMPONENT_TRANSFORM</span><span class="p">,</span>      <span class="n">sizeof</span><span class="p">(</span><span class="no">Transform</span><span class="p">),</span>          <span class="no">NULL</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="no">COMPONENT_RIGID_BODY</span><span class="p">,</span>     <span class="n">sizeof</span><span class="p">(</span><span class="no">RigidBody</span><span class="p">),</span>          <span class="no">NULL</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="no">COMPONENT_MOVEMENT</span><span class="p">,</span>       <span class="n">sizeof</span><span class="p">(</span><span class="no">Movement</span><span class="p">),</span>           <span class="no">NULL</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="no">COMPONENT_SPRITE</span><span class="p">,</span>         <span class="n">sizeof</span><span class="p">(</span><span class="no">Sprite</span><span class="p">),</span>             <span class="no">NULL</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="no">COMPONENT_ANIMATOR</span><span class="p">,</span>       <span class="n">sizeof</span><span class="p">(</span><span class="no">Animator</span><span class="p">),</span>           <span class="no">AnimatorFree</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="no">COMPONENT_CAMERA</span><span class="p">,</span>         <span class="n">sizeof</span><span class="p">(</span><span class="no">CameraController</span><span class="p">),</span>   <span class="no">NULL</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="no">COMPONENT_INVENTORY</span><span class="p">,</span>      <span class="n">sizeof</span><span class="p">(</span><span class="no">Inventory</span><span class="p">),</span>          <span class="no">InventoryFree</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="no">COMPONENT_INTERACTION</span><span class="p">,</span>    <span class="n">sizeof</span><span class="p">(</span><span class="no">Interaction</span><span class="p">),</span>        <span class="no">NULL</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="no">COMPONENT_INTERACTOR</span><span class="p">,</span>     <span class="n">sizeof</span><span class="p">(</span><span class="no">Interactor</span><span class="p">),</span>         <span class="no">NULL</span> <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="n">generate</span> <span class="no">RegisterComponents</span><span class="p">(</span><span class="no">Ecs</span><span class="o">*</span> <span class="n">ecs</span><span class="p">):</span> <span class="no">ComponentType</span> <span class="o">-&gt;</span> <span class="no">EcsRegisterComponent</span><span class="p">(</span><span class="n">ecs</span><span class="p">)</span></code></pre></figure>
+
+<p>```</p>
+:ET

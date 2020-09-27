@@ -1,4 +1,5 @@
 /* GENERAL STYLE */
+@import url(native.css);
 * { box-sizing: border-box; }
 
 body { padding: 0; margin: 0; font-family: "Lucida Console"; color: #eeeeee; background: #242424; }
