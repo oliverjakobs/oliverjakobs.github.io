@@ -25,7 +25,9 @@ learned from my prior mistake. Futhermore I used some code (and knowledge) from 
 
 ## The Scripting Lanuage
 
-Let's first talk about the scripting language. 
+Let's first talk about the scripting language. The language underwent many changes as I was developing the generator
+(mostly during the first attempt) and I do not think this is the final version of the language. But it does what I want 
+for now, and thats all that really matters. 
 
 {% highlight c linenos %}
 define ECS_LOADER_H
@@ -81,10 +83,12 @@ generate RegisterComponents(Ecs* ecs):
 The 'generate' keyword is used to generate a function (or more). If 'generate' is followed by a specific keyword 
 (for now only strings) a predefined function will be generated. E.g. 'generate strings' will generate two functions 
 to allow the conversion from a string to an enum constant and back. If 'generate' is followed by an identifier the 
-generator will generate a function (in this case the function declaration would be 'void RegisterComponents(Ecs* ecs);') 
-which calls the function specified after the arrow operator ('->') for every element of the enum specified before the arrow.
+generator will generate a function (in our case the function declaration would be 'void RegisterComponents(Ecs* ecs);') 
+which calls the function specified after the arrow operator ('->') for every element of the enum specified before the 
+arrow.
 
 In our example the generated function would be: 
+
 {% highlight c linenos %}
 void RegisterComponents(Ecs* ecs)
 {
@@ -100,8 +104,9 @@ void RegisterComponents(Ecs* ecs)
 }
 {% endhighlight %}
 
->Note: A possible upgrade would be to specify via index which argument of the enum is needed in what order. But 
-I had no need for that feature (yet).
+There are various ways this language and the generator could be improved. But these features are either too complicated 
+or are simply not needed for now. A possible upgrade would be to specify via index which argument of the enum is needed 
+in what order. 
 
 ----
 
@@ -142,11 +147,11 @@ typedef enum
 } TokenType;
 {% endhighlight %}
 
-Be aware that these types are depended of your requirements and syntax choices. The types 'TOKEN_ERROR' and 'TOKEN_EOF' are 
-probably useful for every project to identify the end of the file and to help find mistakes in the script file.
+Be aware that these types are depended of your requirements and syntax choices. The types 'TOKEN_ERROR' and 'TOKEN_EOF' 
+are probably useful for every project to identify the end of the file and to help find mistakes in the script file.
 
-To keep track of where we are in the file and what we are currently scanning we define the following struct to help us with 
-that:
+To keep track of where we are in the file and what we are currently scanning we define the following struct to help us 
+with that:
 
 {% highlight c linenos %}
 typedef struct
@@ -157,11 +162,11 @@ typedef struct
 } Scanner;
 {% endhighlight %}
 
-We use 'start' to point to the start of the lexeme we are currently scanning and 'current' to point to the character we are 
-currently looking at. The 'line' keeps track of the line in the script where we are at, to help us with debugging.
+We use 'start' to point to the start of the lexeme we are currently scanning and 'current' to point to the character we 
+are currently looking at. The 'line' keeps track of the line in the script where we are at, to help us with debugging.
 
-We initialize the scanner by letting 'start' and 'current' point to the beginning of the script file. We should probably use 
-a function to do that for us. We also need to set the line of the scanner to 1. 
+We initialize the scanner by letting 'start' and 'current' point to the beginning of the script file. We should 
+probably use a function to do that for us. We also need to set the line of the scanner to 1. 
 
 {% highlight c linenos %}
 void scanner_init(Scanner* scanner, const char* source)
@@ -173,10 +178,11 @@ void scanner_init(Scanner* scanner, const char* source)
 }
 {% endhighlight %}
 
-The heart of the scanner lies in the scan function, which takes the scanner as argument and returns a Token. The function 
-steps through the script file and searches for patterns which matches the various token types. Once the scanner found such 
-a token it creates a token which contains the type, a pointer to the start of the token's lexeme in the script and the 
-length of the lexeme. The token also contains the number of the line where it was found for debugging purposes.
+The heart of the scanner lies in the scan function, which takes the scanner as argument and returns a Token. The 
+function steps through the script file and searches for patterns which matches the various token types. Once the 
+scanner found such a token it creates a token which contains the type, a pointer to the start of the token's lexeme in 
+the script and the length of the lexeme. The token also contains the number of the line where it was found for 
+debugging purposes.
 
 {% highlight c linenos %}
 typedef struct
@@ -192,8 +198,8 @@ typedef struct
 
 Such tokens are stored in an array and will be used by the generator to decide what code to generate. 
 
-The full scan function is rather complex, so we will break it down to more managable pieces. The simplest version of the 
-function would be this:
+The full scan function is rather complex, so we will break it down to more managable pieces. The simplest version of 
+the function would be this:
 
 {% highlight c linenos %}
 Token scanner_get_next(Scanner* scanner)
@@ -207,8 +213,8 @@ Token scanner_get_next(Scanner* scanner)
 }
 {% endhighlight %}
 
-With this function we check if we have reached the end of the file (by checking if 'c' is '\0'). If we are indeed at the end,
-we create a token with the type 'TOKEN_EOF' and if not we return an error token with an according error message.
+With this function we check if we have reached the end of the file (by checking if 'c' is '\0'). If we are indeed at 
+the end, we create a token with the type 'TOKEN_EOF' and if not we return an error token with an according error message.
 
 The creation of these tokens (and other simple token) is pretty straightforward. 
 
@@ -236,8 +242,9 @@ static Token create_token_error(const Scanner* scanner, const char* message)
 }
 {% endhighlight %}
 
-The next step on our way to the full scan function is the creation of single and double character tokens. To do so we add a switch
-statement to check if the current character matches a token. After we added the switch to the function we get something like this:
+The next step on our way to the full scan function is the creation of single and double character tokens. To do so we 
+add a switch statement to check if the current character matches a token. After we added the switch to the function we 
+get something like this:
 
 {% highlight c linenos %}
 Token scanner_get_next(Scanner* scanner)
@@ -272,9 +279,9 @@ Token scanner_get_next(Scanner* scanner)
 }
 {% endhighlight %}
 
-To scan double character token we need a small helper function, that checks if the current character matches a specific character 
-and is not '\0'. If there is a match we advance the scanner by one character. Since the scripting language does not support arithmetic 
-operators, we return an error token if a hyphen is not followed by a greater-than sign.
+To scan double character token we need a small helper function, that checks if the current character matches a specific 
+character and is not '\0'. If there is a match we advance the scanner by one character. Since the scripting language 
+does not support arithmetic operators, we return an error token if a hyphen is not followed by a greater-than sign.
 
 {% highlight c linenos %}
 static int scanner_match(Scanner* scanner, char c)
@@ -288,9 +295,12 @@ static int scanner_match(Scanner* scanner, char c)
 }
 {% endhighlight %}
 
-Currently our scanner is creating a token (more specifically an error token) for every space, tab, and newline. But we do not care 
-for these since they are not part of any token's lexeme. So at the start of the scan function we should skip every leading whitespace.
-While we are at it we should possibly skip comments to. A comment starts with an '#' and goes until the end of the line.
+### Whitespaces and comments
+
+Currently our scanner is creating a token (more specifically an error token) for every space, tab, and newline. But we 
+do not care for these since they are not part of any token's lexeme. So at the start of the scan function we should 
+skip every leading whitespace. While we are at it we should possibly skip comments to. A comment starts with an '#' and 
+goes until the end of the line.
 
 {% highlight c linenos %}
 static void scanner_skip_whitespaces(Scanner* scanner)
@@ -321,230 +331,166 @@ static void scanner_skip_whitespaces(Scanner* scanner)
 }
 {% endhighlight %}
 
-----
+If we now call this function before we set the start of our scanner we will get all the token while avoiding all 
+whitespace and comments. 
+
+### Strings
+
+With comments and whitespaces out of the way, we can continue with adding more token we can scan. The next type we want 
+to scan is strings. A string starts and ends with '"' everthing in between is part of the string. For simplicity's sake 
+we will not handle multiline strings. So if we find '\0' or '\n' before we reach the closing quote we want to return an 
+error token indictating an unterminated was found. If we find a valid string we create a token which contains the 
+string including both quotes.
 
 {% highlight c linenos %}
-Token scanner_get_next(Scanner* scanner)
+static Token create_string(Scanner* scanner)
 {
-    scanner_skip_whitespaces(scanner);
-    scanner->start = scanner->current;
-
-    if (!scanner->current[0]) 
-        return make_token(scanner, TOKEN_EOF);
-
-    char c = scanner->current[0];
-    scanner->current++;
-
-    if (is_alpha(c)) return make_identifier(scanner);
-
-    switch (c)
+    while(scanner->current[0] != '"')
     {
-    case ':': return make_token(scanner, TOKEN_COLON);
-    case ',': return make_token(scanner, TOKEN_COMMA);
-    case '*': return make_token(scanner, TOKEN_ASTERISK);
+        if (!scanner->current[0] || scanner->current[0] == '\n')
+            return create_token_error(scanner, "Unterminated string.");
 
-    case '(': return make_token(scanner, TOKEN_LEFT_PAREN);
-    case ')': return make_token(scanner, TOKEN_RIGHT_PAREN);
-    case '{': return make_token(scanner, TOKEN_LEFT_BRACE);
-    case '}': return make_token(scanner, TOKEN_RIGHT_BRACE);
-    case '[': return make_token(scanner, TOKEN_LEFT_BRACKET);
-    case ']': return make_token(scanner, TOKEN_RIGHT_BRACKET);
-
-    case '-':
-        if (scanner_match(scanner, '>'))
-            return make_token(scanner, TOKEN_ARROW);
-        else
-            return make_token_error(scanner, "Expected '>' after '-'.");
-
-    case '"': return make_string(scanner);
-    
-    default:
-        break;
+        scanner->current++;
     }
 
-    return make_token_error(scanner, "Unexpected character.");
+    scanner->current++; /* closing quote */
+    return create_token(scanner, TOKEN_STRING);
 }
 {% endhighlight %}
 
-With the fist two lines of the function (line 3 and 4 in the snippet above) we skip all whitespaces (and comments) and set the 
-start of the scanner for the token we are currently trying to scan.
+To add this function to our scan function we just need to add another case (for '"') to the switch statement.
+
+### Numbers
+
+The only thing we are missing now is the scanning of numbers, identifiers and keywords. We will start with numbers, 
+since they are easier. To look for numbers we first need to define a small helper function to check if a character is a
+digit.
 
 {% highlight c linenos %}
-if (!scanner->current[0]) 
-    return make_token(scanner, TOKEN_EOF);
+static int is_digit(char c)
+{
+    return c >= '0' && c <= '9';
+}
 {% endhighlight %}
 
-With this statement we check if we found the end of the file or more specific an '\0' character. If we reached the end we return a 
-token with the type 'TOKEN_EOF'. We will talk about how different tokens are created later on when we have more token to create.
+With the help of this function we can scan numbers. To do so we need to advance the scanner while the current character
+is still a number. If the next character is a dot, we need to scan the fractional part as well, which is basically the 
+same as the first part of this function. Put that all together and the result should look something like this:
 
-Next we read the current character and advance the scanner by one. Then we check if we are currently scanning an identifier. An 
-identifier can only contain letters and underscores and has to start with a letter.
+{% highlight c linenos %}
+static Token create_number(Scanner* scanner)
+{
+    while (is_digit(scanner->current[0])) scanner++;
 
-----
+    /* Look for a fractional part. */
+    if (scanner->current[0] && scanner->current[0] == '.' && is_digit(scanner->current[1]))
+    {
+        scanner++;
+        while (is_digit(scanner->current[0])) scanner++;
+    }
 
+    return create_token(scanner, TOKEN_NUMBER);
+}
+{% endhighlight %}
 
+To add this to our scan function we just need to check if our current character is a digit before we enter the switch.
+
+### Identifiers and keywords
+
+Now to identifiers and keywords. Since Keywords are "just" special, reserved indetifiers we can check for both in one function. First we scan the whole identifier, and since we allow numbers in our identifiers we need to check for both 
+letters (and underscores) and digits. Like for the numbers we should define a helper function to check for letters.
 
 {% highlight c linenos %}
 static int is_alpha(char c)
 {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_');
 }
+{% endhighlight %}
 
-static int is_digit(char c)
-{
-    return c >= '0' && c <= '9';
-}
-
-static Token make_token(const Scanner* scanner, TokenType type)
-{
-    Token token;
-    token.type = type;
-    token.start = scanner->start;
-    token.len = scanner->current - scanner->start;
-    token.line = scanner->line;
-
-    return token;
-}
-
-static Token make_token_error(const Scanner* scanner, const char* message)
-{
-    Token token;
-    token.type = TOKEN_ERROR;
-    token.start = message;
-    token.len = strlen(message);
-    token.line = scanner->line;
-
-    return token;
-}
-
-static Token make_string(Scanner* scanner)
-{
-    while(scanner->current[0] != '"')
-    {
-        if (scanner->current[0] == '\0' || scanner->current[0] == '\n')
-            return make_token_error(scanner, "Unterminated string.");
-
-        scanner->current++;
-    }
-
-    scanner->current++; /* closing quote */
-    return make_token(scanner, TOKEN_STRING);
-}
-
+{% highlight c linenos %}
 static TokenType check_keyword(const Scanner* scanner, const char* keyword, TokenType type)
 {
     size_t len = strlen(keyword);
+
     if ((scanner->current - scanner->start == len) && memcmp(scanner->start, keyword, len) == 0)
         return type;
 
     return TOKEN_IDENTIFIER;
 }
 
-static TokenType get_identifier_type(const Scanner* scanner)
-{
-    switch (scanner->start[0])
-    {
-    case 'd': return check_keyword(scanner, "define", TOKEN_DEFINE);
-    case 'e': return check_keyword(scanner, "enum", TOKEN_ENUM);
-    case 'g': return check_keyword(scanner, "generate", TOKEN_GENERATE);
-    case 'i': return check_keyword(scanner, "include", TOKEN_INCLUDE);
-    }
-
-    return TOKEN_IDENTIFIER;
-}
-
-static Token make_identifier(Scanner* scanner)
+static Token create_identifier(Scanner* scanner)
 {
     while (is_alpha(scanner->current[0]) || is_digit(scanner->current[0])) 
         scanner->current++;
 
-    return make_token(scanner, get_identifier_type(scanner));
-}
-
-static int scanner_match(Scanner* scanner, char c)
-{
-    if (!(scanner->current[0] && scanner->current[0] == c))
-        return 0;
-
-    scanner->current++;
-    return 1;
-}
-
-static void scanner_skip_whitespaces(Scanner* scanner)
-{
-    while(1)
+    TokenType identifier_type = TOKEN_IDENTIFIER;
+    switch (scanner->start[0])
     {
-        switch (scanner->current[0])
-        {
-        case ' ':
-        case '\r':
-        case '\t':
-            scanner->current++;
-            break;
-        case '\n':
-            scanner->line++;
-            scanner->current++;
-            break;
-
-        /* Comments */
-        case '#':
-            while(scanner->current[0] && scanner->current[0] != '\n')
-                scanner->current++;
-        
-        default:
-            return;
-        }
+    case 'd': identifier_type = check_keyword(scanner, "define", TOKEN_DEFINE); break;
+    case 'e': identifier_type = check_keyword(scanner, "enum", TOKEN_ENUM); break;
+    case 'g': identifier_type = check_keyword(scanner, "generate", TOKEN_GENERATE); break;
+    case 'i': identifier_type = check_keyword(scanner, "include", TOKEN_INCLUDE); break;
+    case 's': identifier_type = check_keyword(scanner, "strings", TOKEN_STRINGS); break;
     }
-}
 
+    return create_token(scanner, identifier_type);
+}
+{% endhighlight %}
+
+----
+
+{% highlight c linenos %}
 Token scanner_get_next(Scanner* scanner)
 {
     scanner_skip_whitespaces(scanner);
-    
     scanner->start = scanner->current;
 
-    if (!scanner->current[0]) return make_token(scanner, TOKEN_EOF);
-
     char c = scanner->current[0];
+    if (!c) return create_token(scanner, TOKEN_EOF);
+
     scanner->current++;
 
-    if (is_alpha(c)) return make_identifier(scanner);
+    if (is_alpha(c)) return create_identifier(scanner);
+    if (is_digit(c)) return create_number(scanner);
 
     switch (c)
     {
-    case ':': return make_token(scanner, TOKEN_COLON);
-    case ',': return make_token(scanner, TOKEN_COMMA);
-    case '*': return make_token(scanner, TOKEN_ASTERISK);
+    /* checking for single character token */
+    case ':': return create_token(scanner, TOKEN_COLON);
+    case ',': return create_token(scanner, TOKEN_COMMA);
+    case '*': return create_token(scanner, TOKEN_ASTERISK);
+    case '(': return create_token(scanner, TOKEN_LEFT_PAREN);
+    case ')': return create_token(scanner, TOKEN_RIGHT_PAREN);
+    case '{': return create_token(scanner, TOKEN_LEFT_BRACE);
+    case '}': return create_token(scanner, TOKEN_RIGHT_BRACE);
+    case '[': return create_token(scanner, TOKEN_LEFT_BRACKET);
+    case ']': return create_token(scanner, TOKEN_RIGHT_BRACKET);
 
-    case '(': return make_token(scanner, TOKEN_LEFT_PAREN);
-    case ')': return make_token(scanner, TOKEN_RIGHT_PAREN);
-    case '{': return make_token(scanner, TOKEN_LEFT_BRACE);
-    case '}': return make_token(scanner, TOKEN_RIGHT_BRACE);
-    case '[': return make_token(scanner, TOKEN_LEFT_BRACKET);
-    case ']': return make_token(scanner, TOKEN_RIGHT_BRACKET);
-
+    /* checking for double character token */
     case '-':
         if (scanner_match(scanner, '>'))
-            return make_token(scanner, TOKEN_ARROW);
+            return create_token(scanner, TOKEN_ARROW);
         else
-            return make_token_error(scanner, "Expected '>' after '-'.");
+            return create_token_error(scanner, "Expected '>' after '-'.");
 
-    case '"': return make_string(scanner);
-    
-    default:
-        break;
+    case '"': return create_string(scanner);
     }
 
-    return make_token_error(scanner, "Unexpected character.");
-}
-
-int token_cmp(Token* token, const char* str)
-{
-    return strncmp(token->start, str, token->len);
-}
-
-void print_token(Token* token)
-{
-    printf("%2d: %.*s\n", token->type, token->len, token->start);
+    return create_token_error(scanner, "Unexpected character.");
 }
 {% endhighlight %}
+
+With the fist two lines of the function (line 3 and 4 in the snippet above) we skip all whitespaces (and comments) and 
+set the start of the scanner for the token we are currently trying to scan.
+
+{% highlight c linenos %}
+if (!scanner->current[0]) 
+    return make_token(scanner, TOKEN_EOF);
+{% endhighlight %}
+
+With this statement we check if we found the end of the file or more specific an '\0' character. If we reached the end 
+we return a token with the type 'TOKEN_EOF'. We will talk about how different tokens are created later on when we have 
+more token to create.
+
+Next we read the current character and advance the scanner by one. Then we check if we are currently scanning an 
+identifier. An identifier can only contain letters and underscores and has to start with a letter.
