@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-02T14:03:05+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 1): The Scanner</title><link href="http://localhost:4000/2020/09/27/generator-part1.html" rel="alternate" type="text/html" title="Writing a code generation tool (Part 1): The Scanner" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/generator-part1</id><content type="html" xml:base="http://localhost:4000/2020/09/27/generator-part1.html">&lt;p&gt;Introduction and Scanner…&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-03T00:07:50+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 1): The Scanner</title><link href="http://localhost:4000/2020/09/27/generator-part1.html" rel="alternate" type="text/html" title="Writing a code generation tool (Part 1): The Scanner" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/generator-part1</id><content type="html" xml:base="http://localhost:4000/2020/09/27/generator-part1.html">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the 
+course of the development I often needed to call a function a certain number of times with different parameters 
+to fill an array and access them afterwards by index. After having to painstakingly add new components and 
+systems to my ecs I decided to write a small code generation tool to automate the process.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your 
 project or maybe you get inspired to do something better.&lt;/p&gt;
 &lt;/blockquote&gt;
-
-&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the 
-course of the development I often needed to call a function a certain number of times with different parameters 
-to fill an array and access them afterwards by index. After having to painstakingly add new components and 
-systems to my ecs I decided to write a small code generation tool to automate the process.&lt;/p&gt;
 
 &lt;p&gt;My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I 
 could add new features as I needed them. So i rewrote everything.&lt;/p&gt;
@@ -16,8 +14,6 @@ could add new features as I needed them. So i rewrote everything.&lt;/p&gt;
 &lt;p&gt;For my second attempt I refined the syntax for the scripting language used to generate the code, with what I 
 learned from my prior mistake. Futhermore I used some code (and knowledge) from Bob Nystrom’s book 
 &lt;a href=&quot;https://www.craftinginterpreters.com/&quot;&gt;Crafting Interpreters&lt;/a&gt;.&lt;/p&gt;
-
-&lt;hr /&gt;
 
 &lt;h2 id=&quot;the-scripting-lanuage&quot;&gt;The Scripting Lanuage&lt;/h2&gt;
 
@@ -139,8 +135,6 @@ arrow.&lt;/p&gt;
 &lt;p&gt;There are various ways this language and the generator could be improved. But these features are either too complicated 
 or are simply not needed for now. A possible upgrade would be to specify via index which argument of the enum is needed 
 in what order.&lt;/p&gt;
-
-&lt;hr /&gt;
 
 &lt;h2 id=&quot;the-scanner&quot;&gt;The Scanner&lt;/h2&gt;
 
@@ -439,7 +433,7 @@ does not support arithmetic operators, we return an error token if a hyphen is n
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h3 id=&quot;whitespaces-and-comments&quot;&gt;Whitespaces and comments&lt;/h3&gt;
+&lt;h2 id=&quot;whitespaces-and-comments&quot;&gt;Whitespaces and comments&lt;/h2&gt;
 
 &lt;p&gt;Currently our scanner is creating a token (more specifically an error token) for every space, tab, and newline. But we 
 do not care for these since they are not part of any token’s lexeme. So at the start of the scan function we should 
@@ -503,7 +497,7 @@ goes until the end of the line.&lt;/p&gt;
 &lt;p&gt;If we now call this function before we set the start of our scanner we will get all the token while avoiding all 
 whitespace and comments.&lt;/p&gt;
 
-&lt;h3 id=&quot;strings&quot;&gt;Strings&lt;/h3&gt;
+&lt;h2 id=&quot;strings&quot;&gt;Strings&lt;/h2&gt;
 
 &lt;p&gt;With comments and whitespaces out of the way, we can continue with adding more token we can scan. The next type we want 
 to scan is strings. A string starts and ends with ‘”’ everthing in between is part of the string. For simplicity’s sake 
@@ -541,7 +535,7 @@ string including both quotes.&lt;/p&gt;
 
 &lt;p&gt;To add this function to our scan function we just need to add another case (for ‘”’) to the switch statement.&lt;/p&gt;
 
-&lt;h3 id=&quot;numbers&quot;&gt;Numbers&lt;/h3&gt;
+&lt;h2 id=&quot;numbers&quot;&gt;Numbers&lt;/h2&gt;
 
 &lt;p&gt;The only thing we are missing now is the scanning of numbers, identifiers and keywords. We will start with numbers, 
 since they are easier. To look for numbers we first need to define a small helper function to check if a character is a
@@ -591,7 +585,7 @@ same as the first part of this function. Put that all together and the result sh
 
 &lt;p&gt;To add this to our scan function we just need to check if our current character is a digit before we enter the switch.&lt;/p&gt;
 
-&lt;h3 id=&quot;identifiers-and-keywords&quot;&gt;Identifiers and keywords&lt;/h3&gt;
+&lt;h2 id=&quot;identifiers-and-keywords&quot;&gt;Identifiers and keywords&lt;/h2&gt;
 
 &lt;p&gt;Now to identifiers and keywords. Since Keywords are “just” special, reserved indetifiers we can check for both in one 
 function. First we scan the whole identifier, and since we allow numbers in our identifiers we need to check for both 
@@ -671,9 +665,9 @@ identifier. If it doesn’t we just return an identifier token since it can’t 
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;hr /&gt;
+&lt;h2 id=&quot;putting-it-all-together&quot;&gt;Putting it all together&lt;/h2&gt;
 
-&lt;p&gt;If we now put all of the above together the scan function should look something like this:&lt;/p&gt;
+&lt;p&gt;If we now take everything we learned so far and pack it in one function the result should look something like this:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
@@ -753,18 +747,10 @@ identifier. If it doesn’t we just return an identifier token since it can’t 
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;To test if everything is working we just keep scanning until we reach the end of the file. Every token we scan will be 
-printed out for now. To do so we define a little function to print a token in a nice, readable way.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Token&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%2d: %.*s&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;The last part we should do is testing if nothing is crashing and the scanner identifies every token correctly. To do so 
+we will scan a simple &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner/test_script.cx&quot;&gt;test script&lt;/a&gt;.
+To scan a file we just keep getting the next token until we get a token which type is ‘TOKEN_EOF’. For now every token 
+we scan will be printed out in a nice, readable way.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
@@ -817,7 +803,7 @@ printed out for now. To do so we define a little function to print a token in a 
         &lt;span class=&quot;n&quot;&gt;Token&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scanner_get_next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scanner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TOKEN_EOF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
-        &lt;span class=&quot;n&quot;&gt;print_token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%2d: %.*s&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
     &lt;span class=&quot;n&quot;&gt;free&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
@@ -826,7 +812,10 @@ printed out for now. To do so we define a little function to print a token in a 
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;The complete code can be found &lt;a href=&quot;/code/generator-part1&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">Introduction and Scanner…</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/2020/09/27/avl-tree.html" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/avl-tree</id><content type="html" xml:base="http://localhost:4000/2020/09/27/avl-tree.html">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
+&lt;p&gt;If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
+&lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the course of the development I often needed to call a function a certain number of times with different parameters to fill an array and access them afterwards by index. After having to painstakingly add new components and systems to my ecs I decided to write a small code generation tool to automate the process.</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/2020/09/27/avl-tree.html" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/avl-tree</id><content type="html" xml:base="http://localhost:4000/2020/09/27/avl-tree.html">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;

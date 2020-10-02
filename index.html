@@ -13,9 +13,8 @@ title: blog
         <li><i class="far fa-user"></i>{{ post.author }}</li>
         <li><i class="fas fa-code"></i>{{ post.lang }}</li>
       </ul>
-      <p class="post-summary"> {{ post.excerpt }} </p>
-      <br>
-      <a class="default" href="{{ post.url }}">View &raquo;</a>
+      <div class="post-summary"> {{ post.excerpt }} </div>
+      <a class="default" href="{{ post.url }}">More &raquo;</a>
     </li>
   {% endfor %}
 </ul>

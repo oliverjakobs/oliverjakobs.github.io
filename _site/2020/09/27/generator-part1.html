@@ -18,14 +18,14 @@
 <meta property="og:title" content="Writing a code generation tool (Part 1): The Scanner" />
 <meta name="author" content="oliver" />
 <meta property="og:locale" content="C" />
-<meta name="description" content="Introduction and Scanner…" />
-<meta property="og:description" content="Introduction and Scanner…" />
+<meta name="description" content="For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the course of the development I often needed to call a function a certain number of times with different parameters to fill an array and access them afterwards by index. After having to painstakingly add new components and systems to my ecs I decided to write a small code generation tool to automate the process." />
+<meta property="og:description" content="For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the course of the development I often needed to call a function a certain number of times with different parameters to fill an array and access them afterwards by index. After having to painstakingly add new components and systems to my ecs I decided to write a small code generation tool to automate the process." />
 <link rel="canonical" href="http://localhost:4000/2020/09/27/generator-part1.html" />
 <meta property="og:url" content="http://localhost:4000/2020/09/27/generator-part1.html" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-09-27T00:00:00+02:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","url":"http://localhost:4000/2020/09/27/generator-part1.html","headline":"Writing a code generation tool (Part 1): The Scanner","datePublished":"2020-09-27T00:00:00+02:00","dateModified":"2020-09-27T00:00:00+02:00","author":{"@type":"Person","name":"oliver"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/09/27/generator-part1.html"},"description":"Introduction and Scanner…","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","url":"http://localhost:4000/2020/09/27/generator-part1.html","headline":"Writing a code generation tool (Part 1): The Scanner","datePublished":"2020-09-27T00:00:00+02:00","dateModified":"2020-09-27T00:00:00+02:00","author":{"@type":"Person","name":"oliver"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/09/27/generator-part1.html"},"description":"For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the course of the development I often needed to call a function a certain number of times with different parameters to fill an array and access them afterwards by index. After having to painstakingly add new components and systems to my ecs I decided to write a small code generation tool to automate the process.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   </head>
@@ -51,19 +51,16 @@
   <li><i class="fas fa-code"></i>C</li>
 </ul>
 
-<p class="separator"></p>
-
-<p>Introduction and Scanner…</p>
+<div class="post-content">
+  <p>For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the 
+course of the development I often needed to call a function a certain number of times with different parameters 
+to fill an array and access them afterwards by index. After having to painstakingly add new components and 
+systems to my ecs I decided to write a small code generation tool to automate the process.</p>
 
 <blockquote>
   <p>Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your 
 project or maybe you get inspired to do something better.</p>
 </blockquote>
-
-<p>For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the 
-course of the development I often needed to call a function a certain number of times with different parameters 
-to fill an array and access them afterwards by index. After having to painstakingly add new components and 
-systems to my ecs I decided to write a small code generation tool to automate the process.</p>
 
 <p>My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I 
 could add new features as I needed them. So i rewrote everything.</p>
@@ -71,8 +68,6 @@ could add new features as I needed them. So i rewrote everything.</p>
 <p>For my second attempt I refined the syntax for the scripting language used to generate the code, with what I 
 learned from my prior mistake. Futhermore I used some code (and knowledge) from Bob Nystrom’s book 
 <a href="https://www.craftinginterpreters.com/">Crafting Interpreters</a>.</p>
-
-<hr />
 
 <h2 id="the-scripting-lanuage">The Scripting Lanuage</h2>
 
@@ -194,8 +189,6 @@ arrow.</p>
 <p>There are various ways this language and the generator could be improved. But these features are either too complicated 
 or are simply not needed for now. A possible upgrade would be to specify via index which argument of the enum is needed 
 in what order.</p>
-
-<hr />
 
 <h2 id="the-scanner">The Scanner</h2>
 
@@ -494,7 +487,7 @@ does not support arithmetic operators, we return an error token if a hyphen is n
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
-<h3 id="whitespaces-and-comments">Whitespaces and comments</h3>
+<h2 id="whitespaces-and-comments">Whitespaces and comments</h2>
 
 <p>Currently our scanner is creating a token (more specifically an error token) for every space, tab, and newline. But we 
 do not care for these since they are not part of any token’s lexeme. So at the start of the scan function we should 
@@ -558,7 +551,7 @@ goes until the end of the line.</p>
 <p>If we now call this function before we set the start of our scanner we will get all the token while avoiding all 
 whitespace and comments.</p>
 
-<h3 id="strings">Strings</h3>
+<h2 id="strings">Strings</h2>
 
 <p>With comments and whitespaces out of the way, we can continue with adding more token we can scan. The next type we want 
 to scan is strings. A string starts and ends with ‘”’ everthing in between is part of the string. For simplicity’s sake 
@@ -596,7 +589,7 @@ string including both quotes.</p>
 
 <p>To add this function to our scan function we just need to add another case (for ‘”’) to the switch statement.</p>
 
-<h3 id="numbers">Numbers</h3>
+<h2 id="numbers">Numbers</h2>
 
 <p>The only thing we are missing now is the scanning of numbers, identifiers and keywords. We will start with numbers, 
 since they are easier. To look for numbers we first need to define a small helper function to check if a character is a
@@ -646,7 +639,7 @@ same as the first part of this function. Put that all together and the result sh
 
 <p>To add this to our scan function we just need to check if our current character is a digit before we enter the switch.</p>
 
-<h3 id="identifiers-and-keywords">Identifiers and keywords</h3>
+<h2 id="identifiers-and-keywords">Identifiers and keywords</h2>
 
 <p>Now to identifiers and keywords. Since Keywords are “just” special, reserved indetifiers we can check for both in one 
 function. First we scan the whole identifier, and since we allow numbers in our identifiers we need to check for both 
@@ -726,9 +719,9 @@ identifier. If it doesn’t we just return an identifier token since it can’t 
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
-<hr />
+<h2 id="putting-it-all-together">Putting it all together</h2>
 
-<p>If we now put all of the above together the scan function should look something like this:</p>
+<p>If we now take everything we learned so far and pack it in one function the result should look something like this:</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
 2
@@ -808,18 +801,10 @@ identifier. If it doesn’t we just return an identifier token since it can’t 
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
-<p>To test if everything is working we just keep scanning until we reach the end of the file. Every token we scan will be 
-printed out for now. To do so we define a little function to print a token in a nice, readable way.</p>
-
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="kt">void</span> <span class="nf">print_token</span><span class="p">(</span><span class="n">Token</span><span class="o">*</span> <span class="n">token</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"%2d: %.*s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">token</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">,</span> <span class="n">token</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">,</span> <span class="n">token</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></figure>
+<p>The last part we should do is testing if nothing is crashing and the scanner identifies every token correctly. To do so 
+we will scan a simple <a href="https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner/test_script.cx">test script</a>.
+To scan a file we just keep getting the next token until we get a token which type is ‘TOKEN_EOF’. For now every token 
+we scan will be printed out in a nice, readable way.</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
 2
@@ -872,7 +857,7 @@ printed out for now. To do so we define a little function to print a token in a 
         <span class="n">Token</span> <span class="n">token</span> <span class="o">=</span> <span class="n">scanner_get_next</span><span class="p">(</span><span class="n">scanner</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">token</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">TOKEN_EOF</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
 
-        <span class="n">print_token</span><span class="p">(</span><span class="o">&amp;</span><span class="n">token</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"%2d: %.*s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">token</span><span class="p">.</span><span class="n">type</span><span class="p">,</span> <span class="n">token</span><span class="p">.</span><span class="n">len</span><span class="p">,</span> <span class="n">token</span><span class="p">.</span><span class="n">start</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="n">free</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
@@ -881,8 +866,12 @@ printed out for now. To do so we define a little function to print a token in a 
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
-<p>The complete code can be found <a href="/code/generator-part1">here</a>.</p>
+<p>If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
+<a href="https://twitter.com/orwell_23">twitter</a>.</p>
 
+<p>The complete code can be found <a href="https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner">here</a>.</p>
+
+</div>
 
 <div class="comments">
   <i class="far fa-comments"></i>

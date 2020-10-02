@@ -4,15 +4,13 @@ title: "Writing a code generation tool (Part 1): The Scanner"
 author: oliver
 lang: C
 ---
-Introduction and Scanner...
-
->Disclaimer: This is not the only or best way to do this. This is how I've done it. Maybe it helps with your 
-project or maybe you get inspired to do something better.
-
 For some time now I've been working on writing a game in C from scratch (using OpenGL and GLFW). Over the 
 course of the development I often needed to call a function a certain number of times with different parameters 
 to fill an array and access them afterwards by index. After having to painstakingly add new components and 
 systems to my ecs I decided to write a small code generation tool to automate the process.
+
+>Disclaimer: This is not the only or best way to do this. This is how I've done it. Maybe it helps with your 
+project or maybe you get inspired to do something better.
 
 My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I 
 could add new features as I needed them. So i rewrote everything. 
@@ -20,8 +18,6 @@ could add new features as I needed them. So i rewrote everything.
 For my second attempt I refined the syntax for the scripting language used to generate the code, with what I 
 learned from my prior mistake. Futhermore I used some code (and knowledge) from Bob Nystrom's book 
 [Crafting Interpreters](https://www.craftinginterpreters.com/).
-
-----
 
 ## The Scripting Lanuage
 
@@ -107,8 +103,6 @@ void RegisterComponents(Ecs* ecs)
 There are various ways this language and the generator could be improved. But these features are either too complicated 
 or are simply not needed for now. A possible upgrade would be to specify via index which argument of the enum is needed 
 in what order. 
-
-----
 
 ## The Scanner
 
@@ -296,7 +290,7 @@ static int scanner_match(Scanner* scanner, char c)
 }
 {% endhighlight %}
 
-### Whitespaces and comments
+## Whitespaces and comments
 
 Currently our scanner is creating a token (more specifically an error token) for every space, tab, and newline. But we 
 do not care for these since they are not part of any token's lexeme. So at the start of the scan function we should 
@@ -335,7 +329,7 @@ static void scanner_skip_whitespaces(Scanner* scanner)
 If we now call this function before we set the start of our scanner we will get all the token while avoiding all 
 whitespace and comments. 
 
-### Strings
+## Strings
 
 With comments and whitespaces out of the way, we can continue with adding more token we can scan. The next type we want 
 to scan is strings. A string starts and ends with '"' everthing in between is part of the string. For simplicity's sake 
@@ -361,7 +355,7 @@ static Token create_string(Scanner* scanner)
 
 To add this function to our scan function we just need to add another case (for '"') to the switch statement.
 
-### Numbers
+## Numbers
 
 The only thing we are missing now is the scanning of numbers, identifiers and keywords. We will start with numbers, 
 since they are easier. To look for numbers we first need to define a small helper function to check if a character is a
@@ -396,7 +390,7 @@ static Token create_number(Scanner* scanner)
 
 To add this to our scan function we just need to check if our current character is a digit before we enter the switch.
 
-### Identifiers and keywords
+## Identifiers and keywords
 
 Now to identifiers and keywords. Since Keywords are "just" special, reserved indetifiers we can check for both in one 
 function. First we scan the whole identifier, and since we allow numbers in our identifiers we need to check for both 
@@ -449,9 +443,9 @@ static Token create_identifier(Scanner* scanner)
 }
 {% endhighlight %}
 
-----
+## Putting it all together
 
-If we now put all of the above together the scan function should look something like this: 
+If we now take everything we learned so far and pack it in one function the result should look something like this: 
 
 {% highlight c linenos %}
 Token scanner_get_next(Scanner* scanner)
@@ -494,15 +488,10 @@ Token scanner_get_next(Scanner* scanner)
 }
 {% endhighlight %}
 
-To test if everything is working we just keep scanning until we reach the end of the file. Every token we scan will be 
-printed out for now. To do so we define a little function to print a token in a nice, readable way.
-
-{% highlight c linenos %}
-void print_token(Token* token)
-{
-    printf("%2d: %.*s\n", token->type, token->len, token->start);
-}
-{% endhighlight %}
+The last part we should do is testing if nothing is crashing and the scanner identifies every token correctly. To do so 
+we will scan a simple [test script](https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner/test_script.cx).
+To scan a file we just keep getting the next token until we get a token which type is 'TOKEN_EOF'. For now every token 
+we scan will be printed out in a nice, readable way. 
 
 {% highlight c linenos %}
 int main(int argc, char** args)
@@ -527,7 +516,7 @@ int main(int argc, char** args)
         Token token = scanner_get_next(scanner);
         if (token.type == TOKEN_EOF) break;
 
-        print_token(&token);
+        printf("%2d: %.*s\n", token.type, token.len, token.start);
     }
 
     free(buffer);
@@ -536,4 +525,7 @@ int main(int argc, char** args)
 }
 {% endhighlight %}
 
-The complete code can be found [here](/code/generator-part1).
+If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
+[twitter](https://twitter.com/orwell_23).
+
+The complete code can be found [here](https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner).

@@ -5,7 +5,6 @@
 
 static void print_token(Token* token)
 {
-    printf("%2d: %.*s\n", token->type, token->len, token->start);
 }
 
 int main(int argc, char** args)
@@ -32,7 +31,7 @@ int main(int argc, char** args)
         Token token = scanner_get_next(&scanner);
         if (token.type == TOKEN_EOF) break;
 
-        print_token(&token);
+        printf("%2d: %.*s\n", token.type, token.len, token.start);
     }
 
     free(buffer);
