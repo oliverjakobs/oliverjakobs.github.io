@@ -660,6 +660,34 @@ letters (and underscores) and digits. Like for the numbers we should define a he
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
+<p>Additionally we need an another helper function to check if the identifier we scanned is a specific keyword. Basically 
+its just a fancy wrapper for ‘memcmp’.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="k">static</span> <span class="n">TokenType</span> <span class="nf">check_keyword</span><span class="p">(</span><span class="k">const</span> <span class="n">Scanner</span><span class="o">*</span> <span class="n">scanner</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">TokenType</span> <span class="n">type</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">keyword</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">scanner</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">-</span> <span class="n">scanner</span><span class="o">-&gt;</span><span class="n">start</span> <span class="o">==</span> <span class="n">len</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">memcmp</span><span class="p">(</span><span class="n">scanner</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">len</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">type</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">TOKEN_IDENTIFIER</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>With the help of these two functions we can now create the ‘create_identifier’ function. Since we don’t want to compare 
+every single identifier with every possible keyword, we will use a switch statement where we will look only at the 
+first character of each identifier. If it matches the first character of a keyword we will check the rest of the 
+identifier. If it doesn’t we just return an identifier token since it can’t be any keyword.</p>
+
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
 2
 3
@@ -677,27 +705,7 @@ letters (and underscores) and digits. Like for the numbers we should define a he
 15
 16
 17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-</pre></td><td class="code"><pre><span class="k">static</span> <span class="n">TokenType</span> <span class="nf">check_keyword</span><span class="p">(</span><span class="k">const</span> <span class="n">Scanner</span><span class="o">*</span> <span class="n">scanner</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">TokenType</span> <span class="n">type</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">keyword</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">((</span><span class="n">scanner</span><span class="o">-&gt;</span><span class="n">current</span> <span class="o">-</span> <span class="n">scanner</span><span class="o">-&gt;</span><span class="n">start</span> <span class="o">==</span> <span class="n">len</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">memcmp</span><span class="p">(</span><span class="n">scanner</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">len</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">type</span><span class="p">;</span>
-
-    <span class="k">return</span> <span class="n">TOKEN_IDENTIFIER</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="n">Token</span> <span class="nf">create_identifier</span><span class="p">(</span><span class="n">Scanner</span><span class="o">*</span> <span class="n">scanner</span><span class="p">)</span>
+</pre></td><td class="code"><pre><span class="k">static</span> <span class="n">Token</span> <span class="nf">create_identifier</span><span class="p">(</span><span class="n">Scanner</span><span class="o">*</span> <span class="n">scanner</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">while</span> <span class="p">(</span><span class="n">is_alpha</span><span class="p">(</span><span class="n">scanner</span><span class="o">-&gt;</span><span class="n">current</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">||</span> <span class="n">is_digit</span><span class="p">(</span><span class="n">scanner</span><span class="o">-&gt;</span><span class="n">current</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> 
         <span class="n">scanner</span><span class="o">-&gt;</span><span class="n">current</span><span class="o">++</span><span class="p">;</span>
@@ -717,6 +725,8 @@ letters (and underscores) and digits. Like for the numbers we should define a he
 </pre></td></tr></tbody></table></code></pre></figure>
 
 <hr />
+
+<p>If we now put all of the above together the scan function should look something like this:</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
 2
@@ -796,21 +806,9 @@ letters (and underscores) and digits. Like for the numbers we should define a he
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
-<p>With the fist two lines of the function (line 3 and 4 in the snippet above) we skip all whitespaces (and comments) and 
-set the start of the scanner for the token we are currently trying to scan.</p>
-
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
-2
-</pre></td><td class="code"><pre><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">scanner</span><span class="o">-&gt;</span><span class="n">current</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> 
-    <span class="k">return</span> <span class="nf">make_token</span><span class="p">(</span><span class="n">scanner</span><span class="p">,</span> <span class="n">TOKEN_EOF</span><span class="p">);</span>
-</pre></td></tr></tbody></table></code></pre></figure>
-
-<p>With this statement we check if we found the end of the file or more specific an ‘\0’ character. If we reached the end 
-we return a token with the type ‘TOKEN_EOF’. We will talk about how different tokens are created later on when we have 
-more token to create.</p>
-
-<p>Next we read the current character and advance the scanner by one. Then we check if we are currently scanning an 
-identifier. An identifier can only contain letters and underscores and has to start with a letter.</p>
+<p>The complete code can be found on github 
+(<a href="https://github.com/oliverjakobs/code-generator/blob/master/generator/src/scanner.h">header</a> and 
+<a href="https://github.com/oliverjakobs/code-generator/blob/master/generator/src/scanner.c">source</a>)</p>
 
 
 <div class="comments">

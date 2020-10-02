@@ -407,6 +407,9 @@ static int is_alpha(char c)
 }
 {% endhighlight %}
 
+Additionally we need an another helper function to check if the identifier we scanned is a specific keyword. Basically 
+its just a fancy wrapper for 'memcmp'. 
+
 {% highlight c linenos %}
 static TokenType check_keyword(const Scanner* scanner, const char* keyword, TokenType type)
 {
@@ -417,7 +420,14 @@ static TokenType check_keyword(const Scanner* scanner, const char* keyword, Toke
 
     return TOKEN_IDENTIFIER;
 }
+{% endhighlight %}
 
+With the help of these two functions we can now create the 'create_identifier' function. Since we don't want to compare 
+every single identifier with every possible keyword, we will use a switch statement where we will look only at the 
+first character of each identifier. If it matches the first character of a keyword we will check the rest of the 
+identifier. If it doesn't we just return an identifier token since it can't be any keyword.
+
+{% highlight c linenos %}
 static Token create_identifier(Scanner* scanner)
 {
     while (is_alpha(scanner->current[0]) || is_digit(scanner->current[0])) 
@@ -437,7 +447,10 @@ static Token create_identifier(Scanner* scanner)
 }
 {% endhighlight %}
 
+
 ----
+
+If we now put all of the above together the scan function should look something like this: 
 
 {% highlight c linenos %}
 Token scanner_get_next(Scanner* scanner)
@@ -480,17 +493,6 @@ Token scanner_get_next(Scanner* scanner)
 }
 {% endhighlight %}
 
-With the fist two lines of the function (line 3 and 4 in the snippet above) we skip all whitespaces (and comments) and 
-set the start of the scanner for the token we are currently trying to scan.
-
-{% highlight c linenos %}
-if (!scanner->current[0]) 
-    return make_token(scanner, TOKEN_EOF);
-{% endhighlight %}
-
-With this statement we check if we found the end of the file or more specific an '\0' character. If we reached the end 
-we return a token with the type 'TOKEN_EOF'. We will talk about how different tokens are created later on when we have 
-more token to create.
-
-Next we read the current character and advance the scanner by one. Then we check if we are currently scanning an 
-identifier. An identifier can only contain letters and underscores and has to start with a letter.
+The complete code can be found on github 
+([header](https://github.com/oliverjakobs/code-generator/blob/master/generator/src/scanner.h) and 
+[source](https://github.com/oliverjakobs/code-generator/blob/master/generator/src/scanner.c))
