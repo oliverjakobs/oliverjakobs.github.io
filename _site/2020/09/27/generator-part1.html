@@ -355,7 +355,8 @@ the function would be this:</p>
 </pre></td></tr></tbody></table></code></pre></figure>
 
 <p>With this function we check if we have reached the end of the file (by checking if ‘c’ is ‘\0’). If we are indeed at 
-the end, we create a token with the type ‘TOKEN_EOF’ and if not we return an error token with an according error message.</p>
+the end, we create a token with the type ‘TOKEN_EOF’ and if not we return an error token with an according error 
+message.</p>
 
 <p>The creation of these tokens (and other simple token) is pretty straightforward.</p>
 
@@ -647,7 +648,8 @@ same as the first part of this function. Put that all together and the result sh
 
 <h3 id="identifiers-and-keywords">Identifiers and keywords</h3>
 
-<p>Now to identifiers and keywords. Since Keywords are “just” special, reserved indetifiers we can check for both in one function. First we scan the whole identifier, and since we allow numbers in our identifiers we need to check for both 
+<p>Now to identifiers and keywords. Since Keywords are “just” special, reserved indetifiers we can check for both in one 
+function. First we scan the whole identifier, and since we allow numbers in our identifiers we need to check for both 
 letters (and underscores) and digits. Like for the numbers we should define a helper function to check for letters.</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
@@ -806,9 +808,80 @@ identifier. If it doesn’t we just return an identifier token since it can’t 
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
-<p>The complete code can be found on github 
-(<a href="https://github.com/oliverjakobs/code-generator/blob/master/generator/src/scanner.h">header</a> and 
-<a href="https://github.com/oliverjakobs/code-generator/blob/master/generator/src/scanner.c">source</a>)</p>
+<p>To test if everything is working we just keep scanning until we reach the end of the file. Every token we scan will be 
+printed out for now. To do so we define a little function to print a token in a nice, readable way.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="kt">void</span> <span class="nf">print_token</span><span class="p">(</span><span class="n">Token</span><span class="o">*</span> <span class="n">token</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%2d: %.*s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">token</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">,</span> <span class="n">token</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">,</span> <span class="n">token</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">args</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"test_script.cx"</span><span class="p">,</span> <span class="s">"rb"</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">fseek</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SEEK_END</span><span class="p">);</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">ftell</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+    <span class="n">fseek</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">reset</span><span class="p">,</span> <span class="n">SEEK_SET</span><span class="p">);</span>
+
+    <span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="n">tb_file_get_size</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">buffer</span> <span class="o">||</span> <span class="n">fread</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span> <span class="o">!=</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Token</span> <span class="n">token</span> <span class="o">=</span> <span class="n">scanner_get_next</span><span class="p">(</span><span class="n">scanner</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">token</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">TOKEN_EOF</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+
+        <span class="n">print_token</span><span class="p">(</span><span class="o">&amp;</span><span class="n">token</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The complete code can be found <a href="/code/generator-part1">here</a>.</p>
 
 
 <div class="comments">

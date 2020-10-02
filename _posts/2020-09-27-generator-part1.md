@@ -214,7 +214,8 @@ Token scanner_get_next(Scanner* scanner)
 {% endhighlight %}
 
 With this function we check if we have reached the end of the file (by checking if 'c' is '\0'). If we are indeed at 
-the end, we create a token with the type 'TOKEN_EOF' and if not we return an error token with an according error message.
+the end, we create a token with the type 'TOKEN_EOF' and if not we return an error token with an according error 
+message.
 
 The creation of these tokens (and other simple token) is pretty straightforward. 
 
@@ -397,7 +398,8 @@ To add this to our scan function we just need to check if our current character 
 
 ### Identifiers and keywords
 
-Now to identifiers and keywords. Since Keywords are "just" special, reserved indetifiers we can check for both in one function. First we scan the whole identifier, and since we allow numbers in our identifiers we need to check for both 
+Now to identifiers and keywords. Since Keywords are "just" special, reserved indetifiers we can check for both in one 
+function. First we scan the whole identifier, and since we allow numbers in our identifiers we need to check for both 
 letters (and underscores) and digits. Like for the numbers we should define a helper function to check for letters.
 
 {% highlight c linenos %}
@@ -447,7 +449,6 @@ static Token create_identifier(Scanner* scanner)
 }
 {% endhighlight %}
 
-
 ----
 
 If we now put all of the above together the scan function should look something like this: 
@@ -493,6 +494,46 @@ Token scanner_get_next(Scanner* scanner)
 }
 {% endhighlight %}
 
-The complete code can be found on github 
-([header](https://github.com/oliverjakobs/code-generator/blob/master/generator/src/scanner.h) and 
-[source](https://github.com/oliverjakobs/code-generator/blob/master/generator/src/scanner.c))
+To test if everything is working we just keep scanning until we reach the end of the file. Every token we scan will be 
+printed out for now. To do so we define a little function to print a token in a nice, readable way.
+
+{% highlight c linenos %}
+void print_token(Token* token)
+{
+    printf("%2d: %.*s\n", token->type, token->len, token->start);
+}
+{% endhighlight %}
+
+{% highlight c linenos %}
+int main(int argc, char** args)
+{
+    FILE* file = fopen("test_script.cx", "rb");
+    if (!file) return 1;
+
+    fseek(file, 0, SEEK_END);
+    size = ftell(file);
+    fseek(file, reset, SEEK_SET);
+
+    size_t size = tb_file_get_size(file);
+    char* buffer = calloc(size + 1, 1);
+
+    if (!buffer || fread(buffer, 1, size, file) != size)
+        return 1;
+
+    fclose(file);
+
+    while (1)
+    {
+        Token token = scanner_get_next(scanner);
+        if (token.type == TOKEN_EOF) break;
+
+        print_token(&token);
+    }
+
+    free(buffer);
+
+    return 0;
+}
+{% endhighlight %}
+
+The complete code can be found [here](/code/generator-part1).
