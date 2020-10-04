@@ -31,18 +31,15 @@
   </head>
 
   <body>
-    <nav class="navbar">
-  <label class="logo"><a href="/">devlog</a></label>
-  <input type="checkbox" id="menu-check">
-  <label for="menu-check" class="menu-btn"><i class="fas fa-bars"></i></label>
+    <nav class="navbar container">
+  <a class="logo" href="/">devlog</a>
   <ul class="menu">
     
       <li><a href="/" >blog</a></li>
     
   </ul>
 </nav>
-    <div class="page-content container clearfix">
-      <a href="/">&laquo; Back</a>
+    <main class="page-content container"><a href="/">&laquo; Back</a>
 
 <h1 class="post-title">Writing a code generation tool (Part 1): The Scanner</h1>
 <ul class="post-meta">
@@ -51,7 +48,7 @@
   <li><i class="fas fa-code"></i>C</li>
 </ul>
 
-<div class="post-content">
+<article class="post-content">
   <p>For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the 
 course of the development I often needed to call a function a certain number of times with different parameters 
 to fill an array and access them afterwards by index. After having to painstakingly add new components and 
@@ -871,15 +868,14 @@ we scan will be printed out in a nice, readable way.</p>
 
 <p>The complete code can be found <a href="https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner">here</a>.</p>
 
-</div>
+</article>
 
 <div class="comments">
   <i class="far fa-comments"></i>
   <p>
     Placeholder for a comment section.
   </p>
-</div>
-    </div>
+</div></main>
     <footer class="page-footer container">
   <ul class="menu">
     

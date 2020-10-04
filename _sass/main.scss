@@ -1,12 +1,11 @@
 
 $font-family: "Lucida Console";
 
-$container-width: 40%;
-
 $navbar-height: 64px;
-$navbar-margin: (100% - $container-width) / 2;
-
 $footer-height: 4em;
+
+$container-width: 800px;
+$container-padding: 32px;
 
 $color-font: #eeeeee;
 $color-font2: #bbbbbb;
@@ -15,10 +14,6 @@ $color-highlight: #999999;
 $color-background: #242424;
 
 /* GENERAL STYLE */
-
-* {
-    box-sizing: border-box;
-}
 
 body {
     padding: 0;
@@ -43,23 +38,19 @@ a {
 }
 
 .container {
-    width: $container-width;
-    margin-left: auto;
+    max-width: $container-width;
     margin-right: auto;
-}
-
-/* */
-.clearfix::after {
-    content: '';
-    display: block;
-    clear: both;
+    margin-left: auto;
+    padding-right: $container-padding;
+    padding-left: $container-padding;
 }
 
 /* NAVBAR */
-.navbar {
-    height: $navbar-height;
-    width: 100%;
-
+.navbar {  
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-items: end;
+    
     * {
         margin: 0;
         padding: 0;
@@ -69,43 +60,35 @@ a {
     }
 
     .logo {
-        margin-left: $navbar-margin;
         font-size: 2em;
         font-weight: bold;
 
-        a {
-            color: $color-font;
+        color: $color-font;
 
-            &::before {
-                display: inline-block;
-                transition: transform .5s ease;
-                content: '{';
-            }
+        &::before {
+            display: inline-block;
+            transition: transform .5s ease;
+            content: '{';
+        }
 
-            &::after {
-                display: inline-block;
-                transition: transform .5s ease;
-                content: '}';
-            }
+        &::after {
+            display: inline-block;
+            transition: transform .5s ease;
+            content: '}';
+        }
 
-            &:hover {
-                transition: transform .5s ease;
+        &:hover {
+            transition: transform .5s ease;
 
-                &::before { transform: translateX(-.2em); }
-                &::after { transform: translateX(.2em); }
-            }
+            &::before { transform: translateX(-.2em); }
+            &::after { transform: translateX(.2em); }
         }
     }
 
     .menu {
-        float: right;
-        margin-right: $navbar-margin;
-        height: $navbar-height;
-
         li {
             display: inline-block;
             padding-left: .6em;
-            height: inherit;
 
             a {
                 color: $color-font;
@@ -113,52 +96,37 @@ a {
                 padding-bottom: .2em;
                 text-transform: lowercase;
 
-                &:hover {
+                &:hover, &.active {
+                    border-bottom: 2px solid $color-font2;
                     color: $color-font2;
-                    transition: .5s;
-                }
-
-                &.active {
-                    color: $color-font2;
-                    border-bottom: 1px solid $color-font2;
+                    transition: transform .5s ease;
                 }
             }
         }
     }
-
-    .menu-btn {
-        font-size: 2em;
-        float: right;
-        margin-right: $navbar-margin;
-        cursor: pointer;
-        display: none;
-
-        &:hover {
-            color: $color-font2;
-            transition: .5s;
-        }
-    }
-
-    #menu-check {
-        display: none;
-    }
 }
 
 /* CONTENT */
-.page-content {
-    font-size: 1.1em;
-    text-align: justify;
-
-    padding: 2rem 0rem;
-    line-height: 1.4em;
-}
-
 .page-title {
     margin-bottom: 1.4em;
     text-align: left;
 }
 
-.blog {
+.page-content {
+    font-size: 1.1em;
+    text-align: justify;
+
+    padding-top: 2rem;
+    padding-bottom: 1.2rem;
+    line-height: 1.4em;
+
+    figure.highlight > pre {
+        overflow-x: auto;
+        padding: 0 1.2em;
+    }
+}
+
+.blog-overview {
     list-style: none;
 
     * {

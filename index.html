@@ -4,7 +4,7 @@ title: blog
 ---
 <h1 class="page-title separator">Welcome to my blog.</h1>
 
-<ul class="blog">
+<ul class="blog-overview">
   {% for post in site.posts %}
     <li class="separator">
       <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
@@ -14,7 +14,7 @@ title: blog
         <li><i class="fas fa-code"></i>{{ post.lang }}</li>
       </ul>
       <div class="post-summary"> {{ post.excerpt }} </div>
-      <a class="default" href="{{ post.url }}">More &raquo;</a>
+      <a href="{{ post.url }}">More &raquo;</a>
     </li>
   {% endfor %}
 </ul>
