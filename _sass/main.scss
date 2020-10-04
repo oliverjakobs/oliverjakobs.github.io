@@ -11,6 +11,9 @@ $color-font: #eeeeee;
 $color-font2: #bbbbbb;
 $color-highlight: #999999;
 
+$color-block: #404040;
+$color-block-highlight: #888888;
+
 $color-background: #242424;
 
 /* GENERAL STYLE */
@@ -119,11 +122,6 @@ a {
     padding-top: 2rem;
     padding-bottom: 1.2rem;
     line-height: 1.4em;
-
-    figure.highlight > pre {
-        overflow-x: auto;
-        padding: 0 1.2em;
-    }
 }
 
 .blog-overview {
@@ -181,18 +179,23 @@ a {
     }
 
     blockquote {
-        border-left: .6em solid #888888;
-        background: #404040;
         padding: .4em 1.2em;
+        background: $color-block;
+        border-left: .6em solid $color-block-highlight;
     }
-}
 
-.highlight {
-    .lineno {
-        color: #888888;
-        padding-right: .6em;
-        margin-right: .8em;
-        border-right: 1px solid #888888;
+    figure.highlight {
+        .lineno {
+            color: #888888;
+            padding-right: .6em;
+            margin-right: .8em;
+            border-right: 1px solid $color-block-highlight;
+        }
+
+        & > pre {
+            overflow-x: auto;
+            padding: 0 1.2em;
+        }
     }
 }
 
