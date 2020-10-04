@@ -1,23 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-04T03:21:49+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 1): The Scanner</title><link href="http://localhost:4000/2020/09/27/generator-part1.html" rel="alternate" type="text/html" title="Writing a code generation tool (Part 1): The Scanner" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/generator-part1</id><content type="html" xml:base="http://localhost:4000/2020/09/27/generator-part1.html">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the 
-course of the development I often needed to call a function a certain number of times with different parameters 
-to fill an array and access them afterwards by index. After having to painstakingly add new components and 
-systems to my ecs I decided to write a small code generation tool to automate the process.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-05T01:43:37+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 1): The Scanner</title><link href="http://localhost:4000/2020/09/27/generator-part1.html" rel="alternate" type="text/html" title="Writing a code generation tool (Part 1): The Scanner" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/generator-part1</id><content type="html" xml:base="http://localhost:4000/2020/09/27/generator-part1.html">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). During development I 
+often needed to access specific array elements. The easiest way to do so is to define an enum which constants 
+corresponds with the index of the element in the array. The only shortcoming of this method the manual, error prone 
+process to fill the array.&lt;/p&gt;
+
+&lt;p&gt;To register a new component type to the ECS I have to call a function with component specific argmunets. So the order 
+in which the components are added has to match the order defined in the enum which contains all component types. Doing 
+so manual is tedious and error prone. Every time I want to register a new component type the type needs to be added to 
+the enum and the array insertion needs to happen in the right order. A far better way is to automate the process of 
+adding new components and let a code generator do the work.&lt;/p&gt;
+
+&lt;p&gt;The main idea is that the enum constant and the arguments needed for the insert function are stored in the same array 
+and the tool generates a enum and a function that fills the array in the right order. Additionally the tool can generate
+functions to convert enum constants to strings and back for serialisation purposes.&lt;/p&gt;
+
+&lt;p&gt;My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I could 
+add new features as I needed them. So I rewrote everything. For my second attempt I refined the syntax for the 
+scripting language used to generate the code, with what I learned from my prior mistake. And with the help of Bob
+Nystrom’s book &lt;a href=&quot;https://www.craftinginterpreters.com/&quot;&gt;Crafting Interpreters&lt;/a&gt; I managed to create a program that 
+satisfied my requirements.&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your 
-project or maybe you get inspired to do something better.&lt;/p&gt;
+  &lt;p&gt;Disclaimer: 
+    This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe 
+    it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I 
-could add new features as I needed them. So i rewrote everything.&lt;/p&gt;
+&lt;h2 id=&quot;the-scripting-language&quot;&gt;The Scripting Language&lt;/h2&gt;
 
-&lt;p&gt;For my second attempt I refined the syntax for the scripting language used to generate the code, with what I 
-learned from my prior mistake. Futhermore I used some code (and knowledge) from Bob Nystrom’s book 
-&lt;a href=&quot;https://www.craftinginterpreters.com/&quot;&gt;Crafting Interpreters&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-scripting-lanuage&quot;&gt;The Scripting Lanuage&lt;/h2&gt;
-
-&lt;p&gt;Let’s first talk about the scripting language. The language underwent many changes as I was developing the generator
+&lt;p&gt;Before we can start programming we should first talk about the scripting language. The language is highly specified  underwent many changes 
+as I was developing the generator
 (mostly during the first attempt) and I do not think this is the final version of the language. But it does what I want 
 for now, and thats all that really matters.&lt;/p&gt;
 
@@ -815,7 +826,7 @@ we scan will be printed out in a nice, readable way.&lt;/p&gt;
 &lt;p&gt;If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
 &lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the course of the development I often needed to call a function a certain number of times with different parameters to fill an array and access them afterwards by index. After having to painstakingly add new components and systems to my ecs I decided to write a small code generation tool to automate the process.</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/2020/09/27/avl-tree.html" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/avl-tree</id><content type="html" xml:base="http://localhost:4000/2020/09/27/avl-tree.html">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
+&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). During development I often needed to access specific array elements. The easiest way to do so is to define an enum which constants corresponds with the index of the element in the array. The only shortcoming of this method the manual, error prone process to fill the array.</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/2020/09/27/avl-tree.html" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/avl-tree</id><content type="html" xml:base="http://localhost:4000/2020/09/27/avl-tree.html">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;

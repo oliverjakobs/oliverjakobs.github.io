@@ -4,24 +4,35 @@ title: "Writing a code generation tool (Part 1): The Scanner"
 author: oliver
 lang: C
 ---
-For some time now I've been working on writing a game in C from scratch (using OpenGL and GLFW). Over the 
-course of the development I often needed to call a function a certain number of times with different parameters 
-to fill an array and access them afterwards by index. After having to painstakingly add new components and 
-systems to my ecs I decided to write a small code generation tool to automate the process.
+For some time now I've been working on writing a game in C from scratch (using OpenGL and GLFW). During development I 
+often needed to access specific array elements. The easiest way to do so is to define an enum which constants 
+corresponds with the index of the element in the array. The only shortcoming of this method the manual, error prone 
+process to fill the array.
 
->Disclaimer: This is not the only or best way to do this. This is how I've done it. Maybe it helps with your 
-project or maybe you get inspired to do something better.
+To register a new component type to the ECS I have to call a function with component specific argmunets. So the order 
+in which the components are added has to match the order defined in the enum which contains all component types. Doing 
+so manual is tedious and error prone. Every time I want to register a new component type the type needs to be added to 
+the enum and the array insertion needs to happen in the right order. A far better way is to automate the process of 
+adding new components and let a code generator do the work.
 
-My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I 
-could add new features as I needed them. So i rewrote everything. 
+The main idea is that the enum constant and the arguments needed for the insert function are stored in the same array 
+and the tool generates a enum and a function that fills the array in the right order. Additionally the tool can generate
+functions to convert enum constants to strings and back for serialisation purposes.
 
-For my second attempt I refined the syntax for the scripting language used to generate the code, with what I 
-learned from my prior mistake. Futhermore I used some code (and knowledge) from Bob Nystrom's book 
-[Crafting Interpreters](https://www.craftinginterpreters.com/).
+My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I could 
+add new features as I needed them. So I rewrote everything. For my second attempt I refined the syntax for the 
+scripting language used to generate the code, with what I learned from my prior mistake. And with the help of Bob
+Nystrom's book [Crafting Interpreters](https://www.craftinginterpreters.com/) I managed to create a program that 
+satisfied my requirements.
 
-## The Scripting Lanuage
+>   Disclaimer: 
+    This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe 
+    it helps with your project or maybe you get inspired to do something better.
 
-Let's first talk about the scripting language. The language underwent many changes as I was developing the generator
+## The Scripting Language
+
+Before we can start programming we should first talk about the scripting language. The language is highly specified  underwent many changes 
+as I was developing the generator
 (mostly during the first attempt) and I do not think this is the final version of the language. But it does what I want 
 for now, and thats all that really matters. 
 

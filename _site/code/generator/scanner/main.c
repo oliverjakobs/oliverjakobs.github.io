@@ -3,10 +3,6 @@
 
 #include "scanner.h"
 
-static void print_token(Token* token)
-{
-}
-
 int main(int argc, char** args)
 {
     FILE* file = fopen("test_script.cx", "rb");

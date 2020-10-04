@@ -45,10 +45,10 @@
         <li><i class="far fa-user"></i>oliver</li>
         <li><i class="fas fa-code"></i>C</li>
       </ul>
-      <div class="post-summary"> <p>For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). Over the 
-course of the development I often needed to call a function a certain number of times with different parameters 
-to fill an array and access them afterwards by index. After having to painstakingly add new components and 
-systems to my ecs I decided to write a small code generation tool to automate the process.</p>
+      <div class="post-summary"> <p>For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). During development I 
+often needed to access specific array elements. The easiest way to do so is to define an enum which constants 
+corresponds with the index of the element in the array. The only shortcoming of this method the manual, error prone 
+process to fill the array.</p>
  </div>
       <a href="/2020/09/27/generator-part1.html">More &raquo;</a>
     </li>
