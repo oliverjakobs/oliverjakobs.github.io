@@ -2,3 +2,8 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+
+collections:
+  posts:
+    output: true
+    permalink: /blog/:title

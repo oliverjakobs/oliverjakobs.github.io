@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-05T01:43:37+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 1): The Scanner</title><link href="http://localhost:4000/2020/09/27/generator-part1.html" rel="alternate" type="text/html" title="Writing a code generation tool (Part 1): The Scanner" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/generator-part1</id><content type="html" xml:base="http://localhost:4000/2020/09/27/generator-part1.html">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). During development I 
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-06T01:53:04+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 1): Introduction</title><link href="http://localhost:4000/blog/generator-part1" rel="alternate" type="text/html" title="Writing a code generation tool (Part 1): Introduction" /><published>2020-10-06T01:53:03+02:00</published><updated>2020-10-06T01:53:03+02:00</updated><id>http://localhost:4000/blog/generator-part1</id><content type="html" xml:base="http://localhost:4000/blog/generator-part1">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). During development I 
 often needed to access specific array elements. The easiest way to do so is to define an enum which constants 
 corresponds with the index of the element in the array. The only shortcoming of this method the manual, error prone 
 process to fill the array.&lt;/p&gt;
@@ -9,7 +9,7 @@ so manual is tedious and error prone. Every time I want to register a new compon
 the enum and the array insertion needs to happen in the right order. A far better way is to automate the process of 
 adding new components and let a code generator do the work.&lt;/p&gt;
 
-&lt;p&gt;The main idea is that the enum constant and the arguments needed for the insert function are stored in the same array 
+&lt;p&gt;The main idea is that the enum constant and the arguments for the insert function are stored in the same array 
 and the tool generates a enum and a function that fills the array in the right order. Additionally the tool can generate
 functions to convert enum constants to strings and back for serialisation purposes.&lt;/p&gt;
 
@@ -25,19 +25,50 @@ satisfied my requirements.&lt;/p&gt;
     it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;
 &lt;/blockquote&gt;
 
+&lt;p&gt;Since this tool is written for my game which is written in C the language this tool will generate to will be C. But 
+if you need to generate code for another language the changes you need to make to this tool are mostly trivial, as long 
+as the language supports some kind of enums.&lt;/p&gt;
+
+&lt;p&gt;The whole process will be split into serveral parts the keep every post to a managable length.&lt;/p&gt;
+
 &lt;h2 id=&quot;the-scripting-language&quot;&gt;The Scripting Language&lt;/h2&gt;
 
-&lt;p&gt;Before we can start programming we should first talk about the scripting language. The language is highly specified  underwent many changes 
-as I was developing the generator
-(mostly during the first attempt) and I do not think this is the final version of the language. But it does what I want 
-for now, and thats all that really matters.&lt;/p&gt;
+&lt;p&gt;Before we can start programming we should first talk about the scripting language.&lt;/p&gt;
+
+&lt;p&gt;The generator is basically a transpiler, that takes in a custom made language and translate it to a &lt;em&gt;real&lt;/em&gt; programming 
+language (in my case C).&lt;/p&gt;
+
+&lt;p&gt;A transpiler is pretty similar to a compiler, but instead of producing machine code as output the transpiler outputs a
+different programming lanuage.&lt;/p&gt;
+
+&lt;p&gt;If you want to transpile into another language the syntax of the scripting language may need to change, but I think as 
+long as the language supports some kind of enums these changes are trivial.&lt;/p&gt;
+
+&lt;p&gt;The language needs to fullfill a distinctive set of requirements which are heavilly dependent on the target language
+the generator should transpile to.&lt;/p&gt;
+
+&lt;p&gt;The language is highly specified and underwent many changes as I was developing the generator (mostly during the first 
+attempt) and I do not think this is the final version of the language. But it does what I want for now, and thats all 
+that really matters.&lt;/p&gt;
+
+&lt;p&gt;Like every other programming language the scripting language will be in (nearly) constant development. So the language 
+will mature and evolve with time.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Since header files in C (and C++) should have a way to avoid double inclusion and we want to stay standard (so no 
+&lt;em&gt;#pragma once&lt;/em&gt;), we need some way to define an include guard. I dont think automatically generating the name for the 
+guard is worth the effort. So the first line of every script must be ‘define’ followed by an identifier representing 
+the name.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ECS_LOADER_H&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;The first line of every script must be ‘define’ followed by an identifier. The identifier specifies the include 
-guard for the generated C-file.&lt;/p&gt;
+&lt;p&gt;The next feature most files will need is a way to include files in the generated code files. Since often you need to 
+include multiple files I decided to pack all include statements into a block the include block encapsuled by braces. 
+Inside the block the several include statements are represented by multiple strings seperated by commas. An include 
+block could look something like this:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
@@ -65,8 +96,16 @@ guard for the generated C-file.&lt;/p&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;The inluce block indicates what files need to be included in the generated header file. This basically gets 
-translated to a bunch of ‘#include’ statements for all files in the block.&lt;/p&gt;
+&lt;p&gt;Considering that the generator is meant to generate enums and do something with them we need a way to define an enum 
+with constants and arguments. A new enum is defined with the keyword ‘enum’ followed by a name.&lt;/p&gt;
+
+&lt;p&gt;The body of an enum is a collection of arrays (indicated by ‘[’ and ‘]’) encapsuled by braces.&lt;/p&gt;
+
+&lt;p&gt;Arrays are comma separated values between brackets, but unlike C these values do not need to be of the same type (since 
+there are no types in this scripting language).&lt;/p&gt;
+
+&lt;p&gt;Each enum element contains an a name which will be translated to a constant in the resulting C-enum, and an optional 
+list of arguments for the generate function.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
@@ -94,26 +133,26 @@ translated to a bunch of ‘#include’ statements for all files in the block.&l
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;The enum is the core of the script. The ‘enum’ keyword is followed by the name of enum. The body of an enum is a 
-collection of arrays (indicated by ‘[’ and ‘]’) encapsuled by braces. Each enum element of a name which corresponds 
-with the name for the constant in the resulting C-enum, and an optional list of arguments for the generate function.&lt;/p&gt;
+&lt;p&gt;To do something with the enums&lt;/p&gt;
+
+&lt;p&gt;The ‘generate’ keyword is used to generate functions.&lt;/p&gt;
+
+&lt;p&gt;If ‘generate’ is followed by a specific keyword (for now only strings) a predefined function will be generated. E.g. 
+generate strings’ will generate two functions to allow the conversion from a string to an enum constant and back.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;generate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;strings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComponentType&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If ‘generate’ is followed by an identifier the generator will generate a function (in our case the function declaration 
+would be ‘void RegisterComponents(Ecs* ecs);’) which calls the function specified after the arrow operator (‘-&amp;gt;’) for 
+every element of the enum specified before the arrow.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
-3
-4
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;generate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;strings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComponentType&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;generate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RegisterComponents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ecs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ecs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; 
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;generate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RegisterComponents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ecs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ecs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; 
     &lt;span class=&quot;n&quot;&gt;ComponentType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EcsRegisterComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ecs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;The ‘generate’ keyword is used to generate a function (or more). If ‘generate’ is followed by a specific keyword 
-(for now only strings) a predefined function will be generated. E.g. ‘generate strings’ will generate two functions 
-to allow the conversion from a string to an enum constant and back. If ‘generate’ is followed by an identifier the 
-generator will generate a function (in our case the function declaration would be ‘void RegisterComponents(Ecs* ecs);’) 
-which calls the function specified after the arrow operator (‘-&amp;gt;’) for every element of the enum specified before the 
-arrow.&lt;/p&gt;
 
 &lt;p&gt;In our example the generated function would be:&lt;/p&gt;
 
@@ -147,7 +186,9 @@ arrow.&lt;/p&gt;
 or are simply not needed for now. A possible upgrade would be to specify via index which argument of the enum is needed 
 in what order.&lt;/p&gt;
 
-&lt;h2 id=&quot;the-scanner&quot;&gt;The Scanner&lt;/h2&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;Thats all for this part. In the next part I will talk about implementing a scanner.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). During development I often needed to access specific array elements. The easiest way to do so is to define an enum which constants corresponds with the index of the element in the array. The only shortcoming of this method the manual, error prone process to fill the array.</summary></entry><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 2): The Scanner</title><link href="http://localhost:4000/blog/generator-part2" rel="alternate" type="text/html" title="Writing a code generation tool (Part 2): The Scanner" /><published>2020-10-05T17:57:44+02:00</published><updated>2020-10-05T17:57:44+02:00</updated><id>http://localhost:4000/blog/generator-part2</id><content type="html" xml:base="http://localhost:4000/blog/generator-part2">&lt;h2 id=&quot;the-scanner&quot;&gt;The Scanner&lt;/h2&gt;
 
 &lt;p&gt;Before we can generate any code we need to split the script file into a list of tokens. This makes it easier to 
 handle the script. To do so we need to scan the whole file and look for lexemes that correspond with the defined 
@@ -826,7 +867,7 @@ we scan will be printed out in a nice, readable way.&lt;/p&gt;
 &lt;p&gt;If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
 &lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). During development I often needed to access specific array elements. The easiest way to do so is to define an enum which constants corresponds with the index of the element in the array. The only shortcoming of this method the manual, error prone process to fill the array.</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/2020/09/27/avl-tree.html" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-09-27T00:00:00+02:00</published><updated>2020-09-27T00:00:00+02:00</updated><id>http://localhost:4000/2020/09/27/avl-tree</id><content type="html" xml:base="http://localhost:4000/2020/09/27/avl-tree.html">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
+&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">The Scanner</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/blog/avl-tree" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-10-05T17:57:37+02:00</published><updated>2020-10-05T17:57:37+02:00</updated><id>http://localhost:4000/blog/avl-tree</id><content type="html" xml:base="http://localhost:4000/blog/avl-tree">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;
