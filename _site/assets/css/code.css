@@ -5,7 +5,7 @@
 .highlight .cm { color: #2e8a5f; font-style: italic } /* Comment.Multiline */
 .highlight .cp { color: #b88938; font-weight: bold } /* Comment.Preproc */
 
-.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .err { color: #d0d0d0 } /* Error */
 .highlight .o { color: #d0d0d0 } /* Operator */
 .highlight .x { color: #d0d0d0 } /* Other */
 .highlight .p { color: #d0d0d0 } /* Punctuation */

@@ -1,5 +1,5 @@
 /* GENERAL STYLE */
-@import url(chestnut.css);
+@import url(code.css);
 body { padding: 0; margin: 0; font-family: "Lucida Console"; color: #eeeeee; background: #242424; }
 
 a { text-decoration: none; color: #bbbbbb; }

@@ -11,10 +11,10 @@ include
 
 enum ComponentType
 {
-    [ COMPONENT_TRANSFORM,      sizeof(Transform),          NULL ],
-    [ COMPONENT_RIGID_BODY,     sizeof(RigidBody),          NULL ],
-    [ COMPONENT_ANIMATOR,       sizeof(Animator),           AnimatorFree ],
-    [ COMPONENT_SPRITE,         sizeof(Sprite),             NULL ]
+    [ COMPONENT_TRANSFORM,  $SIZE(Transform),   NULL ],
+    [ COMPONENT_RIGID_BODY, $SIZE(RigidBody),   NULL ],
+    [ COMPONENT_ANIMATOR,   $SIZE(Animator),    AnimatorFree ],
+    [ COMPONENT_SPRITE,     $SIZE(Sprite),      NULL ]
 }
 
 generate strings: ComponentType

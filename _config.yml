@@ -7,3 +7,5 @@ collections:
   posts:
     output: true
     permalink: /blog/:title
+
+exclude: [ code/, serve.bat, README.md, LICENSE ]

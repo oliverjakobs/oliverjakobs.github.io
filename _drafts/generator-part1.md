@@ -56,7 +56,14 @@ that really matters.
 Like every other programming language the scripting language will be in (nearly) constant development. So the language 
 will mature and evolve with time.
 
-----
+The language ignores whitespaces like newlines and tabs, so how you want to format the code is up to you.
+
+Comments starts with a '#' and continue to the end of the line.
+
+>   For now the transpiler ignores comments, but it could be useful to just copy them to the C-file.
+
+Since the transpiler just translates the script into header and source file, the language does not support any arithmetic 
+operations.
 
 Since header files in C (and C++) should have a way to avoid double inclusion and we want to stay standard (so no 
 _#pragma once_), we need some way to define an include guard. I dont think automatically generating the name for the 
@@ -75,25 +82,24 @@ block could look something like this:
 {% highlight c linenos %}
 include
 {
-    "Ecs/Ecs.h",
-    "Components/Animator.h",
+    "Ecs/Ecs.h"
     "Components/Transform.h",
     "Components/RigidBody.h",
-    "Components/Sprite.h",
-    "Components/Movement.h",
-    "Components/Camera.h",
-    "Components/Inventory.h",
-    "Components/Interaction.h"
+    "Components/Animator.h",
+    "Components/Sprite.h"
 }
 {% endhighlight %}
+
+## Enums 
 
 Considering that the generator is meant to generate enums and do something with them we need a way to define an enum 
 with constants and arguments. A new enum is defined with the keyword 'enum' followed by a name.
 
-The body of an enum is a collection of arrays (indicated by '[' and ']') encapsuled by braces. 
+Enums are the only thing close to a data type. They are used to generate functions which is explained below.
 
-Arrays are comma separated values between brackets, but unlike C these values do not need to be of the same type (since 
-there are no types in this scripting language).
+The body of an enum is a collection of arrays encapsuled by braces. 
+
+Arrays are comma separated values between brackets.
 
 Each enum element contains an a name which will be translated to a constant in the resulting C-enum, and an optional 
 list of arguments for the generate function.
@@ -101,17 +107,28 @@ list of arguments for the generate function.
 {% highlight c linenos %}
 enum ComponentType
 {
-    [ COMPONENT_TRANSFORM,   sizeof(Transform),     NULL ],
-    [ COMPONENT_RIGID_BODY,  sizeof(RigidBody),     NULL ],
-    [ COMPONENT_MOVEMENT,    sizeof(Movement),      NULL ],
-    [ COMPONENT_SPRITE,      sizeof(Sprite),        NULL ],
-    [ COMPONENT_ANIMATOR,    sizeof(Animator),      AnimatorFree ],
-    [ COMPONENT_CAMERA,      sizeof(Camera),        NULL ],
-    [ COMPONENT_INVENTORY,   sizeof(Inventory),     InventoryFree ],
-    [ COMPONENT_INTERACTION, sizeof(Interaction),   NULL ],
-    [ COMPONENT_INTERACTOR,  sizeof(Interactor),    NULL ]
+    [ COMPONENT_TRANSFORM,  $SIZE(Transform),   NULL ],
+    [ COMPONENT_RIGID_BODY, $SIZE(RigidBody),   NULL ],
+    [ COMPONENT_ANIMATOR,   $SIZE(Animator),    AnimatorFree ],
+    [ COMPONENT_SPRITE,     $SIZE(Sprite),      NULL ]
 }
 {% endhighlight %}
+
+## Macros
+
+The above example already uses another feature.
+Macros are defined by '$' followed by an identifier.
+
+Currently the only macro supported is _$SIZE_, which translates to the C-operator _sizeof_. But the way macros are implemented
+makes it pretty easy to add more.
+
+Macros can have any number of arguments as long as they match the C-function they correspond to. 
+
+The arguments of an macro are just getting copied to the the output file. So nested macros are not possible.
+
+>   In a later version it will probably be possible for the user to define macros. But for now it is easier to just add new macros manually.
+
+## Generate functions
 
 To do something with the enums 
 
@@ -129,8 +146,7 @@ would be 'void RegisterComponents(Ecs* ecs);') which calls the function specifie
 every element of the enum specified before the arrow.
 
 {% highlight c linenos %}
-generate RegisterComponents(Ecs* ecs): 
-    ComponentType -> EcsRegisterComponent(ecs)
+generate RegisterComponents(Ecs* ecs): ComponentType -> EcsRegisterComponent(ecs)
 {% endhighlight %}
 
 In our example the generated function would be: 
@@ -140,21 +156,20 @@ void RegisterComponents(Ecs* ecs)
 {
     EcsRegisterComponent(ecs, sizeof(Transform), NULL);
     EcsRegisterComponent(ecs, sizeof(RigidBody), NULL);
-    EcsRegisterComponent(ecs, sizeof(Movement), NULL);
-    EcsRegisterComponent(ecs, sizeof(Sprite), NULL);
     EcsRegisterComponent(ecs, sizeof(Animator), AnimatorFree);
-    EcsRegisterComponent(ecs, sizeof(Camera), NULL);
-    EcsRegisterComponent(ecs, sizeof(Inventory), InventoryFree);
-    EcsRegisterComponent(ecs, sizeof(Interaction), NULL);
-    EcsRegisterComponent(ecs, sizeof(Interactor), NULL);
+    EcsRegisterComponent(ecs, sizeof(Sprite), NULL);
 }
 {% endhighlight %}
 
-There are various ways this language and the generator could be improved. But these features are either too complicated 
-or are simply not needed for now. A possible upgrade would be to specify via index which argument of the enum is needed 
-in what order. 
+>   A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
+    This would allow to hove multiple generate calls for one enum.
 
-----
+## What's next
+
+There are various ways this language and the generator could be improved. But these features are either too complicated 
+or are simply not needed for now.
 
 Thats all for this part. In the next part I will talk about implementing a scanner.
+
+How we can parse the script file into a more manageable format.
 
