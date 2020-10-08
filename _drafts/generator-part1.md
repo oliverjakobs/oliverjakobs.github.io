@@ -4,10 +4,16 @@ title: "Writing a code generation tool (Part 1): Introduction"
 author: oliver
 lang: C
 ---
-For some time now I've been working on writing a game in C from scratch (using OpenGL and GLFW). During development I 
-often needed to access specific array elements. The easiest way to do so is to define an enum which constants 
-corresponds with the index of the element in the array. The only shortcoming of this method the manual, error prone 
-process to fill the array.
+For some time now I've been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
+and to prevent some errors I have developed a generator and a custom made scripting language to create C-files. 
+
+I think the whole process could be interesting to some people out there, so I decided to explain what I have done step 
+by step in this and the next few posts. In this part I will give an overview of the language we will implement and give 
+a general outlook what to expect.
+
+During development I often needed to access specific array elements. The easiest way to do so is to define an enum 
+which constants corresponds with the index of the element in the array. The only shortcoming of this method the manual, 
+error prone process to fill the array.
 
 To register a new component type to the ECS I have to call a function with component specific argmunets. So the order 
 in which the components are added has to match the order defined in the enum which contains all component types. Doing 
@@ -31,44 +37,29 @@ Since this tool is written for my game which is written in C the language this t
 if you need to generate code for another language the changes you need to make to this tool are mostly trivial, as long 
 as the language supports some kind of enums.
 
-The whole process will be split into serveral parts the keep every post to a managable length. In this part I will give 
-an overview of the language we will implement and give a general outlook what to expect.
-
 ## The Scripting Language
 
-Before we can start programming we should first talk about the scripting language. 
+Before we can start programming we should first talk about _the language_. The single purpose of _the language_ is to 
+tell the generator how the C file should look. So there is no need to support any arithmetic operations. As a result 
+_the language_ is more of a markup language, that tells the generator how the C file should look.
 
-The generator is basically a transpiler, that takes in a custom made language and translate it to a _real_ programming 
-language (in my case C).
+>   I have no idea how to name this language so I'm just gonna call it _the language_, until I come up with something
+    better.
 
-A transpiler is pretty similar to a compiler, but instead of producing machine code as output the transpiler outputs a
-different programming lanuage.
+The syntax and the features of _the language_ are heavilly dependent on the target language the generator should 
+generate. During development of the generator _the language_ underwent many changes (mostly during the first attempt) 
+and like every other programming language the scripting language will continue to be in (nearly) constant development. 
+So _the language_ will mature and evolve with time, but for now it does everything I need.
 
-If you want to transpile into another language the syntax of the scripting language may need to change, but I think as 
-long as the language supports some kind of enums these changes are trivial.
+Let's start with the syntax of _the language_. The first thing to know is _the language_ ignores whitespaces like 
+newlines and tabs, so indentation doesn't matter and how you want to format the code is up to you. And Comments starts 
+with a '#' and continue to the end of the line.
 
-The language needs to fullfill a distinctive set of requirements which are heavilly dependent on the target language
-the generator should transpile to.
-
-The language is highly specified and underwent many changes as I was developing the generator (mostly during the first 
-attempt) and I do not think this is the final version of the language. But it does what I want for now, and thats all 
-that really matters. 
-
-Like every other programming language the scripting language will be in (nearly) constant development. So the language 
-will mature and evolve with time.
-
-The language ignores whitespaces like newlines and tabs, so how you want to format the code is up to you.
-
-Comments starts with a '#' and continue to the end of the line.
-
->   For now the transpiler ignores comments, but it could be useful to just copy them into the header file.
-
-Since the transpiler just translates the script into header and source file, the language does not support any 
-arithmetic operations. It is just going to be used to generate C-files, that are then used in a program.
+>   For now the generator ignores comments, but it could be useful to just copy them into the header file.
 
 In C (and C++) header files should have a way to avoid double inclusion and we want to stay standard (so no _#pragma 
 once_), we need some way to define an include guard. And I dont think automatically generating the name for the guard 
-is worth the effort. So the first line of every script must be 'define' followed by an identifier representing the 
+is worth the effort. So the first line of every script must be _define_ followed by an identifier representing the 
 name.
 
 {% highlight c linenos %}
@@ -78,11 +69,6 @@ define ECS_LOADER_H
 If you need to include header files into the generated code (which in most cases will be necessary) you can pack them 
 all together into one _include_ statement. Inside the block the several include statements are represented by multiple 
 strings seperated by commas. An include block could look something like this:
-
-The next feature most files will need is a way to include files in the generated code files. Since often you need to 
-include multiple files I decided to pack all include statements into a block the include block encapsuled by braces. 
-Inside the block the several include statements are represented by multiple strings seperated by commas. An include 
-block could look something like this:
 
 {% highlight c linenos %}
 include
@@ -95,11 +81,11 @@ include
 }
 {% endhighlight %}
 
-## The core of the language 
+## The Core of _the language_ 
 
-The core of the scripting language are the enums and generate functions. A new enum is defined with the keyword _enum_ 
-followed by a name. They are the only thing close to a data type in this language. The body of an enum is a collection 
-of arrays encapsuled by braces. 
+The core of _the language_ are the enums and generate functions. A new enum is defined with the keyword _enum_ followed 
+by a name. They are the only thing close to a data type in _the language_. The body of an enum is a collection of arrays
+encapsuled by braces. 
 
 Arrays are comma separated values between brackets. Each of these arrays contains a name which will be translated to a 
 constant in the resulting C-enum, and an optional list of arguments for the generate function.
@@ -127,11 +113,11 @@ enum ComponentType
 }
 {% endhighlight %}
 
-Each enum will automatically be translated into a C-enum. For everything else we need to use the _generate_ keyword. This 
-keyword is used to generate functions and can be used in two different ways.
+Each enum will automatically be translated into a C-enum. For everything else we need to use the _generate_ keyword. 
+This keyword is used to generate functions and can be used in two different ways.
 
-To use the enums for something more than just generating enum, I am going to introduce the _generate_ keyword. This keyword 
-is used to generate functions and can be used in two different ways.
+To use the enums for something more than just generating enum, I am going to introduce the _generate_ keyword. This 
+keyword is used to generate functions and can be used in two different ways.
 
 If _generate_ is followed by a specific keyword (for now only strings) a predefined function will be generated. E.g. 
 _generate strings_ will generate two functions to allow the conversion from a string to an enum constant and back. 
@@ -140,8 +126,9 @@ _generate strings_ will generate two functions to allow the conversion from a st
 generate strings: ComponentType
 {% endhighlight %}
 
-If _generate_ is followed by an identifier the generator will generate a function with the name given by the identifier which 
-calls the function specified after the arrow operator ('->') for every element of the enum specified before the arrow. 
+If _generate_ is followed by an identifier the generator will generate a function with the name given by the identifier 
+which calls the function specified after the arrow operator ('->') for every element of the enum specified before the 
+arrow. 
 
 This is actually the feature that made me write this tool. Everythin else is just a bonus.
 
