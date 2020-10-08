@@ -31,7 +31,8 @@ Since this tool is written for my game which is written in C the language this t
 if you need to generate code for another language the changes you need to make to this tool are mostly trivial, as long 
 as the language supports some kind of enums.
 
-The whole process will be split into serveral parts the keep every post to a managable length.
+The whole process will be split into serveral parts the keep every post to a managable length. In this part I will give 
+an overview of the language we will implement and give a general outlook what to expect.
 
 ## The Scripting Language
 
@@ -60,19 +61,23 @@ The language ignores whitespaces like newlines and tabs, so how you want to form
 
 Comments starts with a '#' and continue to the end of the line.
 
->   For now the transpiler ignores comments, but it could be useful to just copy them to the C-file.
+>   For now the transpiler ignores comments, but it could be useful to just copy them into the header file.
 
-Since the transpiler just translates the script into header and source file, the language does not support any arithmetic 
-operations.
+Since the transpiler just translates the script into header and source file, the language does not support any 
+arithmetic operations. It is just going to be used to generate C-files, that are then used in a program.
 
-Since header files in C (and C++) should have a way to avoid double inclusion and we want to stay standard (so no 
-_#pragma once_), we need some way to define an include guard. I dont think automatically generating the name for the 
-guard is worth the effort. So the first line of every script must be 'define' followed by an identifier representing 
-the name.
+In C (and C++) header files should have a way to avoid double inclusion and we want to stay standard (so no _#pragma 
+once_), we need some way to define an include guard. And I dont think automatically generating the name for the guard 
+is worth the effort. So the first line of every script must be 'define' followed by an identifier representing the 
+name.
 
 {% highlight c linenos %}
 define ECS_LOADER_H
 {% endhighlight %}
+
+If you need to include header files into the generated code (which in most cases will be necessary) you can pack them 
+all together into one _include_ statement. Inside the block the several include statements are represented by multiple 
+strings seperated by commas. An include block could look something like this:
 
 The next feature most files will need is a way to include files in the generated code files. Since often you need to 
 include multiple files I decided to pack all include statements into a block the include block encapsuled by braces. 
@@ -90,7 +95,14 @@ include
 }
 {% endhighlight %}
 
-## Enums 
+## The core of the language 
+
+The core of the scripting language are the enums and generate functions. A new enum is defined with the keyword _enum_ 
+followed by a name. They are the only thing close to a data type in this language. The body of an enum is a collection 
+of arrays encapsuled by braces. 
+
+Arrays are comma separated values between brackets. Each of these arrays contains a name which will be translated to a 
+constant in the resulting C-enum, and an optional list of arguments for the generate function.
 
 Considering that the generator is meant to generate enums and do something with them we need a way to define an enum 
 with constants and arguments. A new enum is defined with the keyword 'enum' followed by a name.
@@ -99,7 +111,8 @@ Enums are the only thing close to a data type. They are used to generate functio
 
 The body of an enum is a collection of arrays encapsuled by braces. 
 
-Arrays are comma separated values between brackets.
+Arrays are comma separated values between brackets. Each of these arrays contains the name of the constant in the 
+resulting enum and an optional list of arguments.
 
 Each enum element contains an a name which will be translated to a constant in the resulting C-enum, and an optional 
 list of arguments for the generate function.
@@ -114,42 +127,29 @@ enum ComponentType
 }
 {% endhighlight %}
 
-## Macros
+Each enum will automatically be translated into a C-enum. For everything else we need to use the _generate_ keyword. This 
+keyword is used to generate functions and can be used in two different ways.
 
-The above example already uses another feature.
-Macros are defined by '$' followed by an identifier.
+To use the enums for something more than just generating enum, I am going to introduce the _generate_ keyword. This keyword 
+is used to generate functions and can be used in two different ways.
 
-Currently the only macro supported is _$SIZE_, which translates to the C-operator _sizeof_. But the way macros are implemented
-makes it pretty easy to add more.
-
-Macros can have any number of arguments as long as they match the C-function they correspond to. 
-
-The arguments of an macro are just getting copied to the the output file. So nested macros are not possible.
-
->   In a later version it will probably be possible for the user to define macros. But for now it is easier to just add new macros manually.
-
-## Generate functions
-
-To do something with the enums 
-
-The 'generate' keyword is used to generate functions. 
-
-If 'generate' is followed by a specific keyword (for now only strings) a predefined function will be generated. E.g. 
-generate strings' will generate two functions to allow the conversion from a string to an enum constant and back. 
+If _generate_ is followed by a specific keyword (for now only strings) a predefined function will be generated. E.g. 
+_generate strings_ will generate two functions to allow the conversion from a string to an enum constant and back. 
 
 {% highlight c linenos %}
 generate strings: ComponentType
 {% endhighlight %}
 
-If 'generate' is followed by an identifier the generator will generate a function (in our case the function declaration 
-would be 'void RegisterComponents(Ecs* ecs);') which calls the function specified after the arrow operator ('->') for 
-every element of the enum specified before the arrow.
+If _generate_ is followed by an identifier the generator will generate a function with the name given by the identifier which 
+calls the function specified after the arrow operator ('->') for every element of the enum specified before the arrow. 
+
+This is actually the feature that made me write this tool. Everythin else is just a bonus.
 
 {% highlight c linenos %}
 generate RegisterComponents(Ecs* ecs): ComponentType -> EcsRegisterComponent(ecs)
 {% endhighlight %}
 
-In our example the generated function would be: 
+To fully understand how the _generate_ keyword works, let's just take a look at what the output for our example looks:
 
 {% highlight c linenos %}
 void RegisterComponents(Ecs* ecs)
@@ -161,8 +161,27 @@ void RegisterComponents(Ecs* ecs)
 }
 {% endhighlight %}
 
+If there are still things unclear just wait untill we implement the generator (probably part 4).
+
 >   A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
     This would allow to hove multiple generate calls for one enum.
+
+## Macros
+
+The above example already uses another feature.
+Macros are defined by '$' followed by an identifier.
+
+Currently the only macro supported is _$SIZE_, which translates to the C-operator _sizeof_. But the way macros are 
+implemented makes it pretty easy to add more.
+
+Macros can have any number of arguments as long as they match the C-function they correspond to. 
+
+Macros are just to have function calls as arguments in the enums.
+
+The arguments of an macro are just getting copied to the the output file. So nested macros are not possible.
+
+>   In a later version it will probably be possible for the user to define macros. But for now it is easier to just add 
+    new macros manually.
 
 ## What's next
 
@@ -171,5 +190,8 @@ or are simply not needed for now.
 
 Thats all for this part. In the next part I will talk about implementing a scanner.
 
-How we can parse the script file into a more manageable format.
+In the next part I will talk about how we can parse the script file into a more manageable format. I will explain the
+concept of Tokens and I will show how I implemented a scanner to tokenize the script file.
 
+If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
+[twitter](https://twitter.com/orwell_23).
