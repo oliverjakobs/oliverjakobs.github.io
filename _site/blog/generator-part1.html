@@ -9,23 +9,23 @@
     <!-- Font Aweseome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.min.css"  />
 
-    <title>{ devlog } writing a code generation tool (part 1): introduction</title>
+    <title>{ devlog } writing a code generator (part 1): introduction</title>
 
     <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" />
     <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Writing a code generation tool (Part 1): Introduction</title>
+<title>Writing a code generator (Part 1): Introduction</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Writing a code generation tool (Part 1): Introduction" />
+<meta property="og:title" content="Writing a code generator (Part 1): Introduction" />
 <meta name="author" content="oliver" />
 <meta property="og:locale" content="C" />
-<meta name="description" content="For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some errors I have developed a generator and a custom made scripting language to create C-files." />
-<meta property="og:description" content="For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some errors I have developed a generator and a custom made scripting language to create C-files." />
+<meta name="description" content="For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files." />
+<meta property="og:description" content="For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files." />
 <link rel="canonical" href="http://localhost:4000/blog/generator-part1" />
 <meta property="og:url" content="http://localhost:4000/blog/generator-part1" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-10-09T01:20:14+02:00" />
+<meta property="article:published_time" content="2020-10-09T17:21:34+02:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","url":"http://localhost:4000/blog/generator-part1","headline":"Writing a code generation tool (Part 1): Introduction","dateModified":"2020-10-09T01:20:14+02:00","datePublished":"2020-10-09T01:20:14+02:00","author":{"@type":"Person","name":"oliver"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/generator-part1"},"description":"For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some errors I have developed a generator and a custom made scripting language to create C-files.","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","url":"http://localhost:4000/blog/generator-part1","headline":"Writing a code generator (Part 1): Introduction","dateModified":"2020-10-09T17:21:34+02:00","datePublished":"2020-10-09T17:21:34+02:00","author":{"@type":"Person","name":"oliver"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/generator-part1"},"description":"For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   </head>
@@ -41,7 +41,7 @@
 </nav>
     <main class="page-content container"><a href="/">&laquo; Back</a>
 
-<h1 class="post-title">Writing a code generation tool (Part 1): Introduction</h1>
+<h1 class="post-title">Writing a code generator (Part 1): Introduction</h1>
 <ul class="post-meta">
   <li><i class="far fa-calendar"></i>09 Oct 2020</li>
   <li><i class="far fa-user"></i>oliver</li>
@@ -50,7 +50,7 @@
 
 <article class="post-content">
   <p>For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
-and to prevent some errors I have developed a generator and a custom made scripting language to create C-files.</p>
+and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.</p>
 
 <p>I think the whole process could be interesting to some people out there, so I decided to explain what I have done step 
 by step in this and the next few posts. In this part I will give an overview of the language we will implement and give 
@@ -103,8 +103,8 @@ and like every other programming language the scripting language will continue t
 So <em>the language</em> will mature and evolve with time, but for now it does everything I need.</p>
 
 <p>Let’s start with the syntax of <em>the language</em>. The first thing to know is <em>the language</em> ignores whitespaces like 
-newlines and tabs, so indentation doesn’t matter and how you want to format the code is up to you. And Comments starts 
-with a ‘#’ and continue to the end of the line.</p>
+newlines and tabs, so indentation doesn’t matter and you can format the code whatever way you like the most. <em>The
+language</em> also supports comments. A comment starts with a ‘#’ and continue to the end of the line.</p>
 
 <blockquote>
   <p>For now the generator ignores comments, but it could be useful to just copy them into the header file.</p>
@@ -143,25 +143,13 @@ strings seperated by commas. An include block could look something like this:</p
 
 <h2 id="the-core-of-the-language">The Core of <em>the language</em></h2>
 
-<p>The core of <em>the language</em> are the enums and generate functions. A new enum is defined with the keyword <em>enum</em> followed 
+<p>The core of <em>the language</em> are enums and generate expressions. A new enum is defined with the keyword <em>enum</em> followed 
 by a name. They are the only thing close to a data type in <em>the language</em>. The body of an enum is a collection of arrays
-encapsuled by braces.</p>
-
-<p>Arrays are comma separated values between brackets. Each of these arrays contains a name which will be translated to a 
-constant in the resulting C-enum, and an optional list of arguments for the generate function.</p>
-
-<p>Considering that the generator is meant to generate enums and do something with them we need a way to define an enum 
-with constants and arguments. A new enum is defined with the keyword ‘enum’ followed by a name.</p>
+encapsuled by braces. Arrays are comma separated values between brackets. And each of these arrays contains a name, 
+which will be translated to a constant in the resulting C-enum, and an optional list of arguments for the generate 
+function.</p>
 
 <p>Enums are the only thing close to a data type. They are used to generate functions which is explained below.</p>
-
-<p>The body of an enum is a collection of arrays encapsuled by braces.</p>
-
-<p>Arrays are comma separated values between brackets. Each of these arrays contains the name of the constant in the 
-resulting enum and an optional list of arguments.</p>
-
-<p>Each enum element contains an a name which will be translated to a constant in the resulting C-enum, and an optional 
-list of arguments for the generate function.</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
 2
@@ -179,8 +167,9 @@ list of arguments for the generate function.</p>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
-<p>Each enum will automatically be translated into a C-enum. For everything else we need to use the <em>generate</em> keyword. 
-This keyword is used to generate functions and can be used in two different ways.</p>
+<p>Each enum will automatically be translated into a C-enum. For everything else we need to use the <em>generate</em> keyword.</p>
+
+<p>This keyword is used to generate functions and can be used in two different ways.</p>
 
 <p>To use the enums for something more than just generating enum, I am going to introduce the <em>generate</em> keyword. This 
 keyword is used to generate functions and can be used in two different ways.</p>

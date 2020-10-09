@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Writing a code generation tool (Part 1): Introduction"
+title: "Writing a code generator (Part 1): Introduction"
 author: oliver
 lang: C
 ---
 For some time now I've been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
-and to prevent some errors I have developed a generator and a custom made scripting language to create C-files. 
+and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files. 
 
 I think the whole process could be interesting to some people out there, so I decided to explain what I have done step 
 by step in this and the next few posts. In this part I will give an overview of the language we will implement and give 
@@ -52,8 +52,8 @@ and like every other programming language the scripting language will continue t
 So _the language_ will mature and evolve with time, but for now it does everything I need.
 
 Let's start with the syntax of _the language_. The first thing to know is _the language_ ignores whitespaces like 
-newlines and tabs, so indentation doesn't matter and how you want to format the code is up to you. And Comments starts 
-with a '#' and continue to the end of the line.
+newlines and tabs, so indentation doesn't matter and you can format the code whatever way you like the most. _The
+language_ also supports comments. A comment starts with a '#' and continue to the end of the line.
 
 >   For now the generator ignores comments, but it could be useful to just copy them into the header file.
 
@@ -83,25 +83,13 @@ include
 
 ## The Core of _the language_ 
 
-The core of _the language_ are the enums and generate functions. A new enum is defined with the keyword _enum_ followed 
+The core of _the language_ are enums and generate expressions. A new enum is defined with the keyword _enum_ followed 
 by a name. They are the only thing close to a data type in _the language_. The body of an enum is a collection of arrays
-encapsuled by braces. 
-
-Arrays are comma separated values between brackets. Each of these arrays contains a name which will be translated to a 
-constant in the resulting C-enum, and an optional list of arguments for the generate function.
-
-Considering that the generator is meant to generate enums and do something with them we need a way to define an enum 
-with constants and arguments. A new enum is defined with the keyword 'enum' followed by a name.
+encapsuled by braces. Arrays are comma separated values between brackets. And each of these arrays contains a name, 
+which will be translated to a constant in the resulting C-enum, and an optional list of arguments for the generate 
+function.
 
 Enums are the only thing close to a data type. They are used to generate functions which is explained below.
-
-The body of an enum is a collection of arrays encapsuled by braces. 
-
-Arrays are comma separated values between brackets. Each of these arrays contains the name of the constant in the 
-resulting enum and an optional list of arguments.
-
-Each enum element contains an a name which will be translated to a constant in the resulting C-enum, and an optional 
-list of arguments for the generate function.
 
 {% highlight c linenos %}
 enum ComponentType
@@ -114,6 +102,8 @@ enum ComponentType
 {% endhighlight %}
 
 Each enum will automatically be translated into a C-enum. For everything else we need to use the _generate_ keyword. 
+
+
 This keyword is used to generate functions and can be used in two different ways.
 
 To use the enums for something more than just generating enum, I am going to introduce the _generate_ keyword. This 
