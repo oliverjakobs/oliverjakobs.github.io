@@ -23,9 +23,9 @@
 <link rel="canonical" href="http://localhost:4000/blog/generator-part1" />
 <meta property="og:url" content="http://localhost:4000/blog/generator-part1" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-10-09T17:21:34+02:00" />
+<meta property="article:published_time" content="2020-10-11T02:17:14+02:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","url":"http://localhost:4000/blog/generator-part1","headline":"Writing a code generator (Part 1): Introduction","dateModified":"2020-10-09T17:21:34+02:00","datePublished":"2020-10-09T17:21:34+02:00","author":{"@type":"Person","name":"oliver"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/generator-part1"},"description":"For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","url":"http://localhost:4000/blog/generator-part1","headline":"Writing a code generator (Part 1): Introduction","dateModified":"2020-10-11T02:17:14+02:00","datePublished":"2020-10-11T02:17:14+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/generator-part1"},"author":{"@type":"Person","name":"oliver"},"description":"For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   </head>
@@ -43,7 +43,7 @@
 
 <h1 class="post-title">Writing a code generator (Part 1): Introduction</h1>
 <ul class="post-meta">
-  <li><i class="far fa-calendar"></i>09 Oct 2020</li>
+  <li><i class="far fa-calendar"></i>11 Oct 2020</li>
   <li><i class="far fa-user"></i>oliver</li>
   <li><i class="fas fa-code"></i>C</li>
 </ul>
@@ -66,8 +66,8 @@ so manual is tedious and error prone. Every time I want to register a new compon
 the enum and the array insertion needs to happen in the right order. A far better way is to automate the process of 
 adding new components and let a code generator do the work.</p>
 
-<p>The main idea is that the enum constant and the arguments for the insert function are stored in the same array 
-and the tool generates a enum and a function that fills the array in the right order. Additionally the tool can generate
+<p>The main idea is that the enum constant and the arguments for the insert function are stored in the same array and the
+tool generates a enum and a function that fills the array in the right order. Additionally the tool can generate 
 functions to convert enum constants to strings and back for serialisation purposes.</p>
 
 <p>My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I could 
@@ -167,12 +167,8 @@ function.</p>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
-<p>Each enum will automatically be translated into a C-enum. For everything else we need to use the <em>generate</em> keyword.</p>
-
-<p>This keyword is used to generate functions and can be used in two different ways.</p>
-
-<p>To use the enums for something more than just generating enum, I am going to introduce the <em>generate</em> keyword. This 
-keyword is used to generate functions and can be used in two different ways.</p>
+<p>Each enum will automatically be translated into a C-enum. For everything else we need to use the <em>generate</em> keyword. 
+This keyword is used to generate functions and can be used in two different ways.</p>
 
 <p>If <em>generate</em> is followed by a specific keyword (for now only strings) a predefined function will be generated. E.g. 
 <em>generate strings</em> will generate two functions to allow the conversion from a string to an enum constant and back.</p>
@@ -181,15 +177,23 @@ keyword is used to generate functions and can be used in two different ways.</p>
 </pre></td><td class="code"><pre><span class="n">generate</span> <span class="n">strings</span><span class="o">:</span> <span class="n">ComponentType</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
-<p>If <em>generate</em> is followed by an identifier the generator will generate a function with the name given by the identifier 
-which calls the function specified after the arrow operator (‘-&gt;’) for every element of the enum specified before the 
-arrow.</p>
-
-<p>This is actually the feature that made me write this tool. Everythin else is just a bonus.</p>
+<p>If <em>generate</em> is followed by any other identifier the generator will generate a function with the name given by the 
+identifier which calls the function specified after the arrow operator (‘-&gt;’) for every element of the enum specified 
+before the arrow.</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
 </pre></td><td class="code"><pre><span class="n">generate</span> <span class="n">RegisterComponents</span><span class="p">(</span><span class="n">Ecs</span><span class="o">*</span> <span class="n">ecs</span><span class="p">)</span><span class="o">:</span> <span class="n">ComponentType</span> <span class="o">-&gt;</span> <span class="n">EcsRegisterComponent</span><span class="p">(</span><span class="n">ecs</span><span class="p">)</span>
 </pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The function declaration with all of its parameter is defined right after the <em>generate</em> keyword. After the colon is the 
+enum with which the function shoud be generated. After the arrow operator the function, which should be called with the 
+arguments of each enum element (excluding the name of the element), is defined. The arguments inside the parentheses
+after the to-be-called function are placed infront of the argument of the enum element.</p>
+
+<blockquote>
+  <p>A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
+    This would allow to hove multiple generate calls for one enum.</p>
+</blockquote>
 
 <p>To fully understand how the <em>generate</em> keyword works, let’s just take a look at what the output for our example looks:</p>
 
@@ -210,11 +214,6 @@ arrow.</p>
 </pre></td></tr></tbody></table></code></pre></figure>
 
 <p>If there are still things unclear just wait untill we implement the generator (probably part 4).</p>
-
-<blockquote>
-  <p>A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
-    This would allow to hove multiple generate calls for one enum.</p>
-</blockquote>
 
 <h2 id="macros">Macros</h2>
 
@@ -237,10 +236,8 @@ implemented makes it pretty easy to add more.</p>
 
 <h2 id="whats-next">What’s next</h2>
 
-<p>There are various ways this language and the generator could be improved. But these features are either too complicated 
-or are simply not needed for now.</p>
-
-<p>Thats all for this part. In the next part I will talk about implementing a scanner.</p>
+<p>Thats all for this part. There are various ways this language and the generator could be improved. But these features are 
+either too complicated or are simply not needed for now.</p>
 
 <p>In the next part I will talk about how we can parse the script file into a more manageable format. I will explain the
 concept of Tokens and I will show how I implemented a scanner to tokenize the script file.</p>

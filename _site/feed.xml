@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-09T17:21:34+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generator (Part 1): Introduction</title><link href="http://localhost:4000/blog/generator-part1" rel="alternate" type="text/html" title="Writing a code generator (Part 1): Introduction" /><published>2020-10-09T17:21:34+02:00</published><updated>2020-10-09T17:21:34+02:00</updated><id>http://localhost:4000/blog/generator-part1</id><content type="html" xml:base="http://localhost:4000/blog/generator-part1">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-11T02:17:14+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generator (Part 1): Introduction</title><link href="http://localhost:4000/blog/generator-part1" rel="alternate" type="text/html" title="Writing a code generator (Part 1): Introduction" /><published>2020-10-11T02:17:14+02:00</published><updated>2020-10-11T02:17:14+02:00</updated><id>http://localhost:4000/blog/generator-part1</id><content type="html" xml:base="http://localhost:4000/blog/generator-part1">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
 and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.&lt;/p&gt;
 
 &lt;p&gt;I think the whole process could be interesting to some people out there, so I decided to explain what I have done step 
@@ -15,8 +15,8 @@ so manual is tedious and error prone. Every time I want to register a new compon
 the enum and the array insertion needs to happen in the right order. A far better way is to automate the process of 
 adding new components and let a code generator do the work.&lt;/p&gt;
 
-&lt;p&gt;The main idea is that the enum constant and the arguments for the insert function are stored in the same array 
-and the tool generates a enum and a function that fills the array in the right order. Additionally the tool can generate
+&lt;p&gt;The main idea is that the enum constant and the arguments for the insert function are stored in the same array and the
+tool generates a enum and a function that fills the array in the right order. Additionally the tool can generate 
 functions to convert enum constants to strings and back for serialisation purposes.&lt;/p&gt;
 
 &lt;p&gt;My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I could 
@@ -116,12 +116,8 @@ function.&lt;/p&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Each enum will automatically be translated into a C-enum. For everything else we need to use the &lt;em&gt;generate&lt;/em&gt; keyword.&lt;/p&gt;
-
-&lt;p&gt;This keyword is used to generate functions and can be used in two different ways.&lt;/p&gt;
-
-&lt;p&gt;To use the enums for something more than just generating enum, I am going to introduce the &lt;em&gt;generate&lt;/em&gt; keyword. This 
-keyword is used to generate functions and can be used in two different ways.&lt;/p&gt;
+&lt;p&gt;Each enum will automatically be translated into a C-enum. For everything else we need to use the &lt;em&gt;generate&lt;/em&gt; keyword. 
+This keyword is used to generate functions and can be used in two different ways.&lt;/p&gt;
 
 &lt;p&gt;If &lt;em&gt;generate&lt;/em&gt; is followed by a specific keyword (for now only strings) a predefined function will be generated. E.g. 
 &lt;em&gt;generate strings&lt;/em&gt; will generate two functions to allow the conversion from a string to an enum constant and back.&lt;/p&gt;
@@ -130,15 +126,23 @@ keyword is used to generate functions and can be used in two different ways.&lt;
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;generate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;strings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComponentType&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;If &lt;em&gt;generate&lt;/em&gt; is followed by an identifier the generator will generate a function with the name given by the identifier 
-which calls the function specified after the arrow operator (‘-&amp;gt;’) for every element of the enum specified before the 
-arrow.&lt;/p&gt;
-
-&lt;p&gt;This is actually the feature that made me write this tool. Everythin else is just a bonus.&lt;/p&gt;
+&lt;p&gt;If &lt;em&gt;generate&lt;/em&gt; is followed by any other identifier the generator will generate a function with the name given by the 
+identifier which calls the function specified after the arrow operator (‘-&amp;gt;’) for every element of the enum specified 
+before the arrow.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;generate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RegisterComponents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ecs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ecs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComponentType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EcsRegisterComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ecs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The function declaration with all of its parameter is defined right after the &lt;em&gt;generate&lt;/em&gt; keyword. After the colon is the 
+enum with which the function shoud be generated. After the arrow operator the function, which should be called with the 
+arguments of each enum element (excluding the name of the element), is defined. The arguments inside the parentheses
+after the to-be-called function are placed infront of the argument of the enum element.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
+    This would allow to hove multiple generate calls for one enum.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;To fully understand how the &lt;em&gt;generate&lt;/em&gt; keyword works, let’s just take a look at what the output for our example looks:&lt;/p&gt;
 
@@ -159,11 +163,6 @@ arrow.&lt;/p&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;If there are still things unclear just wait untill we implement the generator (probably part 4).&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
-    This would allow to hove multiple generate calls for one enum.&lt;/p&gt;
-&lt;/blockquote&gt;
 
 &lt;h2 id=&quot;macros&quot;&gt;Macros&lt;/h2&gt;
 
@@ -186,16 +185,14 @@ implemented makes it pretty easy to add more.&lt;/p&gt;
 
 &lt;h2 id=&quot;whats-next&quot;&gt;What’s next&lt;/h2&gt;
 
-&lt;p&gt;There are various ways this language and the generator could be improved. But these features are either too complicated 
-or are simply not needed for now.&lt;/p&gt;
-
-&lt;p&gt;Thats all for this part. In the next part I will talk about implementing a scanner.&lt;/p&gt;
+&lt;p&gt;Thats all for this part. There are various ways this language and the generator could be improved. But these features are 
+either too complicated or are simply not needed for now.&lt;/p&gt;
 
 &lt;p&gt;In the next part I will talk about how we can parse the script file into a more manageable format. I will explain the
 concept of Tokens and I will show how I implemented a scanner to tokenize the script file.&lt;/p&gt;
 
 &lt;p&gt;If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
-&lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.</summary></entry><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 2): The Scanner</title><link href="http://localhost:4000/blog/generator-part2" rel="alternate" type="text/html" title="Writing a code generation tool (Part 2): The Scanner" /><published>2020-10-05T17:57:44+02:00</published><updated>2020-10-05T17:57:44+02:00</updated><id>http://localhost:4000/blog/generator-part2</id><content type="html" xml:base="http://localhost:4000/blog/generator-part2">&lt;h2 id=&quot;the-scanner&quot;&gt;The Scanner&lt;/h2&gt;
+&lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.</summary></entry><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 2): The Scanner</title><link href="http://localhost:4000/blog/generator-part2" rel="alternate" type="text/html" title="Writing a code generation tool (Part 2): The Scanner" /><published>2020-10-09T23:43:59+02:00</published><updated>2020-10-09T23:43:59+02:00</updated><id>http://localhost:4000/blog/generator-part2</id><content type="html" xml:base="http://localhost:4000/blog/generator-part2">&lt;h2 id=&quot;the-scanner&quot;&gt;The Scanner&lt;/h2&gt;
 
 &lt;p&gt;Before we can generate any code we need to split the script file into a list of tokens. This makes it easier to 
 handle the script. To do so we need to scan the whole file and look for lexemes that correspond with the defined 
@@ -874,7 +871,7 @@ we scan will be printed out in a nice, readable way.&lt;/p&gt;
 &lt;p&gt;If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
 &lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">The Scanner</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/blog/avl-tree" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-10-05T17:57:37+02:00</published><updated>2020-10-05T17:57:37+02:00</updated><id>http://localhost:4000/blog/avl-tree</id><content type="html" xml:base="http://localhost:4000/blog/avl-tree">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
+&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">The Scanner</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/blog/avl-tree" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-10-09T23:43:59+02:00</published><updated>2020-10-09T23:43:59+02:00</updated><id>http://localhost:4000/blog/avl-tree</id><content type="html" xml:base="http://localhost:4000/blog/avl-tree">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;

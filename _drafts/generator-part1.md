@@ -21,8 +21,8 @@ so manual is tedious and error prone. Every time I want to register a new compon
 the enum and the array insertion needs to happen in the right order. A far better way is to automate the process of 
 adding new components and let a code generator do the work.
 
-The main idea is that the enum constant and the arguments for the insert function are stored in the same array 
-and the tool generates a enum and a function that fills the array in the right order. Additionally the tool can generate
+The main idea is that the enum constant and the arguments for the insert function are stored in the same array and the
+tool generates a enum and a function that fills the array in the right order. Additionally the tool can generate 
 functions to convert enum constants to strings and back for serialisation purposes.
 
 My first attempt, while producing the desired result, was rather bad and not very extensible. Nothing where I could 
@@ -102,12 +102,7 @@ enum ComponentType
 {% endhighlight %}
 
 Each enum will automatically be translated into a C-enum. For everything else we need to use the _generate_ keyword. 
-
-
 This keyword is used to generate functions and can be used in two different ways.
-
-To use the enums for something more than just generating enum, I am going to introduce the _generate_ keyword. This 
-keyword is used to generate functions and can be used in two different ways.
 
 If _generate_ is followed by a specific keyword (for now only strings) a predefined function will be generated. E.g. 
 _generate strings_ will generate two functions to allow the conversion from a string to an enum constant and back. 
@@ -116,15 +111,21 @@ _generate strings_ will generate two functions to allow the conversion from a st
 generate strings: ComponentType
 {% endhighlight %}
 
-If _generate_ is followed by an identifier the generator will generate a function with the name given by the identifier 
-which calls the function specified after the arrow operator ('->') for every element of the enum specified before the 
-arrow. 
-
-This is actually the feature that made me write this tool. Everythin else is just a bonus.
+If _generate_ is followed by any other identifier the generator will generate a function with the name given by the 
+identifier which calls the function specified after the arrow operator ('->') for every element of the enum specified 
+before the arrow. 
 
 {% highlight c linenos %}
 generate RegisterComponents(Ecs* ecs): ComponentType -> EcsRegisterComponent(ecs)
 {% endhighlight %}
+
+The function declaration with all of its parameter is defined right after the _generate_ keyword. After the colon is the 
+enum with which the function shoud be generated. After the arrow operator the function, which should be called with the 
+arguments of each enum element (excluding the name of the element), is defined. The arguments inside the parentheses
+after the to-be-called function are placed infront of the argument of the enum element.
+
+>   A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
+    This would allow to hove multiple generate calls for one enum.
 
 To fully understand how the _generate_ keyword works, let's just take a look at what the output for our example looks:
 
@@ -139,9 +140,6 @@ void RegisterComponents(Ecs* ecs)
 {% endhighlight %}
 
 If there are still things unclear just wait untill we implement the generator (probably part 4).
-
->   A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
-    This would allow to hove multiple generate calls for one enum.
 
 ## Macros
 
@@ -162,10 +160,8 @@ The arguments of an macro are just getting copied to the the output file. So nes
 
 ## What's next
 
-There are various ways this language and the generator could be improved. But these features are either too complicated 
-or are simply not needed for now.
-
-Thats all for this part. In the next part I will talk about implementing a scanner.
+Thats all for this part. There are various ways this language and the generator could be improved. But these features are 
+either too complicated or are simply not needed for now.
 
 In the next part I will talk about how we can parse the script file into a more manageable format. I will explain the
 concept of Tokens and I will show how I implemented a scanner to tokenize the script file.
