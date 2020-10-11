@@ -125,7 +125,7 @@ arguments of each enum element (excluding the name of the element), is defined. 
 after the to-be-called function are placed infront of the argument of the enum element.
 
 >   A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
-    This would allow to hove multiple generate calls for one enum.
+    This would allow to have multiple generate calls for one enum.
 
 To fully understand how the _generate_ keyword works, let's just take a look at what the output for our example looks:
 
@@ -157,6 +157,40 @@ The arguments of an macro are just getting copied to the the output file. So nes
 
 >   In a later version it will probably be possible for the user to define macros. But for now it is easier to just add 
     new macros manually.
+
+## Annotations
+
+Annotations are a way to change the behaviour of an enum. They are defined before an enum with _@AnnotationName_. An
+annotation is a name with an asociated value inside parentheses. Currently the only annotations are _COUNT_ and _START_. 
+_COUNT_ defines a constant after the enum, which has the number of constants in the enum as value. The value of _COUNT_ 
+has to be a string and sets the name of the constant. _START_ sets the value of the first constant in the enum to the 
+value of _START_. The value of _START_ has to be an integer.
+
+{% highlight c linenos %}
+@START(3)
+@COUNT("NUM_COMPONENTS") 
+enum ComponentType
+{
+    [ COMPONENT_TRANSFORM,  $SIZE(Transform),   NULL ],
+    [ COMPONENT_RIGID_BODY, $SIZE(RigidBody),   NULL ],
+    [ COMPONENT_ANIMATOR,   $SIZE(Animator),    AnimatorFree ],
+    [ COMPONENT_SPRITE,     $SIZE(Sprite),      NULL ]
+}
+{% endhighlight %}
+
+The above defined enum would translate to the following C-enum:
+
+{% highlight c linenos %}
+typedef enum
+{
+    COMPONENT_TRANSFORM = 3,
+    COMPONENT_RIGID_BODY,
+    COMPONENT_ANIMATOR,
+    COMPONENT_SPRITE
+} ComponentType;
+
+#define NUM_COMPONENTS 4 /* size of ComponentType */
+{% endhighlight %}
 
 ## What's next
 

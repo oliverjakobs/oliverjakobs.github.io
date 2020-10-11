@@ -23,9 +23,9 @@
 <link rel="canonical" href="http://localhost:4000/blog/generator-part1" />
 <meta property="og:url" content="http://localhost:4000/blog/generator-part1" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-10-11T02:17:14+02:00" />
+<meta property="article:published_time" content="2020-10-11T23:48:29+02:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","url":"http://localhost:4000/blog/generator-part1","headline":"Writing a code generator (Part 1): Introduction","dateModified":"2020-10-11T02:17:14+02:00","datePublished":"2020-10-11T02:17:14+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/generator-part1"},"author":{"@type":"Person","name":"oliver"},"description":"For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","url":"http://localhost:4000/blog/generator-part1","headline":"Writing a code generator (Part 1): Introduction","dateModified":"2020-10-11T23:48:29+02:00","datePublished":"2020-10-11T23:48:29+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/generator-part1"},"author":{"@type":"Person","name":"oliver"},"description":"For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   </head>
@@ -192,7 +192,7 @@ after the to-be-called function are placed infront of the argument of the enum e
 
 <blockquote>
   <p>A possibly useful upgrade would be a way to specify which argument of an enum element is needed in what order. 
-    This would allow to hove multiple generate calls for one enum.</p>
+    This would allow to have multiple generate calls for one enum.</p>
 </blockquote>
 
 <p>To fully understand how the <em>generate</em> keyword works, let’s just take a look at what the output for our example looks:</p>
@@ -233,6 +233,56 @@ implemented makes it pretty easy to add more.</p>
   <p>In a later version it will probably be possible for the user to define macros. But for now it is easier to just add 
     new macros manually.</p>
 </blockquote>
+
+<h2 id="annotations">Annotations</h2>
+
+<p>Annotations are a way to change the behaviour of an enum. They are defined before an enum with <em>@AnnotationName</em>. An
+annotation is a name with an asociated value inside parentheses. Currently the only annotations are <em>COUNT</em> and <em>START</em>. 
+<em>COUNT</em> defines a constant after the enum, which has the number of constants in the enum as value. The value of <em>COUNT</em> 
+has to be a string and sets the name of the constant. <em>START</em> sets the value of the first constant in the enum to the 
+value of <em>START</em>. The value of <em>START</em> has to be an integer.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="err">@</span><span class="n">START</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="err">@</span><span class="n">COUNT</span><span class="p">(</span><span class="s">"NUM_COMPONENTS"</span><span class="p">)</span> 
+<span class="k">enum</span> <span class="n">ComponentType</span>
+<span class="p">{</span>
+    <span class="p">[</span> <span class="n">COMPONENT_TRANSFORM</span><span class="p">,</span>  <span class="err">$</span><span class="n">SIZE</span><span class="p">(</span><span class="n">Transform</span><span class="p">),</span>   <span class="nb">NULL</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="n">COMPONENT_RIGID_BODY</span><span class="p">,</span> <span class="err">$</span><span class="n">SIZE</span><span class="p">(</span><span class="n">RigidBody</span><span class="p">),</span>   <span class="nb">NULL</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="n">COMPONENT_ANIMATOR</span><span class="p">,</span>   <span class="err">$</span><span class="n">SIZE</span><span class="p">(</span><span class="n">Animator</span><span class="p">),</span>    <span class="n">AnimatorFree</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="n">COMPONENT_SPRITE</span><span class="p">,</span>     <span class="err">$</span><span class="n">SIZE</span><span class="p">(</span><span class="n">Sprite</span><span class="p">),</span>      <span class="nb">NULL</span> <span class="p">]</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The above defined enum would translate to the following C-enum:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="k">typedef</span> <span class="k">enum</span>
+<span class="p">{</span>
+    <span class="n">COMPONENT_TRANSFORM</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">COMPONENT_RIGID_BODY</span><span class="p">,</span>
+    <span class="n">COMPONENT_ANIMATOR</span><span class="p">,</span>
+    <span class="n">COMPONENT_SPRITE</span>
+<span class="p">}</span> <span class="n">ComponentType</span><span class="p">;</span>
+
+<span class="cp">#define NUM_COMPONENTS 4 </span><span class="cm">/* size of ComponentType */</span>
+</pre></td></tr></tbody></table></code></pre></figure>
 
 <h2 id="whats-next">What’s next</h2>
 
