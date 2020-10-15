@@ -1,0 +1,22 @@
+define ECS_LOADER_H
+
+include
+{
+    "Ecs/Ecs.h"
+    "Components/Transform.h",
+    "Components/RigidBody.h",
+    "Components/Animator.h",
+    "Components/Sprite.h"
+}
+
+enum ComponentType
+{
+    [ COMPONENT_TRANSFORM,  $SIZE(Transform),   NULL ],
+    [ COMPONENT_RIGID_BODY, $SIZE(RigidBody),   NULL ],
+    [ COMPONENT_ANIMATOR,   $SIZE(Animator),    AnimatorFree ],
+    [ COMPONENT_SPRITE,     $SIZE(Sprite),      NULL ]
+}
+
+generate strings: ComponentType
+
+generate RegisterComponents(Ecs* ecs): ComponentType -> EcsRegisterComponent(ecs)
