@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-11T23:48:29+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generator (Part 1): Introduction</title><link href="http://localhost:4000/blog/generator-part1" rel="alternate" type="text/html" title="Writing a code generator (Part 1): Introduction" /><published>2020-10-11T23:48:29+02:00</published><updated>2020-10-11T23:48:29+02:00</updated><id>http://localhost:4000/blog/generator-part1</id><content type="html" xml:base="http://localhost:4000/blog/generator-part1">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-15T22:46:54+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generator (Part 1): Introduction</title><link href="http://localhost:4000/blog/generator-part1" rel="alternate" type="text/html" title="Writing a code generator (Part 1): Introduction" /><published>2020-10-15T00:00:00+02:00</published><updated>2020-10-15T00:00:00+02:00</updated><id>http://localhost:4000/blog/generator-part1</id><content type="html" xml:base="http://localhost:4000/blog/generator-part1">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
 and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.&lt;/p&gt;
 
 &lt;p&gt;I think the whole process could be interesting to some people out there, so I decided to explain what I have done step 
@@ -166,17 +166,13 @@ after the to-be-called function are placed infront of the argument of the enum e
 
 &lt;h2 id=&quot;macros&quot;&gt;Macros&lt;/h2&gt;
 
-&lt;p&gt;The above example already uses another feature.
-Macros are defined by ‘$’ followed by an identifier.&lt;/p&gt;
-
-&lt;p&gt;Currently the only macro supported is &lt;em&gt;$SIZE&lt;/em&gt;, which translates to the C-operator &lt;em&gt;sizeof&lt;/em&gt;. But the way macros are 
+&lt;p&gt;The above example already uses another feature. Namely macros. They are defined by ‘$’ followed by an identifier. 
+Currently the only macro supported is &lt;em&gt;$SIZE&lt;/em&gt;, which translates to the C-operator &lt;em&gt;sizeof&lt;/em&gt;. But the way macros are 
 implemented makes it pretty easy to add more.&lt;/p&gt;
 
-&lt;p&gt;Macros can have any number of arguments as long as they match the C-function they correspond to.&lt;/p&gt;
-
-&lt;p&gt;Macros are just to have function calls as arguments in the enums.&lt;/p&gt;
-
-&lt;p&gt;The arguments of an macro are just getting copied to the the output file. So nested macros are not possible.&lt;/p&gt;
+&lt;p&gt;Macros are used to have function calls as arguments inside an enum. The arguments of an macro are just getting copied to 
+the the output file, so nested macros are not possible. Also Macros can have any number of arguments as long as they 
+match the C-function they correspond to.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;In a later version it will probably be possible for the user to define macros. But for now it is easier to just add 
@@ -201,7 +197,7 @@ value of &lt;em&gt;START&lt;/em&gt;. The value of &lt;em&gt;START&lt;/em&gt; has
 8
 9
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;START&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;COUNT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;NUM_COMPONENTS&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;COUNT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;NUM_COMPONENTS&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ComponentType&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COMPONENT_TRANSFORM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;  &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SIZE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Transform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;   &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
@@ -235,14 +231,14 @@ value of &lt;em&gt;START&lt;/em&gt;. The value of &lt;em&gt;START&lt;/em&gt; has
 
 &lt;h2 id=&quot;whats-next&quot;&gt;What’s next&lt;/h2&gt;
 
-&lt;p&gt;Thats all for this part. There are various ways this language and the generator could be improved. But these features are 
-either too complicated or are simply not needed for now.&lt;/p&gt;
+&lt;p&gt;Thats all for this part. There are various ways this language and the generator could be improved. But these features 
+are either too complicated or are simply not needed for now.&lt;/p&gt;
 
 &lt;p&gt;In the next part I will talk about how we can parse the script file into a more manageable format. I will explain the
 concept of Tokens and I will show how I implemented a scanner to tokenize the script file.&lt;/p&gt;
 
 &lt;p&gt;If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
-&lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.</summary></entry><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 2): The Scanner</title><link href="http://localhost:4000/blog/generator-part2" rel="alternate" type="text/html" title="Writing a code generation tool (Part 2): The Scanner" /><published>2020-10-09T23:43:59+02:00</published><updated>2020-10-09T23:43:59+02:00</updated><id>http://localhost:4000/blog/generator-part2</id><content type="html" xml:base="http://localhost:4000/blog/generator-part2">&lt;h2 id=&quot;the-scanner&quot;&gt;The Scanner&lt;/h2&gt;
+&lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.</summary></entry><entry xml:lang="C"><title type="html">Writing a code generation tool (Part 2): The Scanner</title><link href="http://localhost:4000/blog/generator-part2" rel="alternate" type="text/html" title="Writing a code generation tool (Part 2): The Scanner" /><published>2020-10-05T17:57:44+02:00</published><updated>2020-10-05T17:57:44+02:00</updated><id>http://localhost:4000/blog/generator-part2</id><content type="html" xml:base="http://localhost:4000/blog/generator-part2">&lt;h2 id=&quot;the-scanner&quot;&gt;The Scanner&lt;/h2&gt;
 
 &lt;p&gt;Before we can generate any code we need to split the script file into a list of tokens. This makes it easier to 
 handle the script. To do so we need to scan the whole file and look for lexemes that correspond with the defined 
@@ -921,7 +917,7 @@ we scan will be printed out in a nice, readable way.&lt;/p&gt;
 &lt;p&gt;If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
 &lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">The Scanner</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/blog/avl-tree" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-10-09T23:43:59+02:00</published><updated>2020-10-09T23:43:59+02:00</updated><id>http://localhost:4000/blog/avl-tree</id><content type="html" xml:base="http://localhost:4000/blog/avl-tree">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
+&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">The Scanner</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/blog/avl-tree" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-10-05T17:57:37+02:00</published><updated>2020-10-05T17:57:37+02:00</updated><id>http://localhost:4000/blog/avl-tree</id><content type="html" xml:base="http://localhost:4000/blog/avl-tree">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;

@@ -143,17 +143,13 @@ If there are still things unclear just wait untill we implement the generator (p
 
 ## Macros
 
-The above example already uses another feature.
-Macros are defined by '$' followed by an identifier.
-
+The above example already uses another feature. Namely macros. They are defined by '$' followed by an identifier. 
 Currently the only macro supported is _$SIZE_, which translates to the C-operator _sizeof_. But the way macros are 
 implemented makes it pretty easy to add more.
 
-Macros can have any number of arguments as long as they match the C-function they correspond to. 
-
-Macros are just to have function calls as arguments in the enums.
-
-The arguments of an macro are just getting copied to the the output file. So nested macros are not possible.
+Macros are used to have function calls as arguments inside an enum. The arguments of an macro are just getting copied to 
+the the output file, so nested macros are not possible. Also Macros can have any number of arguments as long as they 
+match the C-function they correspond to. 
 
 >   In a later version it will probably be possible for the user to define macros. But for now it is easier to just add 
     new macros manually.
@@ -168,7 +164,7 @@ value of _START_. The value of _START_ has to be an integer.
 
 {% highlight c linenos %}
 @START(3)
-@COUNT("NUM_COMPONENTS") 
+@COUNT("NUM_COMPONENTS")
 enum ComponentType
 {
     [ COMPONENT_TRANSFORM,  $SIZE(Transform),   NULL ],
@@ -194,8 +190,8 @@ typedef enum
 
 ## What's next
 
-Thats all for this part. There are various ways this language and the generator could be improved. But these features are 
-either too complicated or are simply not needed for now.
+Thats all for this part. There are various ways this language and the generator could be improved. But these features 
+are either too complicated or are simply not needed for now.
 
 In the next part I will talk about how we can parse the script file into a more manageable format. I will explain the
 concept of Tokens and I will show how I implemented a scanner to tokenize the script file.

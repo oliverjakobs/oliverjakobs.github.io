@@ -23,9 +23,9 @@
 <link rel="canonical" href="http://localhost:4000/blog/generator-part1" />
 <meta property="og:url" content="http://localhost:4000/blog/generator-part1" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-10-11T23:48:29+02:00" />
+<meta property="article:published_time" content="2020-10-15T00:00:00+02:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","url":"http://localhost:4000/blog/generator-part1","headline":"Writing a code generator (Part 1): Introduction","dateModified":"2020-10-11T23:48:29+02:00","datePublished":"2020-10-11T23:48:29+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/generator-part1"},"author":{"@type":"Person","name":"oliver"},"description":"For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","url":"http://localhost:4000/blog/generator-part1","headline":"Writing a code generator (Part 1): Introduction","dateModified":"2020-10-15T00:00:00+02:00","datePublished":"2020-10-15T00:00:00+02:00","author":{"@type":"Person","name":"oliver"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/generator-part1"},"description":"For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   </head>
@@ -43,7 +43,7 @@
 
 <h1 class="post-title">Writing a code generator (Part 1): Introduction</h1>
 <ul class="post-meta">
-  <li><i class="far fa-calendar"></i>11 Oct 2020</li>
+  <li><i class="far fa-calendar"></i>15 Oct 2020</li>
   <li><i class="far fa-user"></i>oliver</li>
   <li><i class="fas fa-code"></i>C</li>
 </ul>
@@ -217,17 +217,13 @@ after the to-be-called function are placed infront of the argument of the enum e
 
 <h2 id="macros">Macros</h2>
 
-<p>The above example already uses another feature.
-Macros are defined by ‘$’ followed by an identifier.</p>
-
-<p>Currently the only macro supported is <em>$SIZE</em>, which translates to the C-operator <em>sizeof</em>. But the way macros are 
+<p>The above example already uses another feature. Namely macros. They are defined by ‘$’ followed by an identifier. 
+Currently the only macro supported is <em>$SIZE</em>, which translates to the C-operator <em>sizeof</em>. But the way macros are 
 implemented makes it pretty easy to add more.</p>
 
-<p>Macros can have any number of arguments as long as they match the C-function they correspond to.</p>
-
-<p>Macros are just to have function calls as arguments in the enums.</p>
-
-<p>The arguments of an macro are just getting copied to the the output file. So nested macros are not possible.</p>
+<p>Macros are used to have function calls as arguments inside an enum. The arguments of an macro are just getting copied to 
+the the output file, so nested macros are not possible. Also Macros can have any number of arguments as long as they 
+match the C-function they correspond to.</p>
 
 <blockquote>
   <p>In a later version it will probably be possible for the user to define macros. But for now it is easier to just add 
@@ -252,7 +248,7 @@ value of <em>START</em>. The value of <em>START</em> has to be an integer.</p>
 8
 9
 </pre></td><td class="code"><pre><span class="err">@</span><span class="n">START</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="err">@</span><span class="n">COUNT</span><span class="p">(</span><span class="s">"NUM_COMPONENTS"</span><span class="p">)</span> 
+<span class="err">@</span><span class="n">COUNT</span><span class="p">(</span><span class="s">"NUM_COMPONENTS"</span><span class="p">)</span>
 <span class="k">enum</span> <span class="n">ComponentType</span>
 <span class="p">{</span>
     <span class="p">[</span> <span class="n">COMPONENT_TRANSFORM</span><span class="p">,</span>  <span class="err">$</span><span class="n">SIZE</span><span class="p">(</span><span class="n">Transform</span><span class="p">),</span>   <span class="nb">NULL</span> <span class="p">],</span>
@@ -286,8 +282,8 @@ value of <em>START</em>. The value of <em>START</em> has to be an integer.</p>
 
 <h2 id="whats-next">What’s next</h2>
 
-<p>Thats all for this part. There are various ways this language and the generator could be improved. But these features are 
-either too complicated or are simply not needed for now.</p>
+<p>Thats all for this part. There are various ways this language and the generator could be improved. But these features 
+are either too complicated or are simply not needed for now.</p>
 
 <p>In the next part I will talk about how we can parse the script file into a more manageable format. I will explain the
 concept of Tokens and I will show how I implemented a scanner to tokenize the script file.</p>
