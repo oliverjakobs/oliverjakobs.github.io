@@ -15,7 +15,7 @@ During development I often needed to access specific array elements. The easiest
 which constants corresponds with the index of the element in the array. The only shortcoming of this method the manual, 
 error prone process to fill the array.
 
-To register a new component type to the ECS I have to call a function with component specific argmunets. So the order 
+To register a new component type to the ECS I have to call a function with component specific arguments. So the order 
 in which the components are added has to match the order defined in the enum which contains all component types. Doing 
 so manual is tedious and error prone. Every time I want to register a new component type the type needs to be added to 
 the enum and the array insertion needs to happen in the right order. A far better way is to automate the process of 
@@ -139,7 +139,7 @@ void RegisterComponents(Ecs* ecs)
 }
 {% endhighlight %}
 
-If there are still things unclear just wait untill we implement the generator (probably part 4).
+If there are still things unclear just wait until we implement the generator (probably part 4).
 
 ## Macros
 
