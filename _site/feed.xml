@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-10-15T22:46:54+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Writing a code generator (Part 1): Introduction</title><link href="http://localhost:4000/blog/generator-part1" rel="alternate" type="text/html" title="Writing a code generator (Part 1): Introduction" /><published>2020-10-15T00:00:00+02:00</published><updated>2020-10-15T00:00:00+02:00</updated><id>http://localhost:4000/blog/generator-part1</id><content type="html" xml:base="http://localhost:4000/blog/generator-part1">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-01-06T15:54:22+01:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Stretchy Buffer</title><link href="http://localhost:4000/blog/stretchy-buffer" rel="alternate" type="text/html" title="Stretchy Buffer" /><published>2020-11-18T14:26:34+01:00</published><updated>2020-11-18T14:26:34+01:00</updated><id>http://localhost:4000/blog/stretchy-buffer</id><content type="html" xml:base="http://localhost:4000/blog/stretchy-buffer">&lt;blockquote&gt;
+  &lt;p&gt;Disclaimer: 
+    This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe 
+    it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>oliver</name></author><summary type="html">Disclaimer: This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe it helps with your project or maybe you get inspired to do something better.</summary></entry><entry xml:lang="C"><title type="html">Writing a code generator (Part 1): Introduction</title><link href="http://localhost:4000/blog/generator-part1" rel="alternate" type="text/html" title="Writing a code generator (Part 1): Introduction" /><published>2020-10-15T00:00:00+02:00</published><updated>2020-10-15T00:00:00+02:00</updated><id>http://localhost:4000/blog/generator-part1</id><content type="html" xml:base="http://localhost:4000/blog/generator-part1">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
 and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.&lt;/p&gt;
 
 &lt;p&gt;I think the whole process could be interesting to some people out there, so I decided to explain what I have done step 
@@ -9,7 +13,7 @@ a general outlook what to expect.&lt;/p&gt;
 which constants corresponds with the index of the element in the array. The only shortcoming of this method the manual, 
 error prone process to fill the array.&lt;/p&gt;
 
-&lt;p&gt;To register a new component type to the ECS I have to call a function with component specific argmunets. So the order 
+&lt;p&gt;To register a new component type to the ECS I have to call a function with component specific arguments. So the order 
 in which the components are added has to match the order defined in the enum which contains all component types. Doing 
 so manual is tedious and error prone. Every time I want to register a new component type the type needs to be added to 
 the enum and the array insertion needs to happen in the right order. A far better way is to automate the process of 
@@ -162,7 +166,7 @@ after the to-be-called function are placed infront of the argument of the enum e
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;If there are still things unclear just wait untill we implement the generator (probably part 4).&lt;/p&gt;
+&lt;p&gt;If there are still things unclear just wait until we implement the generator (probably part 4).&lt;/p&gt;
 
 &lt;h2 id=&quot;macros&quot;&gt;Macros&lt;/h2&gt;
 
