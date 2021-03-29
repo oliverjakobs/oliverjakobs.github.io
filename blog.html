@@ -1,0 +1,20 @@
+---
+layout: default
+title: blog
+---
+<h1 class="page-title separator">Welcome to my blog.</h1>
+
+<ul class="blog-overview">
+  {% for post in site.posts %}
+    <li class="separator">
+      <h2 class="post-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
+      <ul class="post-meta">
+        <li><i class="far fa-calendar"></i>{{ post.date | date_to_string }}</li>
+        <li><i class="far fa-user"></i>{{ post.author }}</li>
+        <li><i class="fas fa-code"></i>{{ post.lang }}</li>
+      </ul>
+      <div class="post-summary"> {{ post.excerpt }} </div>
+      <a href="{{ post.url }}">More &raquo;</a>
+    </li>
+  {% endfor %}
+</ul>
