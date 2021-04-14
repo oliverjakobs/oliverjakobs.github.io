@@ -1,0 +1,24 @@
+---
+
+---
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/hub.css" />
+    <title>{ oliver.jakobs } | hub </title>
+  </head>
+
+  <body>
+    <div class="container">
+      {% for item in site.data.hub %}
+        <a class="card" href={{ item.link }}>
+          <img src={{ item.logo }}>
+          <div class="title">{{ item.title }}</div>
+        </a>
+      {% endfor %}
+    </div>
+  </body>
+</html>

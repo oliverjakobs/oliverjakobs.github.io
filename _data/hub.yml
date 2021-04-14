@@ -1,0 +1,36 @@
+- title: Twitch
+  link: "https://www.twitch.tv/directory/game/Dota%202"
+  logo: "assets/hub/twitch.png"
+- title: YouTube
+  link: "http://www.youtube.com"
+  logo: "assets/hub/youtube.png"
+- title: Twitter
+  link: "https://twitter.com/home"
+  logo: "assets/hub/twitter.png"
+- title: Reddit
+  link: "http://www.reddit.com"
+  logo: "assets/hub/reddit.png"
+- title: GitHub
+  link: "https://github.com/oliverjakobs"
+  logo: "assets/hub/github.png"
+- title: StudIP
+  link: "https://studip.hochschule-trier.de/dispatch.php/start"
+  logo: "assets/hub/studip.png"
+- title: Proxer
+  link: "https://proxer.me/"
+  logo: "assets/hub/proxer.png"
+- title: Liquipedia
+  link: "https://liquipedia.net/dota2/Main_Page"
+  logo: "assets/hub/liquipedia.png"
+- title: Google Keep
+  link: "https://keep.google.com/#home"
+  logo: "assets/hub/keep.png"
+- title: Ebay
+  link: "https://www.ebay.de/"
+  logo: "assets/hub/ebay.png"
+- title: OneDrive
+  link: "https://onedrive.live.com/"
+  logo: "assets/hub/onedrive.png"
+- title: Prime Video
+  link: "https://www.primevideo.com/"
+  logo: "assets/hub/primevideo.png"
