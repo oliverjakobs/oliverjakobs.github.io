@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    
+    <!-- Font Aweseome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.min.css" />
+
+    <title>
+      { oliver.jakobs } 
+      typesafe dynamic arrays in c
+    </title>
+
+    <link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" />
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Typesafe dynamic arrays in C</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Typesafe dynamic arrays in C" />
+<meta name="author" content="oliver" />
+<meta property="og:locale" content="C" />
+<meta name="description" content="Disclaimer: This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe it helps with your project or maybe you get inspired to do something better." />
+<meta property="og:description" content="Disclaimer: This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe it helps with your project or maybe you get inspired to do something better." />
+<link rel="canonical" href="http://localhost:4000/blog/dynamic_arrays" />
+<meta property="og:url" content="http://localhost:4000/blog/dynamic_arrays" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-05-22T00:24:58+02:00" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/blog/dynamic_arrays"},"@type":"BlogPosting","url":"http://localhost:4000/blog/dynamic_arrays","author":{"@type":"Person","name":"oliver"},"headline":"Typesafe dynamic arrays in C","dateModified":"2021-05-22T00:24:58+02:00","description":"Disclaimer: This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe it helps with your project or maybe you get inspired to do something better.","datePublished":"2021-05-22T00:24:58+02:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+    <nav class="navbar container">
+  <a class="logo" href="/">oliver.jakobs</a>
+  <ul class="menu">
+    
+      <li><a href="/blog" >blog</a></li>
+    
+  </ul>
+</nav>
+    <main class="page-content container"><a href="/">&laquo; Back</a>
+
+<h1 class="post-title">Typesafe dynamic arrays in C</h1>
+<ul class="post-meta">
+  <li><i class="far fa-calendar"></i>22 May 2021</li>
+  <li><i class="far fa-user"></i>oliver</li>
+  <li><i class="fas fa-code"></i>C</li>
+</ul>
+
+<article class="post-content">
+  <blockquote>
+  <p>Disclaimer: 
+    This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe 
+    it helps with your project or maybe you get inspired to do something better.</p>
+</blockquote>
+
+<h2 id="concept">Concept</h2>
+
+<h2 id="functionality">Functionality</h2>
+
+<h2 id="header-macros">Header Macros</h2>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="cp">#define array__hdr(a) ((size_t*)(void*)(a) - 2)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="cp">#define array__cap(a) array__hdr(a)[0]
+#define array__len(a) array__hdr(a)[1]</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="resize-function">Resize Function</h2>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="kt">void</span><span class="o">*</span> <span class="nf">array__resize</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">elem_size</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">cap</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shrink</span><span class="p">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="kt">void</span><span class="o">*</span> <span class="nf">array__resize</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">elem_size</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">cap</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shrink</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">arr</span> <span class="o">&amp;&amp;</span> <span class="n">cap</span> <span class="o">&lt;</span> <span class="n">array__cap</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">shrink</span><span class="p">)</span> <span class="k">return</span> <span class="n">arr</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">arr</span> <span class="o">&amp;&amp;</span> <span class="n">cap</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">cap</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">size_t</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">cap</span> <span class="o">*</span> <span class="n">elem_size</span><span class="p">);</span>
+    <span class="kt">size_t</span><span class="o">*</span> <span class="n">hdr</span> <span class="o">=</span> <span class="n">realloc</span><span class="p">(</span><span class="n">arr</span> <span class="o">?</span> <span class="n">array__hdr</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">:</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">hdr</span><span class="p">)</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span> <span class="cm">/* out of memory */</span>
+
+    <span class="n">hdr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cap</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">arr</span><span class="p">)</span> <span class="n">hdr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">hdr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="pushing-into-the-array">Pushing into the Array</h2>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="cp">#define array__growth(a)     ((a) &amp;&amp; (array__len(a) &gt;= array__cap(a)) ? (2 * array__cap(a)) : 0)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="cp">#define array__make_space(a) (*((void**)&amp;(a)) = array__resize((a), sizeof(*(a)), array__growth(a), 0))</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="cp">#define array_push(a, v)     (array__make_space(a), (a)[array__len(a)++] = (v))</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="more-functionality">More Functionality</h2>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="cp">#define array_resize(a, n)   (*((void**)&amp;(a)) = array__resize((a), sizeof(*(a)), (n), 1))
+#define array_reserve(a, n)  (*((void**)&amp;(a)) = array__resize((a), sizeof(*(a)), (n), 0))</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="cp">#define array_free(a)        ((a) ? (free(array__hdr(a)), (a) = NULL) : 0);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h2 id="utility-macros">Utility Macros</h2>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="cp">#define array_len(a) ((a) ? array__len(a) : 0)
+#define array_cap(a) ((a) ? array__cap(a) : 0)</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="cp">#define array_pack(a)    ((a) ? (array_resize((a), array__len(a))) : 0)
+#define array_clear(a)   ((a) ? array__len(a) = 0 : 0)
+#define array_last(a)    ((a) + array_len(a))
+#define array_sizeof(a)  (array_len(a) * sizeof(*(a)))</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+</article>
+
+<script src="https://utteranc.es/client.js" 
+        repo="oliverjakobs/oliverjakobs.github.io"
+        issue-term="url"
+        theme="photon-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+</main>
+    <footer class="page-footer container">
+  <ul class="menu">
+    
+      <li><a href="/copyright.html"><i class="far fa-copyright"></i>2020 oliver jakobs</a></li>
+    
+      <li><a href="https://github.com/oliverjakobs"><i class="fab fa-github"></i>github</a></li>
+    
+      <li><a href="https://twitter.com/orwell_23"><i class="fab fa-twitter"></i>twitter</a></li>
+    
+  </ul>
+</footer>
+  </body>
+</html>

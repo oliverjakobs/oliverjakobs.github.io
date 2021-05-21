@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://localhost:4000/blog/avl-tree</loc>
-<lastmod>2020-10-05T17:57:37+02:00</lastmod>
-</url>
-<url>
 <loc>http://localhost:4000/blog/generator-part2</loc>
 <lastmod>2020-10-05T17:57:44+02:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/blog/generator-part1</loc>
-<lastmod>2020-10-15T00:00:00+02:00</lastmod>
+<lastmod>2021-05-21T20:00:30+02:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/blog/stretchy-buffer</loc>
-<lastmod>2020-11-18T14:26:34+01:00</lastmod>
+<loc>http://localhost:4000/blog/avl-tree</loc>
+<lastmod>2021-05-21T23:50:41+02:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/blog/dynamic_arrays</loc>
+<lastmod>2021-05-22T00:24:58+02:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/blog.html</loc>

@@ -1,8 +1,114 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-04-14T18:39:00+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Stretchy Buffer</title><link href="http://localhost:4000/blog/stretchy-buffer" rel="alternate" type="text/html" title="Stretchy Buffer" /><published>2020-11-18T14:26:34+01:00</published><updated>2020-11-18T14:26:34+01:00</updated><id>http://localhost:4000/blog/stretchy-buffer</id><content type="html" xml:base="http://localhost:4000/blog/stretchy-buffer">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-22T00:48:53+02:00</updated><id>http://localhost:4000/feed.xml</id><entry xml:lang="C"><title type="html">Typesafe dynamic arrays in C</title><link href="http://localhost:4000/blog/dynamic_arrays" rel="alternate" type="text/html" title="Typesafe dynamic arrays in C" /><published>2021-05-22T00:24:58+02:00</published><updated>2021-05-22T00:24:58+02:00</updated><id>http://localhost:4000/blog/dynamic_arrays</id><content type="html" xml:base="http://localhost:4000/blog/dynamic_arrays">&lt;blockquote&gt;
   &lt;p&gt;Disclaimer: 
     This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe 
     it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;
-&lt;/blockquote&gt;</content><author><name>oliver</name></author><summary type="html">Disclaimer: This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe it helps with your project or maybe you get inspired to do something better.</summary></entry><entry xml:lang="C"><title type="html">Writing a code generator (Part 1): Introduction</title><link href="http://localhost:4000/blog/generator-part1" rel="alternate" type="text/html" title="Writing a code generator (Part 1): Introduction" /><published>2020-10-15T00:00:00+02:00</published><updated>2020-10-15T00:00:00+02:00</updated><id>http://localhost:4000/blog/generator-part1</id><content type="html" xml:base="http://localhost:4000/blog/generator-part1">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;concept&quot;&gt;Concept&lt;/h2&gt;
+
+&lt;h2 id=&quot;functionality&quot;&gt;Functionality&lt;/h2&gt;
+
+&lt;h2 id=&quot;header-macros&quot;&gt;Header Macros&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;#define array__hdr(a) ((size_t*)(void*)(a) - 2)&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;#define array__cap(a) array__hdr(a)[0]
+#define array__len(a) array__hdr(a)[1]&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;resize-function&quot;&gt;Resize Function&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;array__resize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elem_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shrink&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;array__resize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elem_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shrink&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array__cap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shrink&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;sizeof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elem_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hdr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realloc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array__hdr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hdr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* out of memory */&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;hdr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hdr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hdr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;pushing-into-the-array&quot;&gt;Pushing into the Array&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;#define array__growth(a)     ((a) &amp;amp;&amp;amp; (array__len(a) &amp;gt;= array__cap(a)) ? (2 * array__cap(a)) : 0)&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;#define array__make_space(a) (*((void**)&amp;amp;(a)) = array__resize((a), sizeof(*(a)), array__growth(a), 0))&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;#define array_push(a, v)     (array__make_space(a), (a)[array__len(a)++] = (v))&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;more-functionality&quot;&gt;More Functionality&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;#define array_resize(a, n)   (*((void**)&amp;amp;(a)) = array__resize((a), sizeof(*(a)), (n), 1))
+#define array_reserve(a, n)  (*((void**)&amp;amp;(a)) = array__resize((a), sizeof(*(a)), (n), 0))&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;#define array_free(a)        ((a) ? (free(array__hdr(a)), (a) = NULL) : 0);&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;utility-macros&quot;&gt;Utility Macros&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;#define array_len(a) ((a) ? array__len(a) : 0)
+#define array_cap(a) ((a) ? array__cap(a) : 0)&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cp&quot;&gt;#define array_pack(a)    ((a) ? (array_resize((a), array__len(a))) : 0)
+#define array_clear(a)   ((a) ? array__len(a) = 0 : 0)
+#define array_last(a)    ((a) + array_len(a))
+#define array_sizeof(a)  (array_len(a) * sizeof(*(a)))&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name>oliver</name></author><summary type="html">Disclaimer: This is not the only or best way to do this. This is just how I have done it. I am by no means an expert. Maybe it helps with your project or maybe you get inspired to do something better.</summary></entry><entry xml:lang="C"><title type="html">Implementing an AVL tree</title><link href="http://localhost:4000/blog/avl-tree" rel="alternate" type="text/html" title="Implementing an AVL tree" /><published>2021-05-21T23:50:41+02:00</published><updated>2021-05-21T23:50:41+02:00</updated><id>http://localhost:4000/blog/avl-tree</id><content type="html" xml:base="http://localhost:4000/blog/avl-tree">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Before we start we need to talk about what an avl tree even is and why we may want to use it. An AVL tree (named after inventors Adelson-Velsky and Landis) is a self-balancing binary search tree. Lookup, insertion, and deletion all take O(log n) time in both the average and worst cases (with n beeing the number of nodes prior to the operation). After insertion and deletion the tree may require to be rebalanced by one or two tree rotations.&lt;/p&gt;
+
+&lt;p&gt;AVL trees are often compared with red–black trees because both support the same set of operations and take O (log ⁡n) time for the basic operations. For lookup-intensive applications, AVL trees are faster than red–black trees because they are more strictly balanced.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">Iterative method to implement an avl tree in c.</summary></entry><entry xml:lang="C"><title type="html">Writing a code generator (Part 1): Introduction</title><link href="http://localhost:4000/blog/generator-part1" rel="alternate" type="text/html" title="Writing a code generator (Part 1): Introduction" /><published>2021-05-21T20:00:30+02:00</published><updated>2021-05-21T20:00:30+02:00</updated><id>http://localhost:4000/blog/generator-part1</id><content type="html" xml:base="http://localhost:4000/blog/generator-part1">&lt;p&gt;For some time now I’ve been working on writing a game in C from scratch (using OpenGL and GLFW). To make my life easier 
 and to prevent some mistakes I have developed a generator and a custom made scripting language to create C-files.&lt;/p&gt;
 
 &lt;p&gt;I think the whole process could be interesting to some people out there, so I decided to explain what I have done step 
@@ -921,12 +1027,4 @@ we scan will be printed out in a nice, readable way.&lt;/p&gt;
 &lt;p&gt;If something was unclear or you have some (constructive) critisim, feel free to leave a comment or write me on 
 &lt;a href=&quot;https://twitter.com/orwell_23&quot;&gt;twitter&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">The Scanner</summary></entry><entry xml:lang="C"><title type="html">Avl Tree</title><link href="http://localhost:4000/blog/avl-tree" rel="alternate" type="text/html" title="Avl Tree" /><published>2020-10-05T17:57:37+02:00</published><updated>2020-10-05T17:57:37+02:00</updated><id>http://localhost:4000/blog/avl-tree</id><content type="html" xml:base="http://localhost:4000/blog/avl-tree">&lt;p&gt;Iterative method to implement an avl tree in c.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Disclaimer: This is not the only or best way to do this. This is how I’ve done it. Maybe it helps with your project or maybe you get inspired to do something better.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Before we start we need to talk about what an avl tree even is and why we may want to use it. An AVL tree (named after inventors Adelson-Velsky and Landis) is a self-balancing binary search tree. Lookup, insertion, and deletion all take O(log n) time in both the average and worst cases (with n beeing the number of nodes prior to the operation). After insertion and deletion the tree may require to be rebalanced by one or two tree rotations.&lt;/p&gt;
-
-&lt;p&gt;AVL trees are often compared with red–black trees because both support the same set of operations and take O (log ⁡n) time for the basic operations. For lookup-intensive applications, AVL trees are faster than red–black trees because they are more strictly balanced.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">Iterative method to implement an avl tree in c.</summary></entry></feed>
+&lt;p&gt;The complete code can be found &lt;a href=&quot;https://github.com/oliverjakobs/oliverjakobs.github.io/tree/draft/code/generator/scanner&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>oliver</name></author><summary type="html">The Scanner</summary></entry></feed>

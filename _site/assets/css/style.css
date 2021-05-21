@@ -8,7 +8,7 @@ a:hover { color: #999999; }
 
 .separator { padding-bottom: 1em; border-bottom: 1px solid #999999; }
 
-.container { max-width: 800px; margin-right: auto; margin-left: auto; padding-right: 32px; padding-left: 32px; }
+.container { max-width: 960px; margin-right: auto; margin-left: auto; padding-right: 32px; padding-left: 32px; }
 
 /* NAVBAR */
 .navbar { display: grid; grid-template-columns: auto 1fr; justify-items: end; }

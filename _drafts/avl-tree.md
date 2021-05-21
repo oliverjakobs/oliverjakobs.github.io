@@ -1,8 +1,8 @@
 ---
 layout: post
+title: "Implementing an AVL tree"
 author: oliver
 lang: C
-full-title: "Implementing an AVL tree"
 ---
 Iterative method to implement an avl tree in c.
 
