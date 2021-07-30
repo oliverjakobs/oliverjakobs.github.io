@@ -14,8 +14,8 @@
   <body>
     <div class="container">
       {% for item in site.data.hub %}
-        <a class="card" href={{ item.link }}>
-          <img src={{ item.logo }}>
+        <a class="card" href="{{ item.link }}">
+          <img src="{{ item.logo }}">
           <div class="title">{{ item.title }}</div>
         </a>
       {% endfor %}
