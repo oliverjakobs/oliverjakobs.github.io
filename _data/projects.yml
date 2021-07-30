@@ -1,0 +1,9 @@
+- name: minesweeper
+  lang: js
+  desc: Simple implementation of minesweeper in plain javascript.
+  rep: https://github.com/oliverjakobs/js
+  link: /js/minesweeper
+- name: Frost
+  lang: C99
+  desc: Writing a game from scratch in C.
+  rep: https://github.com/oliverjakobs/Frost
