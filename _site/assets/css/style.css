@@ -47,23 +47,19 @@ a:hover { color: #999999; }
 /* PROJECTS */
 .project-name { margin: 0.2em 0em; font-size: 1.8em; }
 
-.project-content { margin-left: 0.2em; }
+.project-name i { margin-left: 0.4em; }
 
-.project-content .project-meta { font-size: .85em; padding-left: 0.1em; margin-right: 0.6em; color: #bbbbbb; }
+.project-desc { margin: 0.6em 0em 2em 0.2em; }
 
-.project-content .project-meta i { padding-right: 0.4em; }
+.project-link { padding: 0.6em 1.2em; margin-left: 0.2em; border-radius: 4px; border: 1px solid #bbbbbb; transition: all 0.3s ease; position: relative; color: #eeeeee; }
 
-.project-content .project-desc { margin: 0.6em 0em; margin-bottom: 2em; }
+.project-link::after { position: absolute; content: ""; width: 0; height: 100%; top: 0; right: 0; z-index: -1; background: #eeeeee; transition: all 0.3s ease; }
 
-.project-content .project-link { padding: 0.6em 1.2em; border-radius: 4px; border: 1px solid #bbbbbb; transition: all 0.3s ease; position: relative; color: #eeeeee; }
+.project-link:hover { color: #242424; }
 
-.project-content .project-link::after { position: absolute; content: ""; width: 0; height: 100%; top: 0; right: 0; z-index: -1; background: #bbbbbb; transition: all 0.3s ease; }
+.project-link:hover::after { left: 0; width: 100%; }
 
-.project-content .project-link:hover { color: #242424; }
-
-.project-content .project-link:hover::after { left: 0; width: 100%; }
-
-.project-content .project-link:active { top: 2px; }
+.project-link:active { top: 2px; }
 
 /* POST */
 .post-title { margin: 0.2em 0em; line-height: 1.2em; }
@@ -98,16 +94,20 @@ a:hover { color: #999999; }
 /* FOOTER */
 .page-footer { height: 4em; margin-top: 2rem; text-align: center; }
 
-.page-footer ul { border-top: 1px solid #bbbbbb; line-height: 4em; list-style: none; padding: 0px; margin: 0px; }
+.page-footer .menu { border-top: 1px solid #bbbbbb; line-height: 4em; list-style: none; padding: 0px; margin: 0px; }
 
-.page-footer ul li { display: inline; color: #bbbbbb; }
+.page-footer .menu li { display: inline; color: #bbbbbb; }
 
-.page-footer ul li * { vertical-align: middle; }
+.page-footer .menu li * { vertical-align: middle; }
 
-.page-footer ul li i { font-size: 1.4em; padding-right: 0.4em; }
+.page-footer .menu li i { font-size: 1.4em; padding-right: 0.4em; }
 
-.page-footer ul li a:hover { transition: .5s; }
+.page-footer .menu li a:hover { transition: .5s; }
 
-.page-footer ul li:not(:last-child)::after { content: "|"; margin: 1.25em; }
+.page-footer .menu li:not(:last-child)::after { content: "|"; margin: 1.25em; }
+
+.page-footer .copyright { font-size: 0.8em; color: #bbbbbb; margin-bottom: 1.2rem; }
+
+.page-footer .copyright::before { font-family: Arial, sans-serif; margin-right: 0.2em; content: "\00a9"; }
 
 /*# sourceMappingURL=style.css.map */

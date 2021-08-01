@@ -1,9 +1,9 @@
 - name: minesweeper
-  lang: js
+  lang: devicon-javascript-plain colored
   desc: Simple implementation of minesweeper in plain javascript.
   rep: https://github.com/oliverjakobs/js
   link: /js/minesweeper
 - name: Frost
-  lang: C99
+  lang: devicon-c-plain colored
   desc: Writing a game from scratch in C.
   rep: https://github.com/oliverjakobs/Frost
