@@ -270,20 +270,19 @@ a {
 
 /* FOOTER */
 .page-footer {
-    height: $footer-height;
-    margin-top: 2rem;
+    margin-top: 2em;
+    margin-bottom: 1.2em;
     text-align: center;
+    color: $color-font2;
+    border-top: 1px solid $color-font2;
 
     .menu {
-        border-top: 1px solid $color-font2;
-        line-height: $footer-height;
         list-style: none;
-        padding: 0px;
-        margin: 0px;
+        padding: 0em;
+        margin: 1em 0em;
 
         li {
             display: inline;
-            color: $color-font2;
 
             * {
                 vertical-align: middle;
@@ -307,8 +306,6 @@ a {
 
     .copyright {
         font-size: 0.8em;
-        color: $color-font2;
-        margin-bottom: 1.2rem;
 
         &::before {
             font-family: Arial, sans-serif;

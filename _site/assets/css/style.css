@@ -92,11 +92,11 @@ a:hover { color: #999999; }
 .comments p { text-align: center; font-size: 2em; margin-bottom: 1em; }
 
 /* FOOTER */
-.page-footer { height: 4em; margin-top: 2rem; text-align: center; }
+.page-footer { margin-top: 2em; margin-bottom: 1.2em; text-align: center; color: #bbbbbb; border-top: 1px solid #bbbbbb; }
 
-.page-footer .menu { border-top: 1px solid #bbbbbb; line-height: 4em; list-style: none; padding: 0px; margin: 0px; }
+.page-footer .menu { list-style: none; padding: 0em; margin: 1em 0em; }
 
-.page-footer .menu li { display: inline; color: #bbbbbb; }
+.page-footer .menu li { display: inline; }
 
 .page-footer .menu li * { vertical-align: middle; }
 
@@ -106,7 +106,7 @@ a:hover { color: #999999; }
 
 .page-footer .menu li:not(:last-child)::after { content: "|"; margin: 1.25em; }
 
-.page-footer .copyright { font-size: 0.8em; color: #bbbbbb; margin-bottom: 1.2rem; }
+.page-footer .copyright { font-size: 0.8em; }
 
 .page-footer .copyright::before { font-family: Arial, sans-serif; margin-right: 0.2em; content: "\00a9"; }
 
