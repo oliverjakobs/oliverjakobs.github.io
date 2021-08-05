@@ -9,6 +9,11 @@
   lang-icon: devicon-python-plain colored
   description: A really basic text editor written in Python (using tkinter) and tcl.
   repository: https://github.com/oliverjakobs/capricorn
+- name: toolbox
+  lang: C99
+  lang-icon: devicon-c-plain colored
+  description: A collection of single-header tools and utilities written in C99. Basically an extended standard library for C.
+  repository: https://github.com/oliverjakobs/toolbox
 - name: Frost
   lang: C99
   lang-icon: devicon-c-plain colored
