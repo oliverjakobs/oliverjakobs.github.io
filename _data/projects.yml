@@ -1,9 +1,16 @@
 - name: minesweeper
-  lang: devicon-javascript-plain colored
-  desc: Simple implementation of minesweeper in plain javascript.
-  rep: https://github.com/oliverjakobs/js
-  link: /js/minesweeper
+  lang: javascript
+  lang-icon: devicon-javascript-plain colored
+  description: Simple implementation of minesweeper in plain javascript.
+  repository: https://github.com/oliverjakobs/js/tree/main/minesweeper
+  demo-link: /js/minesweeper
+- name: capricorn
+  lang: python/tcl
+  lang-icon: devicon-python-plain colored
+  description: A really basic text editor written in Python (using tkinter) and tcl.
+  repository: https://github.com/oliverjakobs/capricorn
 - name: Frost
-  lang: devicon-c-plain colored
-  desc: Writing a game from scratch in C.
-  rep: https://github.com/oliverjakobs/Frost
+  lang: C99
+  lang-icon: devicon-c-plain colored
+  description: Writing a game from scratch in C.
+  repository: https://github.com/oliverjakobs/Frost

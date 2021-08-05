@@ -17,300 +17,310 @@ $color-block-highlight: #888888;
 $color-background: #242424;
 
 /* GENERAL STYLE */
-
 body {
-    padding: 0;
-    margin: 0;
-    font-family: $font-family;
-    color: $color-font;
-    background: $color-background;
+  padding: 0;
+  margin: 0;
+  font-family: $font-family;
+  color: $color-font;
+  background: $color-background;
 }
 
 a {
-    text-decoration: none;
-    color: $color-font2;
+  text-decoration: none;
+  color: $color-font2;
 
-    &:hover {
-        color: $color-highlight;
-    }
+  &:hover { color: $color-highlight; }
 }
 
 .separator {
-    padding-bottom: 1em;
-    border-bottom: 1px solid $color-highlight;
+  padding-bottom: 1em;
+  border-bottom: 1px solid $color-highlight;
 }
 
 .container {
-    max-width: $container-width;
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: $container-padding;
-    padding-left: $container-padding;
+  max-width: $container-width;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $container-padding;
+  padding-left: $container-padding;
+}
+
+/* TOOLTIP */
+.tooltip {
+  .tooltiptext {
+    visibility: hidden;
+    font-size: 0.6em;
+    font-family: $font-family;
+    color: $color-background;
+    background-color: $color-font;
+    
+    padding: 0.3em 1.2em;
+    margin-left: 0.6em;
+    border-radius: 4px;
+    
+    text-align: center;
+    position: absolute;
+    z-index: 1;
+
+    &::after {
+      content: " ";
+      position: absolute;
+      top: 50%;
+      right: 100%; /* To the left of the tooltip */
+      margin-top: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent $color-font transparent transparent;
+    }
+  }
+
+  &:hover .tooltiptext {  visibility: visible; } 
 }
 
 /* NAVBAR */
 .navbar {  
-    display: grid;
-    grid-template-columns: auto 1fr;
-    justify-items: end;
-    
-    * {
-        margin: 0;
-        padding: 0;
-        line-height: $navbar-height;
-        list-style: none;
-        text-decoration: none;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  justify-items: end;
+  
+  * {
+    margin: 0;
+    padding: 0;
+    line-height: $navbar-height;
+    list-style: none;
+    text-decoration: none;
+  }
+
+  .logo {
+    font-size: 2em;
+    font-weight: bold;
+
+    color: $color-font;
+
+    &::before {
+      display: inline-block;
+      transition: transform .5s ease;
+      content: '{';
     }
 
-    .logo {
-        font-size: 2em;
-        font-weight: bold;
+    &::after {
+      display: inline-block;
+      transition: transform .5s ease;
+      content: '}';
+    }
 
+    &:hover {
+      transition: transform .5s ease;
+
+      &::before { transform: translateX(-.2em); }
+      &::after { transform: translateX(.2em); }
+    }
+  }
+
+  .menu {
+    li {
+      display: inline-block;
+      padding-left: 1.4em;
+
+      a {
         color: $color-font;
+        font-size: 1.4em;
+        padding-bottom: .2em;
+        text-transform: lowercase;
 
-        &::before {
-            display: inline-block;
-            transition: transform .5s ease;
-            content: '{';
+        &:hover, &.active {
+          border-bottom: 2px solid $color-font2;
+          color: $color-font2;
+          transition: transform .5s ease;
         }
-
-        &::after {
-            display: inline-block;
-            transition: transform .5s ease;
-            content: '}';
-        }
-
-        &:hover {
-            transition: transform .5s ease;
-
-            &::before { transform: translateX(-.2em); }
-            &::after { transform: translateX(.2em); }
-        }
+      }
     }
-
-    .menu {
-        li {
-            display: inline-block;
-            padding-left: 1.4em;
-
-            a {
-                color: $color-font;
-                font-size: 1.4em;
-                padding-bottom: .2em;
-                text-transform: lowercase;
-
-                &:hover, &.active {
-                    border-bottom: 2px solid $color-font2;
-                    color: $color-font2;
-                    transition: transform .5s ease;
-                }
-            }
-        }
-    }
+  }
 }
 
 /* CONTENT */
 .page-title {
-    margin-bottom: 1.4em;
-    text-align: left;
+  margin-bottom: 1.4em;
+  text-align: left;
 }
 
 .page-content {
-    font-size: 1.1em;
-    text-align: justify;
+  font-size: 1.1em;
+  text-align: justify;
 
-    padding-top: 2rem;
-    padding-bottom: 1.2rem;
-    line-height: 1.4em;
+  padding-top: 2rem;
+  padding-bottom: 1.2rem;
+  line-height: 1.4em;
 }
 
 .content-overview {
-    list-style: none;
+  list-style: none;
 
-    * {
-        margin: 0px;
-        padding: 0px;
-    }
+  * {
+      margin: 0px;
+      padding: 0px;
+  }
 
-    & > li {
-        margin: 1rem;
-        padding: 2rem;
-    }
+  & > li {
+      margin: 1rem;
+      padding: 2rem;
+  }
 }
 
 /* PROJECTS */
 .project-name {
-    margin: 0.2em 0em;
-    font-size: 1.8em;
+  margin: 0.2em 0em;
+  font-size: 1.8em;
 
-    i {
-        margin-left: 0.4em;
-    }
+  i {
+      margin-left: 0.4em;
+  }
 }
 
-.project-desc {
-    margin: 0.6em 0em 2em 0.2em;
+.project-description {
+  margin: 0.6em 0em 2em 0.2em;
 }
 
 .project-link {
-    padding: 0.6em 1.2em;
-    margin-left: 0.2em; 
-    border-radius: 4px;
-    border: 1px solid $color-font2;
+  padding: 0.6em 1.2em;
+  margin-left: 0.2em; 
+  border-radius: 4px;
+  border: 1px solid $color-font2;
+  transition: all 0.3s ease;
+  position: relative;
+  color: $color-font;
+
+  &::after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    background: $color-font;
     transition: all 0.3s ease;
-    position: relative;
-    color: $color-font;
+  }
+
+  &:hover {
+    color: $color-background;
 
     &::after {
-        position: absolute;
-        content: "";
-        width: 0;
-        height: 100%;
-        top: 0;
-        right: 0;
-        z-index: -1;
-        background: $color-font;
-        transition: all 0.3s ease;
+      left: 0;
+      width: 100%;
     }
+  }
 
-    &:hover {
-        color: $color-background;
-
-        &::after {
-            left: 0;
-            width: 100%;
-        }
-    }
-
-    &:active {
-        top: 2px;
-    }
+  &:active { top: 2px; }
 }
 
 /* POST */
 .post-title {
-    margin: 0.2em 0em;
-    line-height: 1.2em;
+  margin: 0.2em 0em;
+  line-height: 1.2em;
 
-    a {
-        color: $color-font;
-    }
+  a { color: $color-font; }
 }
 
 .post-summary {
-    margin: 0.6em 0em;
+  margin: 0.6em 0em;
 }
 
 .post-meta {
-    font-size: .85em;
-    padding-left: 0.1em;
+  font-size: .85em;
+  padding-left: 0.1em;
 
-    li {
-        display: inline;
-        margin-right: 0.6em;
-        color: $color-font2;
+  li {
+    display: inline;
+    margin-right: 0.6em;
+    color: $color-font2;
 
-        i {
-            padding-right: 0.4em;
-        }
-    }
+    i { padding-right: 0.4em; }
+  }
 }
 
 .post-content {
-    font-size: .85em;
-    margin-top: 1.4em;
+  font-size: .85em;
+  margin-top: 1.4em;
+  border-top: 1px solid $color-highlight;
+
+  h2 {
     border-top: 1px solid $color-highlight;
+    padding-top: 1.2em;
+  }
 
-    h2 {
-        border-top: 1px solid $color-highlight;
-        padding-top: 1.2em;
+  blockquote {
+    padding: .4em 1.2em;
+    background: $color-block;
+    border-left: .6em solid $color-block-highlight;
+  }
+
+  figure.highlight {
+    .lineno {
+      color: #888888;
+      padding-right: .6em;
+      margin-right: .8em;
+      border-right: 1px solid $color-block-highlight;
     }
 
-    blockquote {
-        padding: .4em 1.2em;
-        background: $color-block;
-        border-left: .6em solid $color-block-highlight;
+    & > pre {
+      overflow-x: auto;
+      padding: 0 1.2em;
     }
-
-    figure.highlight {
-        .lineno {
-            color: #888888;
-            padding-right: .6em;
-            margin-right: .8em;
-            border-right: 1px solid $color-block-highlight;
-        }
-
-        & > pre {
-            overflow-x: auto;
-            padding: 0 1.2em;
-        }
-    }
+  }
 }
 
 /* COMMENTS */
 .comments {
-    border: 1px solid $color-highlight;
-    border-radius: 3px;
-    color: $color-font2;
+  border: 1px solid $color-highlight;
+  border-radius: 3px;
+  color: $color-font2;
 
-    i {
-        font-size: 4em;
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
-        margin: 0.5em 0em;
-    }
+  i {
+    font-size: 4em;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0.5em 0em;
+  }
 
-    p {
-        text-align: center;
-        font-size: 2em;
-        margin-bottom: 1em;
-    }
+  p {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 1em;
+  }
 }
 
 /* FOOTER */
 .page-footer {
-    margin-top: 2em;
-    margin-bottom: 1.2em;
-    text-align: center;
-    color: $color-font2;
-    border-top: 1px solid $color-font2;
+  margin-top: 2em;
+  margin-bottom: 1.2em;
+  text-align: center;
+  color: $color-font2;
+  border-top: 1px solid $color-font2;
 
-    .menu {
-        list-style: none;
-        padding: 0em;
-        margin: 1em 0em;
+  .menu {
+    list-style: none;
+    padding: 0em;
+    margin: 1em 0em;
 
-        li {
-            display: inline;
+    li {
+      display: inline;
 
-            * {
-                vertical-align: middle;
-            }
-
-            i {
-                font-size: 1.4em;
-                padding-right: 0.4em;
-            }
-
-            a:hover {
-                transition: .5s;
-            }
-
-            &:not(:last-child)::after {
-                content: "|";
-                margin: 1.25em;
-            }
-        }
+      * { vertical-align: middle; }
+      i { font-size: 1.4em; padding-right: 0.4em; }
+      a:hover { transition: .5s; }
+      &:not(:last-child)::after { content: "|"; margin: 1.25em; }
     }
+  }
 
-    .copyright {
-        font-size: 0.8em;
+  .copyright {
+    font-size: 0.8em;
 
-        &::before {
-            font-family: Arial, sans-serif;
-            margin-right: 0.2em;
-            content: "\00a9";
-        }
+    &::before {
+      font-family: Arial, sans-serif;
+      margin-right: 0.2em;
+      content: "\00a9";
     }
+  }
 }

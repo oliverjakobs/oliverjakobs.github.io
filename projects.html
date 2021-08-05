@@ -7,11 +7,14 @@ title: projects
 <ul class="content-overview">
   {% for item in site.data.projects %}
     <li class="separator">
-      <h2 class="project-name">{{ item.name }}<i class="{{ item.lang }}"></i></h2>
-      <div class="project-desc"> {{ item.desc }} </div>
-        <a class="project-link" href="{{ item.rep }}">View on GitHub &raquo;</a>
-        {% if item.link %}
-          <a class="project-link" href="{{ item.link }}">Demo &raquo;</a>
+      <h2 class="project-name">
+        {{ item.name }}
+        <i class="{{ item.lang-icon }} tooltip"><span class="tooltiptext">{{ item.lang }}</span></i>
+      </h2>
+      <div class="project-description"> {{ item.description }} </div>
+        <a class="project-link" href="{{ item.repository }}">View on GitHub &raquo;</a>
+        {% if item.demo-link %}
+          <a class="project-link" href="{{ item.demo-link }}">Demo &raquo;</a>
         {% endif %}
     </li>
   {% endfor %}
