@@ -4,13 +4,13 @@
   description: A WebApp developed with Symfony.
   repository: https://github.com/oliverjakobs/pinakes
 - name: javascript
-  lang: javascript
+  lang: JavaScript
   lang-icon: devicon-javascript-plain colored
-  description: A Collection of various projects in plain javascript (with html/css).
+  description: A Collection of various projects in plain JavaScript (with html/css).
   repository: https://github.com/oliverjakobs/js
   demo-link: /js/minesweeper
 - name: capricorn
-  lang: python/tcl
+  lang: Python/tcl
   lang-icon: devicon-python-plain colored
   description: A basic text editor for writing developed in Python (using tkinter) and tcl.
   repository: https://github.com/oliverjakobs/capricorn
