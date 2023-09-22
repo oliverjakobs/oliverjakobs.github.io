@@ -4,6 +4,12 @@
   description: Simple implementation of minesweeper in plain javascript.
   repository: https://github.com/oliverjakobs/js/tree/main/minesweeper
   demo-link: /js/minesweeper
+- name: chess
+  lang: javascript
+  lang-icon: devicon-javascript-plain colored
+  description: Simple implementation of chess in plain javascript.
+  repository: https://github.com/oliverjakobs/js/tree/main/chess
+  demo-link: /js/chess
 - name: capricorn
   lang: python/tcl
   lang-icon: devicon-python-plain colored
