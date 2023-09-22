@@ -1,13 +1,13 @@
 - name: pinakes
-  lang: PHP
+  lang: PHP/Symfony
   lang-icon: devicon-php-plain colored
-  description: WebApp developed with Symfony.
+  description: A WebApp developed with Symfony.
   repository: https://github.com/oliverjakobs/pinakes
   demo-link: /js/minesweeper
 - name: javascript
   lang: javascript
   lang-icon: devicon-javascript-plain colored
-  description: Implementation of projects in plain javascript.
+  description: A Collection of various projects in plain javascript (with html/css).
   repository: https://github.com/oliverjakobs/js
   demo-link: /js/minesweeper
 - name: capricorn
@@ -15,13 +15,23 @@
   lang-icon: devicon-python-plain colored
   description: A basic text editor for writing developed in Python (using tkinter) and tcl.
   repository: https://github.com/oliverjakobs/capricorn
-- name: toolbox
+- name: ignis
   lang: C99
   lang-icon: devicon-c-plain colored
-  description: A collection of single-header tools and utilities written in C99. Basically an extended standard library for C.
+  description: A simple abstraction layer above OpenGL.
+  repository: https://github.com/oliverjakobs/toolbox 
+- name: Minimal
+  lang: C99
+  lang-icon: devicon-c-plain colored
+  description: A small application framework.
   repository: https://github.com/oliverjakobs/toolbox
 - name: Frost
   lang: C99
   lang-icon: devicon-c-plain colored
   description: Writing a game from scratch in C.
   repository: https://github.com/oliverjakobs/Frost
+- name: toolbox
+  lang: C99
+  lang-icon: devicon-c-plain colored
+  description: A collection of single-header tools and utilities written in C99.
+  repository: https://github.com/oliverjakobs/toolbox
