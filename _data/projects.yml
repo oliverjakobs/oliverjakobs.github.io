@@ -8,7 +8,7 @@
   lang-icon: devicon-javascript-plain colored
   description: A Collection of various projects in plain JavaScript (with html/css).
   repository: https://github.com/oliverjakobs/js
-  demo-link: /js/minesweeper
+  demo-link: /js/
 - name: capricorn
   lang: Python/tcl
   lang-icon: devicon-python-plain colored
