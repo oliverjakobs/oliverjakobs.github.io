@@ -1,19 +1,19 @@
-- name: minesweeper
-  lang: javascript
-  lang-icon: devicon-javascript-plain colored
-  description: Simple implementation of minesweeper in plain javascript.
-  repository: https://github.com/oliverjakobs/js/tree/main/minesweeper
+- name: pinakes
+  lang: PHP
+  lang-icon: devicon-php-plain colored
+  description: WebApp developed with Symfony.
+  repository: https://github.com/oliverjakobs/pinakes
   demo-link: /js/minesweeper
-- name: chess
+- name: javascript
   lang: javascript
   lang-icon: devicon-javascript-plain colored
-  description: Simple implementation of chess in plain javascript.
-  repository: https://github.com/oliverjakobs/js/tree/main/chess
-  demo-link: /js/chess
+  description: Implementation of projects in plain javascript.
+  repository: https://github.com/oliverjakobs/js
+  demo-link: /js/minesweeper
 - name: capricorn
   lang: python/tcl
   lang-icon: devicon-python-plain colored
-  description: A really basic text editor written in Python (using tkinter) and tcl.
+  description: A basic text editor for writing developed in Python (using tkinter) and tcl.
   repository: https://github.com/oliverjakobs/capricorn
 - name: toolbox
   lang: C99
