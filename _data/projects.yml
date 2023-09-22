@@ -3,7 +3,6 @@
   lang-icon: devicon-php-plain colored
   description: A WebApp developed with Symfony.
   repository: https://github.com/oliverjakobs/pinakes
-  demo-link: /js/minesweeper
 - name: javascript
   lang: javascript
   lang-icon: devicon-javascript-plain colored
