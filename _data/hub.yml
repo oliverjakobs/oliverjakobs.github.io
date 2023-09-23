@@ -1,6 +1,6 @@
 - title: Twitch
   link: https://www.twitch.tv/directory/game/Dota%202
-  icon: <svg width="2400" height="2800" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"><path d="M500 0 0 500v1800h600v500l500-500h400l900-900V0H500zm1700 1300-400 400h-400l-350 350v-350H600V200h1600v1100z" class="st0"/><path class="st0" d="M1700 550h200v600h-200zM1150 550h200v600h-200z"/></svg>
+  icon: <svg width="2400" height="2800" xmlns="http://www.w3.org/2000/svg"><path d="M500 0 0 500v1800h600v500l500-500h400l900-900V0H500zm1700 1300-400 400h-400l-350 350v-350H600V200h1600v1100z"/><path d="M1700 550h200v600h-200zM1150 550h200v600h-200z"/></svg>
 - title: YouTube
   link: http://www.youtube.com
   icon: <svg viewBox="0 0 1000.0016 1000.0037" xmlns="http://www.w3.org/2000/svg"><path d="M397 629.003l270-139-270-141v280zm103-481q94 0 181 3t128 5l41 2q0 0 9 1t13 2 13 2 16 5 16 7 17 11 16 15q4 3 9 10t16 33 15 56q4 36 7 76t3 64v98q1 81-10 162-4 30-14 55t-18 35l-8 9q-7 8-16 15t-17 10-16 7-16 5-13 2-13 2-9 1q-140 11-350 11-115-2-201-4t-111-4l-28-3-20-2q-20-3-30-5t-29-12-31-23q-4-3-9-10t-16-33-15-56q-4-36-7-76t-3-64v-98q-1-81 10-162 4-31 14-55t18-35l8-9q8-9 16-15t17-11 16-7 16-5 13-2 13-2 9-1q140-10 350-10z"/></svg>
