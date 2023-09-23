@@ -15,10 +15,15 @@
     <div class="container">
       {% for item in site.data.hub %}
         <a class="card" href="{{ item.link }}">
-          <img src="{{ item.logo }}">
+          <div class="icon">{{ item.icon }}</div>
           <div class="title">{{ item.title }}</div>
         </a>
       {% endfor %}
     </div>
   </body>
 </html>
+
+<a class="card" href="https://github.com/oliverjakobs">
+  <div class="icon"></div>
+  <div class="title">GitHub</div>
+</a>
