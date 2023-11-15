@@ -1,1 +1,1 @@
-call bundle exec jekyll serve --drafts
+call bundle exec jekyll serve --drafts --livereload

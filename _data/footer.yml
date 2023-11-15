@@ -1,6 +1,6 @@
 - name: github
   link: https://github.com/oliverjakobs
-  icon: fab fa-github
+  icon: devicon-github-original
 - name: twitter
   link: https://twitter.com/orwell_23
-  icon: fab fa-twitter
+  icon: devicon-twitter-original

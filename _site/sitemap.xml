@@ -1,31 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>/blog/avl-tree</loc>
-<lastmod>2021-07-30T17:40:07+02:00</lastmod>
+<loc>http://localhost:4000/contact.html</loc>
 </url>
 <url>
-<loc>/blog/dynamic_arrays</loc>
-<lastmod>2021-07-30T17:40:07+02:00</lastmod>
+<loc>http://localhost:4000/</loc>
 </url>
 <url>
-<loc>/blog/generator-part1</loc>
-<lastmod>2021-07-30T17:40:07+02:00</lastmod>
-</url>
-<url>
-<loc>/blog/generator-part2</loc>
-<lastmod>2021-07-30T17:40:07+02:00</lastmod>
-</url>
-<url>
-<loc>/blog.html</loc>
-</url>
-<url>
-<loc>/hub.html</loc>
-</url>
-<url>
-<loc>/</loc>
-</url>
-<url>
-<loc>/projects.html</loc>
+<loc>http://localhost:4000/projects.html</loc>
 </url>
 </urlset>

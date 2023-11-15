@@ -1,0 +1,153 @@
+$font-family: "Lucida Console";
+
+$navbar-height: 64px;
+$footer-height: 4em;
+
+$container-width: 960px;
+$container-padding: 32px;
+
+$color-font: #eeeeee;
+$color-font2: #bbbbbb;
+$color-highlight: #999999;
+
+$color-tag: #575757;
+$color-background: #242424;
+
+/* GENERAL STYLE */
+body {
+  padding: 0;
+  margin: 0;
+  font-family: $font-family;
+  color: $color-font;
+  background: $color-background;
+}
+
+a {
+  text-decoration: none;
+  color: $color-font2;
+
+  &:hover { color: $color-highlight; }
+}
+
+.separator {
+  padding-bottom: 1em;
+  border-bottom: 1px solid $color-highlight;
+}
+
+.container {
+  max-width: $container-width;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $container-padding;
+  padding-left: $container-padding;
+}
+
+/* NAVBAR */
+.navbar {  
+  display: grid;
+  grid-template-columns: auto 1fr;
+  justify-items: end;
+  
+  * {
+    margin: 0;
+    padding: 0;
+    line-height: $navbar-height;
+    list-style: none;
+    text-decoration: none;
+  }
+
+  .logo {
+    font-size: 2em;
+    font-weight: bold;
+
+    color: $color-font;
+
+    &::before {
+      display: inline-block;
+      transition: transform .5s ease;
+      content: '{';
+    }
+
+    &::after {
+      display: inline-block;
+      transition: transform .5s ease;
+      content: '}';
+    }
+
+    &:hover {
+      transition: transform .5s ease;
+
+      &::before { transform: translateX(-.2em); }
+      &::after { transform: translateX(.2em); }
+    }
+  }
+
+  .menu {
+    li {
+      display: inline-block;
+      padding-left: 1.4em;
+
+      a {
+        color: $color-font;
+        font-size: 1.4em;
+        padding-bottom: .2em;
+        text-transform: lowercase;
+
+        &:hover, &.active {
+          border-bottom: 2px solid $color-font2;
+          color: $color-font2;
+          transition: transform .5s ease;
+        }
+      }
+    }
+  }
+}
+
+/* CONTENT */
+.page-title {
+  margin-bottom: 1.4em;
+  text-align: left;
+}
+
+.page-content {
+  font-size: 1.1em;
+  text-align: justify;
+
+  padding-top: 2rem;
+  padding-bottom: 1.2rem;
+  line-height: 1.4em;
+}
+
+/* FOOTER */
+.page-footer {
+  margin-top: 2em;
+  margin-bottom: 1.2em;
+  text-align: center;
+  color: $color-font2;
+  border-top: 1px solid $color-font2;
+
+  .menu {
+    list-style: none;
+    padding: 0em;
+    margin: 1em 0em;
+
+    li {
+      display: inline;
+
+      * { vertical-align: middle; }
+      i { font-size: 1.4em; padding-right: 0.4em; }
+      a:hover { transition: .5s; }
+      &:not(:last-child)::after { content: "|"; margin: 1.25em; }
+    }
+  }
+
+  .copyright {
+    font-size: 0.8em;
+
+    &::before {
+      font-family: Arial, sans-serif;
+      margin-right: 0.2em;
+      content: "\00a9";
+    }
+  }
+}

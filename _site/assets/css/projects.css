@@ -135,4 +135,74 @@ a:hover {
   content: "©";
 }
 
-/*# sourceMappingURL=style.css.map */
+.project-list {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+.project-list > li {
+  margin: 1rem;
+  padding: 1rem 0rem;
+}
+.project-list > li > * {
+  margin: 0.2rem 0.2rem 0.4rem;
+}
+
+.project-title {
+  font-size: 1.8em;
+  position: relative;
+}
+.project-title::before {
+  content: "❞";
+  position: absolute;
+  font-size: 1.4em;
+  font-weight: 100;
+  left: -1em;
+  transition: all 0.3s ease;
+}
+.project-title:hover::before {
+  transform: translateY(-0.2em);
+}
+
+.project-content {
+  padding: 0em 0.4em;
+}
+
+.project-tags {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  font-size: 0.8em;
+}
+.project-tags > li {
+  display: inline;
+  padding: 0.2em 0.4em 0.1em;
+  border-radius: 4px;
+  color: #bbbbbb;
+  background: #575757;
+}
+
+.project-description {
+  margin: 0.6em 0em 1em;
+}
+
+.project-link {
+  padding: 0.6em 1.2em;
+  margin-left: 0.2em;
+  transition: all 0.3s ease-in;
+  color: #eeeeee;
+}
+.project-link::after {
+  content: "»";
+  display: inline-block;
+  transition: all 0.3s ease;
+  padding-left: 0.2em;
+}
+.project-link:hover {
+  color: #bbbbbb;
+}
+.project-link:hover::after {
+  transform: translateX(0.2em);
+}
+
+/*# sourceMappingURL=projects.css.map */

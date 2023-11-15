@@ -1,36 +1,29 @@
 - name: pinakes
-  lang: PHP/Symfony
-  lang-icon: devicon-php-plain colored
-  description: A WebApp developed with Symfony.
+  tags: [PHP, Symfony, HTML, CSS, HTMX]
   repository: https://github.com/oliverjakobs/pinakes
-- name: javascript
-  lang: JavaScript
-  lang-icon: devicon-javascript-plain colored
-  description: A Collection of various projects in plain JavaScript (with html/css).
-  repository: https://github.com/oliverjakobs/js
-  demo-link: /js/
+  description: A WebApp developed with Symfony.
 - name: capricorn
-  lang: Python/tcl
-  lang-icon: devicon-python-plain colored
-  description: A basic text editor for writing developed in Python (using tkinter) and tcl.
+  tags: [Python, Tcl/Tk]
   repository: https://github.com/oliverjakobs/capricorn
+  description: A basic text editor for writing developed in Python (using tkinter) and tcl.
 - name: ignis
-  lang: C99
-  lang-icon: devicon-c-plain colored
-  description: A simple abstraction layer above OpenGL.
+  tags: [C, OpenGL]
   repository: https://github.com/oliverjakobs/toolbox 
+  description: A simple abstraction layer above OpenGL.
 - name: Minimal
-  lang: C99
-  lang-icon: devicon-c-plain colored
+  tags: [C]
+  repository: https://github.com/oliverjakobs/toolbox
   description: A small application framework.
-  repository: https://github.com/oliverjakobs/toolbox
 - name: Frost
-  lang: C99
-  lang-icon: devicon-c-plain colored
-  description: Writing a game from scratch in C.
+  tags: [C, OpenGL]
   repository: https://github.com/oliverjakobs/Frost
-- name: toolbox
-  lang: C99
-  lang-icon: devicon-c-plain colored
-  description: A collection of single-header tools and utilities written in C99.
+  description: Writing a game from scratch in C.
+- name: javascript
+  tags: [JavaScript]
+  repository: https://github.com/oliverjakobs/js
+  description: A Collection of various projects in plain JavaScript (with html/css).
+  demo-link: /js/
+- name: This website
+  tags: [Jekyll, HTML, SCSS]
   repository: https://github.com/oliverjakobs/toolbox
+  description: This website.

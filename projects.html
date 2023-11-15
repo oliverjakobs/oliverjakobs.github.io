@@ -1,21 +1,26 @@
 ---
 layout: default
 title: projects
+styles: [projects]
 ---
-<h1 class="page-title separator">Project list</h1>
+<h1 class="page-title separator">Projects</h1>
 
-<ul class="content-overview">
-  {% for item in site.data.projects %}
+<ul class="project-list">
+  {% for project in site.data.projects %}
     <li class="separator">
-      <h2 class="project-name">
-        {{ item.name }}
-        <i class="{{ item.lang-icon }} tooltip"><span class="tooltiptext">{{ item.lang }}</span></i>
-      </h2>
-      <div class="project-description"> {{ item.description }} </div>
-        <a class="project-link" href="{{ item.repository }}">View on GitHub &raquo;</a>
-        {% if item.demo-link %}
-          <a class="project-link" href="{{ item.demo-link }}">Demo &raquo;</a>
+      <h2 class="project-title">{{ project.name }}</h2>
+      <div class="project-content">
+        <ul class="project-tags">
+          {% for tag in project.tags %}
+            <li>{{tag}}</li>
+          {% endfor %}
+        </ul>
+        <div class="project-description">{{ project.description }}</div>
+        <a class="project-link" href="{{ project.repository }}">View on GitHub</a>
+        {% if project.demo-link %}
+          <a class="project-link" href="{{ project.demo-link }}">Demo</a>
         {% endif %}
+      </div>
     </li>
   {% endfor %}
 </ul>
