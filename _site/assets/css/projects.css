@@ -16,11 +16,6 @@ a:hover {
   color: #999999;
 }
 
-.separator {
-  padding-bottom: 1em;
-  border-bottom: 1px solid #999999;
-}
-
 .container {
   max-width: 960px;
   margin-right: auto;
@@ -84,8 +79,10 @@ a:hover {
 
 /* CONTENT */
 .page-title {
-  margin-bottom: 1.4em;
   text-align: left;
+  margin-bottom: 1.4em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #999999;
 }
 
 .page-content {
@@ -140,28 +137,33 @@ a:hover {
   padding: 0px;
   list-style: none;
 }
-.project-list > li {
+
+.project-entry {
   margin: 1rem;
   padding: 1rem 0rem;
-}
-.project-list > li > * {
-  margin: 0.2rem 0.2rem 0.4rem;
-}
-
-.project-title {
-  font-size: 1.8em;
   position: relative;
 }
-.project-title::before {
+.project-entry > * {
+  margin: 0.2rem 0.2rem 0.4rem;
+}
+.project-entry:not(:last-child) {
+  padding-bottom: 1em;
+  border-bottom: 1px solid #999999;
+}
+.project-entry::before {
   content: "❞";
   position: absolute;
-  font-size: 1.4em;
+  font-size: 2.6em;
   font-weight: 100;
   left: -1em;
   transition: all 0.3s ease;
 }
-.project-title:hover::before {
+.project-entry:hover::before {
   transform: translateY(-0.2em);
+}
+
+.project-title {
+  font-size: 1.8em;
 }
 
 .project-content {

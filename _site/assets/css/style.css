@@ -16,11 +16,6 @@ a:hover {
   color: #999999;
 }
 
-.separator {
-  padding-bottom: 1em;
-  border-bottom: 1px solid #999999;
-}
-
 .container {
   max-width: 960px;
   margin-right: auto;
@@ -84,8 +79,10 @@ a:hover {
 
 /* CONTENT */
 .page-title {
-  margin-bottom: 1.4em;
   text-align: left;
+  margin-bottom: 1.4em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #999999;
 }
 
 .page-content {

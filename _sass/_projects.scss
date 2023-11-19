@@ -3,25 +3,26 @@
   margin: 0px;
   padding: 0px;
   list-style: none;
-
-  & > li {
-      margin: 1rem;
-      padding: 1rem 0rem;
-
-      & > * {
-        margin: 0.2rem 0.2rem 0.4rem;
-      }
-  }
 }
 
-.project-title {
-  font-size: 1.8em;
+.project-entry {
+  margin: 1rem;
+  padding: 1rem 0rem;
   position: relative;
 
+  & > * {
+    margin: 0.2rem 0.2rem 0.4rem;
+  }
+
+  &:not(:last-child) {
+    padding-bottom: 1em;
+    border-bottom: 1px solid $color-highlight;
+  }
+  
   &::before {
     content: '\275E';
     position: absolute;
-    font-size: 1.4em;
+    font-size: 2.6em;
     font-weight: 100;
     left: -1em;
     transition: all 0.3s ease;
@@ -30,6 +31,11 @@
   &:hover::before {
     transform: translateY(-0.2em);
   }
+}
+
+.project-title {
+  font-size: 1.8em;
+
 }
 
 .project-content {
