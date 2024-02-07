@@ -16,9 +16,9 @@ styles: [projects]
           {% endfor %}
         </ul>
         <div class="project-description">{{ project.description }}</div>
-        <a class="project-link" href="{{ project.repository }}">View on GitHub</a>
+        <a class="fancy-link" href="{{ project.repository }}">View on GitHub</a>
         {% if project.demo-link %}
-          <a class="project-link" href="{{ project.demo-link }}">Demo</a>
+          <a class="fancy-link" href="{{ project.demo-link }}">Demo</a>
         {% endif %}
       </div>
     </li>
