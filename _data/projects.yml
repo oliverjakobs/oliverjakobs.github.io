@@ -1,7 +1,7 @@
 - name: pinakes
-  tags: [PHP, Symfony, HTML, CSS, HTMX]
+  tags: [Go, HTML, CSS, HTMX]
   repository: https://github.com/oliverjakobs/pinakes
-  description: A WebApp developed with Symfony.
+  description: A WebApp developed in Go.
 - name: capricorn
   tags: [Python, Tcl/Tk]
   repository: https://github.com/oliverjakobs/capricorn
