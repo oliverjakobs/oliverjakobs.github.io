@@ -8,11 +8,11 @@
   description: A basic text editor for writing developed in Python (using tkinter) and tcl.
 - name: ignis
   tags: [C, OpenGL]
-  repository: https://github.com/oliverjakobs/toolbox 
+  repository: https://github.com/oliverjakobs/Ignis 
   description: A simple abstraction layer above OpenGL.
 - name: Minimal
-  tags: [C]
-  repository: https://github.com/oliverjakobs/toolbox
+  tags: [C, Windows API]
+  repository: https://github.com/oliverjakobs/Minimal
   description: A small application framework.
 - name: Frost
   tags: [C, OpenGL]
@@ -25,5 +25,5 @@
   demo-link: /js/
 - name: This website
   tags: [Jekyll, HTML, SCSS]
-  repository: https://github.com/oliverjakobs/toolbox
+  repository: https://github.com/oliverjakobs/oliverjakobs.github.io
   description: This website.
