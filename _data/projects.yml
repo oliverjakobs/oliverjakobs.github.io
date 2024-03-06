@@ -10,7 +10,7 @@
   tags: [C, OpenGL]
   repository: https://github.com/oliverjakobs/Ignis 
   description: A simple abstraction layer above OpenGL.
-- name: Minimal
+- name: minimal
   tags: [C, Windows API]
   repository: https://github.com/oliverjakobs/minimal
   description: Small singleheader application framework for OpenGL and Vulkan development.
