@@ -1,11 +1,7 @@
 - name: pinakes
-  tags: [Go, HTML, CSS, HTMX]
-  repository: https://github.com/oliverjakobs/pinakes
-  description: A WebApp developed in Go.
-- name: pinakes (PHP)
-  tags: [PHP, HTML, CSS, HTMX]
+  tags: [PHP, HTML, CSS, HTMX, Symfony]
   repository: https://github.com/oliverjakobs/pinakes/tree/php
-  description: PHP version of pinakes.
+  description: A WebApp to catalogue bibliographic work. Developed with Symfony.
 - name: capricorn
   tags: [Python, Tcl/Tk]
   repository: https://github.com/oliverjakobs/capricorn
